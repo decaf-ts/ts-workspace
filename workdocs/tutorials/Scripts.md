@@ -2,6 +2,8 @@
 
 The following npm scripts are available for development:
 
+- `update-scripts`: will pull the github actions, templates, and style configs from the [ts-workspace](https://github.com/decaf-ts/ts-workspace) repository, overwriting the existing.
+- `on-first-run`: "chmod +x ./bin/template_setup.sh && ./bin/template_setup.sh",
 - `preinstall` - will run only on the first install to trigger the dep update. will self delete;
 - `do-install` - sets a `TOKEN` environment variable to the contents of `.token` and runs npm install (useful when you
   have private dependencies);
