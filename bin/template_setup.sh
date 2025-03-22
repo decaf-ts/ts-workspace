@@ -47,10 +47,12 @@ function ask(){
 # Flash Forward the dependencies
 npx npm-check-updates -u
 
+npm audit fix --force
+
 # Delete the preinstall script from package.json (we only need it the first run)
 node<<EOF > _.json && mv _.json package.json
 var o = $(cat package.json);
-delete o["scripts"]["before-install"];
+delete o["scripts"]["preinstall"];
 console.log(JSON.stringify(o, null, 2));
 EOF
 
@@ -67,6 +69,3 @@ if [[ $(git status --porcelain) ]]; then
   git config --unset user.name
   git config --unset user.email
 fi
-
-# delete this file
-rm -f ./bin/template_setup.sh
