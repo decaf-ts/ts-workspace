@@ -65,7 +65,7 @@ if [[ $(git status --porcelain) ]]; then
   git config user.name "setup_automation"
   git add .
   git commit -m "refs #1 - initial commit"
-#  git push
+  git push
   git config --unset user.name
   git config --unset user.email
 fi
