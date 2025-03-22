@@ -7,7 +7,8 @@
 !/workdocs/drawings/*.drawio
 !/workdocs/uml/*.puml
 /.idea
-!/.idea/runConfigurations
 /.token
 /.npmtoken
+/.dockertoken
 /node_modules
+/temp
