@@ -1,6 +1,7 @@
 import { ParseArgsOptionsConfig, VerbosityLogger } from "../utils/types";
 import { TextUtils } from "../utils/text";
 import { color } from "../utils/colors";
+import slogans from "../assets/slogans.json";
 
 /**
  * @description Base Configuration for command-line arguments.
@@ -18,7 +19,7 @@ export const DefaultInputOptions: ParseArgsOptionsConfig = {
     default: false
   }
 }
-const reset = "\x1b[0m";
+
 const colors = [
   "\x1b[38;5;215m", // soft orange
   "\x1b[38;5;209m", // coral
@@ -31,7 +32,7 @@ const colors = [
 ];
 
 export function printBanner(logger?: VerbosityLogger){
-  const message = ``;
+  const message = getSlogan();
   const banner: string | string[] =
 `#
 #  ░▒▓███████▓▒░  ░▒▓████████▓▒░  ░▒▓██████▓▒░   ░▒▓██████▓▒░  ░▒▓████████▓▒░             ░▒▓████████▓▒░  ░▒▓███████▓▒░ 
@@ -48,4 +49,22 @@ export function printBanner(logger?: VerbosityLogger){
   banner.forEach((line, index) => {
     console.log(color(line).raw(colors[index]));
   })
+}
+
+export function getPackage(){
+  try {
+    return require(`${process.cwd()}/package.json`);
+  }  catch (error) {
+    throw new Error("Failed to retrieve package information");
+  }
+}
+
+export function getSlogan(i?: number): string {
+  try {
+    const slogans = require("../assets/slogans.json");
+    i = typeof i === "undefined" ? Math.floor(Math.random() * slogans.length) : i;
+    return slogans[i];
+  }  catch (error) {
+    throw new Error("Failed to retrieve package information");
+  }
 }
