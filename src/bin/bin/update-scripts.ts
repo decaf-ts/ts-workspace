@@ -1,5 +1,8 @@
 import fs from "fs";
-import https from "https";
+import { HttpClient } from "../utils/web";
+import { Logging } from "../utils/logging";
+
+const logger = Logging.for("Update")
 
 const scripts = [
   ".github/ISSUE_TEMPLATE/bug_report.md",
@@ -43,46 +46,33 @@ const scripts = [
 
 async function main(){
   return Promise.allSettled(scripts.map(async p => {
-    return new Promise<{path: string, result: string}>((resolve, reject) => {
-      const request = https.get(`https://raw.githubusercontent.com/decaf-ts/ts-wokspace/master/${p}`, res => {
-        if (res.statusCode!== 200) {
-          console.error(`Failed to fetch ${p} (status: ${res.statusCode})`);
-          return reject(new Error(`Failed to fetch ${p}`));
-        }
-        let data = '';
-        res.on('data', chunk => {
-          data += chunk;
-        });
-        res.on('end', () => {
-          resolve({
-            path: p,
-            result: data
-          });
-        });
-      });
+    return new Promise<{path: string, result: string}>(async (resolve, reject) => {
+      const  data = await HttpClient.downloadFile(`https://raw.githubusercontent.com/decaf-ts/ts-wokspace/master/${p}`)
+      return data;
     })
   })).catch(error => {
-    console.error("Error fetching scripts:", error);
-    process.exit(1);
+    logger.error(`Error fetching scripts: ${error}`);
+    throw new Error(`Error fetching scripts: ${error}`);
   }).then(results => {
     results.forEach((prom) => {
       if(prom.status === "fulfilled") {
         const { path, result } = prom.value;
         const content = result.toString();
         fs.writeFileSync(path, content);
-        console.log(`Updated ${path}`);
+        logger.verbose(`Updated ${path}`);
       } else {
-        console.warn(`Failed to download: ${prom.reason}`);
+        logger.debug(`Failed to download: ${prom.reason}`);
       }
     });
   }).catch((error: unknown) => {
+    logger.error(`Error fetching scripts: ${error}`);
     throw new Error(`Error overwriting files: ${error}`);
   })
 }
 
 main()
-  .then(() => console.log("Scripts and configs updated"))
+  .then(() => logger.info("Scripts and configs updated"))
   .catch(e => {
-    console.error("Error Updating scripts:", e.message);
+    logger.error(`Error Updating scripts: ${e}`);
     process.exit(1);
   });

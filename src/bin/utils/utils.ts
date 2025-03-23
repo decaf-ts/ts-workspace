@@ -2,29 +2,43 @@ import { spawn, SpawnOptionsWithoutStdio } from 'child_process';
 import { StandardOutputWriter } from "../writers/StandardOutputWriter";
 import { CommandResult, OutputWriterConstructor } from "./types";
 
-export function colorize(...args: unknown[]) {
-  return {
-    black: `\x1b[30m${args.join(' ')}`,
-    red: `\x1b[31m${args.join(' ')}`,
-    green: `\x1b[32m${args.join(' ')}`,
-    yellow: `\x1b[33m${args.join(' ')}`,
-    blue: `\x1b[34m${args.join(' ')}`,
-    magenta: `\x1b[35m${args.join(' ')}`,
-    cyan: `\x1b[36m${args.join(' ')}`,
-    white: `\x1b[37m${args.join(' ')}`,
-    bgBlack: `\x1b[40m${args.join(' ')}\x1b[0m`,
-    bgRed: `\x1b[41m${args.join(' ')}\x1b[0m`,
-    bgGreen: `\x1b[42m${args.join(' ')}\x1b[0m`,
-    bgYellow: `\x1b[43m${args.join(' ')}\x1b[0m`,
-    bgBlue: `\x1b[44m${args.join(' ')}\x1b[0m`,
-    bgMagenta: `\x1b[45m${args.join(' ')}\x1b[0m`,
-    bgCyan: `\x1b[46m${args.join(' ')}\x1b[0m`,
-    bgWhite: `\x1b[47m${args.join(' ')}\x1b[0m`
-  };
-}
-
-
-export function lockify<R>(f: (...params: unknown[]) => R){
+/**
+ * @description Creates a locked version of a function.
+ * @summary This higher-order function takes a function and returns a new function that ensures
+ * sequential execution of the original function, even when called multiple times concurrently.
+ * It uses a Promise-based locking mechanism to queue function calls.
+ *
+ * @template R - The return type of the input function.
+ * 
+ * @param f - The function to be locked. It can take any number of parameters and return a value of type R.
+ * @return A new function with the same signature as the input function, but with sequential execution guaranteed.
+ * 
+ * @function lockify
+ * 
+ * @mermaid
+ * sequenceDiagram
+ *   participant Caller
+ *   participant LockedFunction
+ *   participant OriginalFunction
+ *   Caller->>LockedFunction: Call with params
+ *   LockedFunction->>LockedFunction: Check current lock
+ *   alt Lock is resolved
+ *     LockedFunction->>OriginalFunction: Execute with params
+ *     OriginalFunction-->>LockedFunction: Return result
+ *     LockedFunction-->>Caller: Return result
+ *   else Lock is pending
+ *     LockedFunction->>LockedFunction: Queue execution
+ *     LockedFunction-->>Caller: Return promise
+ *     Note over LockedFunction: Wait for previous execution
+ *     LockedFunction->>OriginalFunction: Execute with params
+ *     OriginalFunction-->>LockedFunction: Return result
+ *     LockedFunction-->>Caller: Resolve promise with result
+ *   end
+ *   LockedFunction->>LockedFunction: Update lock
+ * 
+ * @memberOf module:@decaf-ts/utils
+ */
+export function lockify<R>(f: (...params: unknown[]) => R) {
   let lock: Promise<R | void> = Promise.resolve()
   return (...params: unknown[]) => {
     const result = lock.then(() => f(...params))
@@ -33,8 +47,52 @@ export function lockify<R>(f: (...params: unknown[]) => R){
   }
 }
 
-
-export async function runCommand<R = void>(command: string | string[], opts: SpawnOptionsWithoutStdio = {}, outputConstructor: OutputWriterConstructor<R> = StandardOutputWriter<R>, ...args: unknown[]): Promise<R> {
+/**
+ * @description Executes a command asynchronously with customizable output handling.
+ * @summary This function runs a shell command as a child process, providing fine-grained
+ * control over its execution and output handling. It supports custom output writers,
+ * allows for command abortion, and captures both stdout and stderr.
+ *
+ * @template R - The type of the resolved value from the command execution.
+ *
+ * @param command - The command to run, either as a string or an array of strings.
+ * @param opts - Spawn options for the child process. Defaults to an empty object.
+ * @param outputConstructor - Constructor for the output writer. Defaults to StandardOutputWriter.
+ * @param args - Additional arguments to pass to the output constructor.
+ * @return A promise that resolves to the command result of type R.
+ *
+ * @function runCommand
+ *
+ * @mermaid
+ * sequenceDiagram
+ *   participant Caller
+ *   participant runCommand
+ *   participant OutputWriter
+ *   participant ChildProcess
+ *   Caller->>runCommand: Call with command and options
+ *   runCommand->>OutputWriter: Create new instance
+ *   runCommand->>OutputWriter: Parse command
+ *   runCommand->>ChildProcess: Spawn process
+ *   ChildProcess-->>runCommand: Return process object
+ *   runCommand->>ChildProcess: Set up event listeners
+ *   loop For each stdout data
+ *     ChildProcess->>runCommand: Emit stdout data
+ *     runCommand->>OutputWriter: Handle stdout data
+ *   end
+ *   loop For each stderr data
+ *     ChildProcess->>runCommand: Emit stderr data
+ *     runCommand->>OutputWriter: Handle stderr data
+ *   end
+ *   ChildProcess->>runCommand: Emit error (if any)
+ *   runCommand->>OutputWriter: Handle error
+ *   ChildProcess->>runCommand: Emit exit
+ *   runCommand->>OutputWriter: Handle exit
+ *   OutputWriter-->>runCommand: Resolve or reject promise
+ *   runCommand-->>Caller: Return CommandResult
+ *
+ * @memberOf module:@decaf-ts/utils
+ */
+export async function runCommand<R = string>(command: string | string[], opts: SpawnOptionsWithoutStdio = {}, outputConstructor: OutputWriterConstructor<R> = StandardOutputWriter<R>, ...args: unknown[]): Promise<R> {
   const abort = new AbortController();
   const logs: string[] = [];
   const errs: string[] = [];

@@ -55,9 +55,11 @@ async function pushToGit(){
 }
 
 async function main(){
-  // # Flash Forward the dependencies
-
-  await runCommand("npx npm audit fix --force");
+  await fixPackage();
+  await createTokenFiles();
+  await updateDependencies();
+  await auditFix();
+  await pushToGit();
 }
 
 main()
