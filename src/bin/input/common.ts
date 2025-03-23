@@ -61,9 +61,8 @@ export function getPackage(){
 
 export function getSlogan(i?: number): string {
   try {
-    const slogans = require("../assets/slogans.json");
     i = typeof i === "undefined" ? Math.floor(Math.random() * slogans.length) : i;
-    return slogans[i];
+    return slogans[i].Slogan;
   }  catch (error) {
     throw new Error("Failed to retrieve package information");
   }
