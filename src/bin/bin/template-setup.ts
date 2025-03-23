@@ -4,6 +4,7 @@ import fs from "fs";
 import { Encoding, SetupScriptKey, Tokens } from "../utils/constants";
 
 async function updateDependencies() {
+
   await runCommand("npx npm-check-updates -u");
   await runCommand("npx npm run do-install");
 }

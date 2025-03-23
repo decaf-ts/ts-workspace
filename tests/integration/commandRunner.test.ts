@@ -5,10 +5,13 @@ import { CommandResult } from '../../src/bin/utils/types';
 describe('runCommand Integration Tests', () => {
   jest.setTimeout(10000); // Increase timeout for potentially slow commands
 
+  const testString = "Hello, World!";
+
   test('Standard output writer captures full log', async () => {
-    const commandPromise = runCommand('echo "Hello, World!"') as CommandResult;
+    const commandPromise: CommandResult = runCommand(`echo "${testString}"`) as CommandResult;
     const result = await commandPromise;
-    expect(commandPromise.logs.join('')).toContain('Hello, World!');
+    expect(result).toEqual(testString);
+    expect(commandPromise.logs.join('')).toEqual(result);
   });
 
   test('Regexp output writer captures matched string', async () => {

@@ -59,7 +59,7 @@ export function lockify<R>(f: (...params: unknown[]) => R) {
  * @param opts - Spawn options for the child process. Defaults to an empty object.
  * @param outputConstructor - Constructor for the output writer. Defaults to StandardOutputWriter.
  * @param args - Additional arguments to pass to the output constructor.
- * @return A promise that resolves to the command result of type R.
+ * @return {CommandResult} A promise that resolves to the command result of type R.
  *
  * @function runCommand
  *

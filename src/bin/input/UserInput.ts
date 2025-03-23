@@ -597,6 +597,7 @@ export class UserInput<R extends string = string> implements PromptObject<R> {
    * @param input - The UserInput instance to use for prompting.
    * @param test - A function to validate the user's input.
    * @param limit - The maximum number of attempts allowed (default is 1).
+   * @param defaultConfirmation
    * @return A Promise that resolves to the valid input or undefined if the limit is reached.
    *
    * @mermaid
@@ -628,7 +629,7 @@ export class UserInput<R extends string = string> implements PromptObject<R> {
    *   end
    *   I-->>Caller: Return undefined if limit reached
    */
-  static async insist<R>(input: UserInput, test: (res: string | number) => boolean, limit = 1): Promise<R | undefined> {
+  static async insist<R>(input: UserInput, test: (res: string | number) => boolean, defaultConfirmation: boolean, limit = 1, ): Promise<R | undefined> {
     const logger = Logging.for(UserInput, UserInput.insist.name);
     let result: string | number | undefined = undefined;
     let count = 0
@@ -640,7 +641,7 @@ export class UserInput<R extends string = string> implements PromptObject<R> {
           result = undefined;
           continue;
         }
-        confirmation = await UserInput.askConfirmation("tag-confirm", "Is the tag number correct?", false);
+        confirmation = await UserInput.askConfirmation(`${input.name}-confirm`, `Is the ${input.type} correct?`, defaultConfirmation);
         if (!confirmation)
           result = undefined;
       } while (typeof result === "undefined" && limit > 1 && count++ < limit);
@@ -662,10 +663,11 @@ export class UserInput<R extends string = string> implements PromptObject<R> {
    * @param test - A function to validate the user's input.
    * @param mask - The character used to mask the input (optional, for password-like inputs).
    * @param initial - The initial value presented to the user (optional).
+   * @param defaultConfirmation
    * @param limit - The maximum number of attempts allowed (default is -1, meaning unlimited).
    * @return A Promise that resolves to the valid input or undefined if the limit is reached.
    */
-  static async insistForText(name: string, question: string, test: (res: string | number) => boolean, mask: string | undefined = undefined, initial?: string, limit = -1): Promise<string | undefined> {
+  static async insistForText(name: string, question: string, test: (res: string | number) => boolean, mask: string | undefined = undefined, initial?: string, defaultConfirmation = false, limit = -1): Promise<string | undefined> {
     const userInput = new UserInput(name)
       .setMessage(question);
 
@@ -673,7 +675,7 @@ export class UserInput<R extends string = string> implements PromptObject<R> {
       userInput.setMask(mask);
     if (typeof initial ==='string')
       userInput.setInitial(initial);
-    return this.insist(userInput, test, limit);
+    return this.insist(userInput, test, defaultConfirmation, limit);
   }
   /**
    * @description Repeatedly asks for number input until a valid response is given or the limit is reached.
@@ -685,10 +687,11 @@ export class UserInput<R extends string = string> implements PromptObject<R> {
    * @param min - The minimum allowed value (optional).
    * @param max - The maximum allowed value (optional).
    * @param initial - The initial value presented to the user (optional).
+   * @param defaultConfirmation
    * @param limit - The maximum number of attempts allowed (default is -1, meaning unlimited).
    * @return A Promise that resolves to the valid input or undefined if the limit is reached.
    */
-  static async insistForNumber(name: string, question: string, test: (res: string | number) => boolean, min?: number, max?: number, initial?: number, limit = -1): Promise<string | undefined> {
+  static async insistForNumber(name: string, question: string, test: (res: string | number) => boolean, min?: number, max?: number, initial?: number, defaultConfirmation = false, limit = -1): Promise<string | undefined> {
     const userInput = new UserInput(name)
       .setMessage(question)
       .setType("number");
@@ -701,7 +704,7 @@ export class UserInput<R extends string = string> implements PromptObject<R> {
 
     if (typeof initial === 'number')
       userInput.setInitial(initial);
-    return this.insist(userInput, test, limit);
+    return this.insist(userInput, test, defaultConfirmation, limit);
   }
 
   /**
@@ -728,6 +731,7 @@ export class UserInput<R extends string = string> implements PromptObject<R> {
     try {
       return parseArgs(args);
     } catch (error: unknown) {
+      Logging.for(UserInput, UserInput.parseArgs.name).debug(`Error while parsing arguments:\n${JSON.stringify(args, null, 2)}\n | options\n${JSON.stringify(options, null ,2)}\n | ${error}`);
       throw new Error(`Error while parsing arguments: ${error}`);
     }
   }

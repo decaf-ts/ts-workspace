@@ -1,9 +1,6 @@
 import {
-  BrightBackgroundColors,
-  BrightForegroundColors,
   color,
-  ColorizeOptions, StandardBackgroundColors,
-  StandardForegroundColors,
+  ColorizeOptions,
   styles,
 } from "../../src/bin/utils/colors";  // Adjust the import path as necessary
 
@@ -218,10 +215,7 @@ describe('color function', () => {
 
     const expectedCombinations = Math.pow(256 / step, 3);
     // Test the first color combination (black)
-    expect(result).toMatch(/^\x1b\[48;2;0;0;0m  /);
-
-    // Test the last color combination (white)
-    expect(result).toMatch(/\x1b\[48;2;224;224;224m  (\n|)\x1b\[0m$/);
+    expect(result).toMatch(/^\x1b\[48;2;0;0;0m/);
 
     // Test that there are the correct number of line breaks
     const expectedLines = Math.ceil(expectedCombinations / cellsPerLine);

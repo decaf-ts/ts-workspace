@@ -3,6 +3,9 @@ import { runCommand } from "../utils/utils";
 import { NoCIFLag, SemVersion, SemVersionRegex } from "../utils/constants";
 import { UserInput } from "../input/UserInput";
 import { DefaultInputOptions } from "../input/common";
+import { Logging } from "../utils/logging";
+
+const logger = Logging.for("ReleaseScript");
 /**
  * @description Configuration for command-line arguments.
  * @summary Defines the accepted command-line options for the script.
@@ -50,17 +53,21 @@ let {tag, message, ci} = UserInput.parseArgs(Object.assign({}, DefaultInputOptio
  *   G --> H
  */
 function testVersion(version: string): string | undefined {
-  switch (version.toLowerCase()) {
+  version = version.trim().toLowerCase()
+  switch (version) {
     case SemVersion.PATCH:
     case SemVersion.MINOR:
     case SemVersion.MAJOR:
-      return version.toLowerCase();
+      logger.verbose(`Using provided SemVer update: ${version}`, 1);
+      return version;
     default:
-      if (!SemVersionRegex.test(version)) {
-        console.debug(`Invalid version number: ${version}`);
+      logger.verbose(`Testing provided version for SemVer compatibility: ${version}`, 1);
+      if (!(new RegExp(SemVersionRegex).test(version))) {
+        logger.debug(`Invalid version number: ${version}`);
         return undefined;
       }
-      return version.toLowerCase();
+      logger.verbose(`version approved: ${version}`, 1);
+      return version;
   }
 }
 /**
@@ -88,18 +95,12 @@ function testVersion(version: string): string | undefined {
  *   end
  */
 async function prepareVersion(){
-
   tag = testVersion(tag as string || "");
-
   if (!tag) {
-    console.log(`Listing git tags:`)
+    logger.verbose("No release message provided. Prompting for one:");
+    logger.info(`Listing latest git tags:`)
     await runCommand("git tag --sort=-taggerdate | head -n 5");
-    let confirmation = false;
-    do {
-      tag = await UserInput.askText("tag", "Enter 'patch', 'minor', 'major', or the new tag number (accepts v*.*.*[-...])");
-      if (!testVersion(tag)) continue;
-      confirmation = await UserInput.askConfirmation("tag-confirm", "Is the tag number correct?", false);
-    } while (!confirmation)
+    tag = await UserInput.insistForText("tag", "Enter the new tag number (accepts v*.*.*[-...])", (val) => !!val.toString().match(/^v[0-9]+\.[0-9]+.[0-9]+(\-[0-9a-zA-Z\-]+)?$/));
   }
 }
 
@@ -110,13 +111,9 @@ async function prepareVersion(){
  * @function prepareMessage
  */
 async function prepareMessage(){
-
   if (!message) {
-    let confirmation = false;
-    do {
-      message = await UserInput.askText("message", "What should be the release message?");
-      confirmation = await UserInput.askConfirmation("message-confirm", `Is "${message}"  correct?`, false);
-    } while (!confirmation)
+    logger.verbose("No release message provided. Prompting for one:");
+    tag = await UserInput.insistForText("message", "What should be the release message/ticket?", (val) => !!val && val.toString().length > 5);
   }
 }
 
