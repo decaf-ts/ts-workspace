@@ -7,7 +7,7 @@ import slogans from "../assets/slogans.json";
  * @description Base Configuration for command-line arguments.
  * @summary Defines the accepted command-line options for the script.
  */
-export const DefaultInputOptions: ParseArgsOptionsConfig = {
+export const DefaultInputOptions = {
   verbose: {
     type: "boolean",
     short: "v",
@@ -28,21 +28,21 @@ const colors = [
   "\x1b[38;5;217m", // salmon
   "\x1b[38;5;216m", // light coral
   "\x1b[38;5;224m", // light peach
+  "\x1b[38;5;230m", // soft cream
   "\x1b[38;5;230m"  // soft cream
 ];
 
 export function printBanner(logger?: VerbosityLogger){
   const message = getSlogan();
   const banner: string | string[] =
-`#
-#  ░▒▓███████▓▒░  ░▒▓████████▓▒░  ░▒▓██████▓▒░   ░▒▓██████▓▒░  ░▒▓████████▓▒░             ░▒▓████████▓▒░  ░▒▓███████▓▒░ 
-#  ░▒▓█▓▒░░▒▓█▓▒░ ░▒▓█▓▒░        ░▒▓█▓▒░░▒▓█▓▒░ ░▒▓█▓▒░░▒▓█▓▒░ ░▒▓█▓▒░                       ░▒▓█▓▒░     ░▒▓█▓▒░        
-#  ░▒▓█▓▒░░▒▓█▓▒░ ░▒▓█▓▒░        ░▒▓█▓▒░        ░▒▓█▓▒░░▒▓█▓▒░ ░▒▓█▓▒░                       ░▒▓█▓▒░     ░▒▓█▓▒░        
-#  ░▒▓█▓▒░░▒▓█▓▒░ ░▒▓██████▓▒░   ░▒▓█▓▒░        ░▒▓████████▓▒░ ░▒▓██████▓▒░                  ░▒▓█▓▒░      ░▒▓██████▓▒░  
-#  ░▒▓█▓▒░░▒▓█▓▒░ ░▒▓█▓▒░        ░▒▓█▓▒░        ░▒▓█▓▒░░▒▓█▓▒░ ░▒▓█▓▒░                       ░▒▓█▓▒░            ░▒▓█▓▒░ 
-#  ░▒▓█▓▒░░▒▓█▓▒░ ░▒▓█▓▒░        ░▒▓█▓▒░░▒▓█▓▒░ ░▒▓█▓▒░░▒▓█▓▒░ ░▒▓█▓▒░                       ░▒▓█▓▒░            ░▒▓█▓▒░ 
-#  ░▒▓███████▓▒░  ░▒▓████████▓▒░  ░▒▓██████▓▒░  ░▒▓█▓▒░░▒▓█▓▒░ ░▒▓█▓▒░                       ░▒▓█▓▒░     ░▒▓███████▓▒░  
-#                                                                                                                       
+`#                 ░▒▓███████▓▒░  ░▒▓████████▓▒░  ░▒▓██████▓▒░   ░▒▓██████▓▒░  ░▒▓████████▓▒░       ░▒▓████████▓▒░  ░▒▓███████▓▒░ 
+#      ( (        ░▒▓█▓▒░░▒▓█▓▒░ ░▒▓█▓▒░        ░▒▓█▓▒░░▒▓█▓▒░ ░▒▓█▓▒░░▒▓█▓▒░ ░▒▓█▓▒░                 ░▒▓█▓▒░     ░▒▓█▓▒░        
+#       ) )       ░▒▓█▓▒░░▒▓█▓▒░ ░▒▓█▓▒░        ░▒▓█▓▒░        ░▒▓█▓▒░░▒▓█▓▒░ ░▒▓█▓▒░                 ░▒▓█▓▒░     ░▒▓█▓▒░        
+#    [=======]    ░▒▓█▓▒░░▒▓█▓▒░ ░▒▓██████▓▒░   ░▒▓█▓▒░        ░▒▓████████▓▒░ ░▒▓██████▓▒░            ░▒▓█▓▒░      ░▒▓██████▓▒░  
+#     \`-----´     ░▒▓█▓▒░░▒▓█▓▒░ ░▒▓█▓▒░        ░▒▓█▓▒░        ░▒▓█▓▒░░▒▓█▓▒░ ░▒▓█▓▒░                 ░▒▓█▓▒░            ░▒▓█▓▒░ 
+#                 ░▒▓█▓▒░░▒▓█▓▒░ ░▒▓█▓▒░        ░▒▓█▓▒░░▒▓█▓▒░ ░▒▓█▓▒░░▒▓█▓▒░ ░▒▓█▓▒░                 ░▒▓█▓▒░            ░▒▓█▓▒░ 
+#                 ░▒▓███████▓▒░  ░▒▓████████▓▒░  ░▒▓██████▓▒░  ░▒▓█▓▒░░▒▓█▓▒░ ░▒▓█▓▒░                 ░▒▓█▓▒░     ░▒▓███████▓▒░  
+#                                                                                                                 
 `.split("\n")
   const maxLength = banner.reduce((max, line) => Math.max(max, line.length), 0);
   banner.push(TextUtils.padEnd(` #  ${message}`, maxLength));
@@ -51,13 +51,7 @@ export function printBanner(logger?: VerbosityLogger){
   })
 }
 
-export function getPackage(){
-  try {
-    return require(`${process.cwd()}/package.json`);
-  }  catch (error) {
-    throw new Error("Failed to retrieve package information");
-  }
-}
+
 
 export function getSlogan(i?: number): string {
   try {

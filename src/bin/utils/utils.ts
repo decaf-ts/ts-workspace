@@ -1,6 +1,7 @@
 import { spawn, SpawnOptionsWithoutStdio } from 'child_process';
 import { StandardOutputWriter } from "../writers/StandardOutputWriter";
 import { CommandResult, OutputWriterConstructor } from "./types";
+import { Logging } from "./logging";
 
 /**
  * @description Creates a locked version of a function.
@@ -93,6 +94,7 @@ export function lockify<R>(f: (...params: unknown[]) => R) {
  * @memberOf module:@decaf-ts/utils
  */
 export async function runCommand<R = string>(command: string | string[], opts: SpawnOptionsWithoutStdio = {}, outputConstructor: OutputWriterConstructor<R> = StandardOutputWriter<R>, ...args: unknown[]): Promise<R> {
+  const logger = Logging.for(runCommand)
   const abort = new AbortController();
   const logs: string[] = [];
   const errs: string[] = [];
@@ -104,8 +106,9 @@ export async function runCommand<R = string>(command: string | string[], opts: S
         reject
       }, ...args);
 
-      console.log(`Running command: ${command}`);
       const [cmd, argz] = output.parseCommand(command);
+      logger.info(`Running command: ${cmd}`);
+      logger.debug(`with args: ${argz.join(" ")}`);
       runCommand = spawn(cmd, argz, {
         ...opts,
         cwd: opts.cwd || process.cwd(),
@@ -113,7 +116,7 @@ export async function runCommand<R = string>(command: string | string[], opts: S
         shell: opts.shell || false,
         signal: abort.signal
       });
-      console.log(`pid : ${runCommand.pid}`);
+      logger.verbose(`pid : ${runCommand.pid}`);
     } catch (e: unknown){
       throw new Error(`Error running command ${command}: ${e}`);
     }

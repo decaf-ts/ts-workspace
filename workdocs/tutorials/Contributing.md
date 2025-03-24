@@ -16,16 +16,16 @@ to abide by its terms.
 
 ### Bootstrapping the project
 
-```
-git clone https://github.com/decaf-ts/reflection.git
-cd reflection
+```bash
+git clone https://github.com/decaf-ts/ts-workspace.git
+cd ts-workspace
 npm install
-npm run build:prod
+npm run build
 ```
 
 ### Running the tests
 
-```
+```bash
 npm run test:all
 ```
 
@@ -57,3 +57,7 @@ The acceptance of a pull request will trigger an automatic release by the CI.
 - [How to Contribute to Open Source](https://opensource.guide/how-to-contribute/)
 - [Using Pull Requests](https://help.github.com/articles/about-pull-requests/)
 - [GitHub Help](https://help.github.com)
+
+## Developers Guide
+
+Please follow read the [developers guide] before making any changes.

@@ -20,6 +20,7 @@ const logger = Logging.for("Input");
  * @class
  */
 export class UserInput<R extends string = string> implements PromptObject<R> {
+
   /**
    * @description The type of the prompt.
    * @summary Determines the input method (e.g., text, number, confirm).
@@ -189,11 +190,12 @@ export class UserInput<R extends string = string> implements PromptObject<R> {
   /**
    * @description Sets the type of the prompt.
    * @summary Configures the input method for the prompt.
-   * 
+   *
    * @param type - The type of the prompt.
    * @returns This UserInput instance for method chaining.
    */
   setType(type: PromptType | Falsy | PrevCaller<R, PromptType | Falsy>): this {
+    logger.verbose(`Setting type to: ${type}`);
     this.type = type;
     return this;
   }
@@ -201,11 +203,12 @@ export class UserInput<R extends string = string> implements PromptObject<R> {
   /**
    * @description Sets the message of the prompt.
    * @summary Configures the question or instruction presented to the user.
-   * 
+   *
    * @param value - The message to be displayed.
    * @returns This UserInput instance for method chaining.
    */
   setMessage(value: ValueOrFunc<string> | undefined): this {
+    logger.verbose(`Setting message to: ${value}`);
     this.message = value;
     return this;
   }
@@ -213,11 +216,12 @@ export class UserInput<R extends string = string> implements PromptObject<R> {
   /**
    * @description Sets the initial value of the prompt.
    * @summary Configures the default value presented to the user.
-   * 
+   *
    * @param value - The initial value.
    * @returns This UserInput instance for method chaining.
    */
   setInitial(value: InitialReturnValue | PrevCaller<R, InitialReturnValue | Promise<InitialReturnValue>> | undefined): this {
+    logger.verbose(`Setting initial value to: ${value}`);
     this.initial = value;
     return this;
   }
@@ -225,11 +229,12 @@ export class UserInput<R extends string = string> implements PromptObject<R> {
   /**
    * @description Sets the style of the prompt.
    * @summary Configures the visual style of the prompt.
-   * 
+   *
    * @param value - The style to be applied.
    * @returns This UserInput instance for method chaining.
    */
   setStyle(value: string | PrevCaller<R, string | Falsy> | undefined): this {
+    logger.verbose(`Setting style to: ${value}`);
     this.style = value;
     return this;
   }
@@ -237,11 +242,12 @@ export class UserInput<R extends string = string> implements PromptObject<R> {
   /**
    * @description Sets the format function of the prompt.
    * @summary Configures a function to format the user's input before it's returned.
-   * 
+   *
    * @param value - The format function.
    * @returns This UserInput instance for method chaining.
    */
   setFormat(value: PrevCaller<R, void> | undefined): this {
+    logger.verbose(`Setting format function`);
     this.format = value;
     return this;
   }
@@ -249,11 +255,12 @@ export class UserInput<R extends string = string> implements PromptObject<R> {
   /**
    * @description Sets the validation function of the prompt.
    * @summary Configures a function to validate the user's input.
-   * 
+   *
    * @param value - The validation function.
    * @returns This UserInput instance for method chaining.
    */
   setValidate(value: PrevCaller<R, boolean | string | Promise<boolean | string>> | undefined): this {
+    logger.verbose(`Setting validate function`);
     this.validate = value;
     return this;
   }
@@ -261,11 +268,12 @@ export class UserInput<R extends string = string> implements PromptObject<R> {
   /**
    * @description Sets the onState callback of the prompt.
    * @summary Configures a function to be called when the state of the prompt changes.
-   * 
+   *
    * @param value - The onState callback function.
    * @returns This UserInput instance for method chaining.
    */
   setOnState(value: PrevCaller<R, void> | undefined): this {
+    logger.verbose(`Setting onState callback`);
     this.onState = value;
     return this;
   }
@@ -273,11 +281,12 @@ export class UserInput<R extends string = string> implements PromptObject<R> {
   /**
    * @description Sets the onRender callback of the prompt.
    * @summary Configures a function to be called when the prompt is rendered.
-   * 
+   *
    * @param value - The onRender callback function.
    * @returns This UserInput instance for method chaining.
    */
   setOnRender(value: ((kleur: Kleur) => void) | undefined): this {
+    logger.verbose(`Setting onRender callback`);
     this.onRender = value;
     return this;
   }
@@ -285,11 +294,12 @@ export class UserInput<R extends string = string> implements PromptObject<R> {
   /**
    * @description Sets the minimum value for number inputs.
    * @summary Configures the lowest number the user can input.
-   * 
+   *
    * @param value - The minimum value.
    * @returns This UserInput instance for method chaining.
    */
   setMin(value: number | PrevCaller<R, number | Falsy> | undefined): this {
+    logger.verbose(`Setting min value to: ${value}`);
     this.min = value;
     return this;
   }
@@ -297,11 +307,12 @@ export class UserInput<R extends string = string> implements PromptObject<R> {
   /**
    * @description Sets the maximum value for number inputs.
    * @summary Configures the highest number the user can input.
-   * 
+   *
    * @param value - The maximum value.
    * @returns This UserInput instance for method chaining.
    */
   setMax(value: number | PrevCaller<R, number | Falsy> | undefined): this {
+    logger.verbose(`Setting max value to: ${value}`);
     this.max = value;
     return this;
   }
@@ -309,11 +320,12 @@ export class UserInput<R extends string = string> implements PromptObject<R> {
   /**
    * @description Sets whether to allow float values for number inputs.
    * @summary Configures whether decimal numbers are allowed.
-   * 
+   *
    * @param value - Whether to allow float values.
    * @returns This UserInput instance for method chaining.
    */
   setFloat(value: boolean | PrevCaller<R, boolean | Falsy> | undefined): this {
+    logger.verbose(`Setting float to: ${value}`);
     this.float = value;
     return this;
   }
@@ -321,11 +333,12 @@ export class UserInput<R extends string = string> implements PromptObject<R> {
   /**
    * @description Sets the number of decimal places to round to for float inputs.
    * @summary Configures the precision of float inputs.
-   * 
+   *
    * @param value - The number of decimal places.
    * @returns This UserInput instance for method chaining.
    */
   setRound(value: number | PrevCaller<R, number | Falsy> | undefined): this {
+    logger.verbose(`Setting round to: ${value}`);
     this.round = value;
     return this;
   }
@@ -333,11 +346,12 @@ export class UserInput<R extends string = string> implements PromptObject<R> {
   /**
    * @description Sets the instructions for the user.
    * @summary Configures additional guidance provided to the user.
-   * 
+   *
    * @param value - The instructions.
    * @returns This UserInput instance for method chaining.
    */
   setInstructions(value: string | boolean | undefined): this {
+    logger.verbose(`Setting instructions to: ${value}`);
     this.instructions = value;
     return this;
   }
@@ -345,11 +359,12 @@ export class UserInput<R extends string = string> implements PromptObject<R> {
   /**
    * @description Sets the increment value for number inputs.
    * @summary Configures the step size when increasing or decreasing the number.
-   * 
+   *
    * @param value - The increment value.
    * @returns This UserInput instance for method chaining.
    */
   setIncrement(value: number | PrevCaller<R, number | Falsy> | undefined): this {
+    logger.verbose(`Setting increment to: ${value}`);
     this.increment = value;
     return this;
   }
@@ -357,11 +372,12 @@ export class UserInput<R extends string = string> implements PromptObject<R> {
   /**
    * @description Sets the separator for list inputs.
    * @summary Configures the character used to separate list items.
-   * 
+   *
    * @param value - The separator character.
    * @returns This UserInput instance for method chaining.
    */
   setSeparator(value: string | PrevCaller<R, string | Falsy> | undefined): this {
+    logger.verbose(`Setting separator to: ${value}`);
     this.separator = value;
     return this;
   }
@@ -369,11 +385,12 @@ export class UserInput<R extends string = string> implements PromptObject<R> {
   /**
    * @description Sets the active option style for select inputs.
    * @summary Configures the style applied to the currently selected option.
-   * 
+   *
    * @param value - The active option style.
    * @returns This UserInput instance for method chaining.
    */
   setActive(value: string | PrevCaller<R, string | Falsy> | undefined): this {
+    logger.verbose(`Setting active style to: ${value}`);
     this.active = value;
     return this;
   }
@@ -381,11 +398,12 @@ export class UserInput<R extends string = string> implements PromptObject<R> {
   /**
    * @description Sets the inactive option style for select inputs.
    * @summary Configures the style applied to non-selected options.
-   * 
+   *
    * @param value - The inactive option style.
    * @returns This UserInput instance for method chaining.
    */
   setInactive(value: string | PrevCaller<R, string | Falsy> | undefined): this {
+    logger.verbose(`Setting inactive style to: ${value}`);
     this.inactive = value;
     return this;
   }
@@ -393,11 +411,12 @@ export class UserInput<R extends string = string> implements PromptObject<R> {
   /**
    * @description Sets the choices for select inputs.
    * @summary Configures the list of options presented to the user.
-   * 
+   *
    * @param value - The list of choices.
    * @returns This UserInput instance for method chaining.
    */
   setChoices(value: Choice[] | PrevCaller<R, Choice[] | Falsy> | undefined): this {
+    logger.verbose(`Setting choices: ${JSON.stringify(value)}`);
     this.choices = value;
     return this;
   }
@@ -405,11 +424,12 @@ export class UserInput<R extends string = string> implements PromptObject<R> {
   /**
    * @description Sets the hint text for the prompt.
    * @summary Configures additional information displayed to the user.
-   * 
+   *
    * @param value - The hint text.
    * @returns This UserInput instance for method chaining.
    */
   setHint(value: string | PrevCaller<R, string | Falsy> | undefined): this {
+    logger.verbose(`Setting hint to: ${value}`);
     this.hint = value;
     return this;
   }
@@ -417,11 +437,12 @@ export class UserInput<R extends string = string> implements PromptObject<R> {
   /**
    * @description Sets the warning text for the prompt.
    * @summary Configures a warning message displayed to the user.
-   * 
+   *
    * @param value - The warning text.
    * @returns This UserInput instance for method chaining.
    */
   setWarn(value: string | PrevCaller<R, string | Falsy> | undefined): this {
+    logger.verbose(`Setting warn to: ${value}`);
     this.warn = value;
     return this;
   }
@@ -429,11 +450,12 @@ export class UserInput<R extends string = string> implements PromptObject<R> {
   /**
    * @description Sets the suggest function for autocomplete inputs.
    * @summary Configures a function to provide suggestions based on user input.
-   * 
+   *
    * @param value - The suggest function.
    * @returns This UserInput instance for method chaining.
    */
   setSuggest(value: ((input: any, choices: Choice[]) => Promise<any>) | undefined): this {
+    logger.verbose(`Setting suggest function`);
     this.suggest = value;
     return this;
   }
@@ -446,6 +468,7 @@ export class UserInput<R extends string = string> implements PromptObject<R> {
    * @return This UserInput instance for method chaining.
    */
   setLimit(value: number | PrevCaller<R, number | Falsy> | undefined): this {
+    logger.verbose(`Setting limit to: ${value}`);
     this.limit = value;
     return this;
   }
@@ -458,6 +481,7 @@ export class UserInput<R extends string = string> implements PromptObject<R> {
    * @return This UserInput instance for method chaining.
    */
   setMask(value: string | PrevCaller<R, string | Falsy> | undefined): this {
+    logger.verbose(`Setting mask to: ${value}`);
     this.mask = value;
     return this;
   }
@@ -469,10 +493,10 @@ export class UserInput<R extends string = string> implements PromptObject<R> {
    * @return This UserInput instance for method chaining.
    */
   setStdout(value: Writable | undefined): this {
+    logger.verbose(`Setting stdout stream`);
     this.stdout = value;
     return this;
   }
-
   /**
    * @description Sets the stdin stream for the prompt.
    * @summary Configures the input stream used by the prompt for receiving user input.
@@ -513,12 +537,15 @@ export class UserInput<R extends string = string> implements PromptObject<R> {
    *   A-->>Caller: Return processed answers
    */
   static async ask<R extends string = string>(question: UserInput<R> | UserInput<R>[]){
+    const log = logger.for(this.ask);
     if (!Array.isArray(question)) {
       question = [question];
     }
     let answers: Answers<R>;
     try {
+      log.verbose(`Asking questions: ${question.map(q => q.name).join(", ")}`);
       answers = await prompts(question);
+      log.verbose(`Received answers: ${JSON.stringify(answers, null, 2)}`);
     } catch (error: unknown) {
       throw new Error(`Error while getting input: ${error}`);
     }
@@ -536,6 +563,8 @@ export class UserInput<R extends string = string> implements PromptObject<R> {
    * @return A Promise that resolves to the number entered by the user.
    */
   static async askNumber(name: string, question: string, min?: number, max?: number, initial?: number): Promise<number> {
+    const log = logger.for(this.askNumber);
+    log.verbose(`Asking number input: ${name}, question: ${question}, min: ${min}, max: ${max}, initial: ${initial}`);
     const userInput = new UserInput(name)
       .setMessage(question)
       .setType("number");
@@ -562,6 +591,8 @@ export class UserInput<R extends string = string> implements PromptObject<R> {
    * @return A Promise that resolves to the text entered by the user.
    */
   static async askText(name: string, question: string, mask: string | undefined = undefined, initial?: string): Promise<string> {
+    const log = logger.for(this.askText);
+    log.verbose(`Asking text input: ${name}, question: ${question}, mask: ${mask}, initial: ${initial}`);
     const userInput = new UserInput(name)
       .setMessage(question);
 
@@ -581,6 +612,8 @@ export class UserInput<R extends string = string> implements PromptObject<R> {
    * @return A Promise that resolves to a boolean representing the user's answer.
    */
   static async askConfirmation(name: string, question: string, initial?: boolean): Promise<boolean> {
+    const log = logger.for(this.askConfirmation);
+    log.verbose(`Asking confirmation input: ${name}, question: ${question}, initial: ${initial}`);
     const userInput = new UserInput(name)
       .setMessage(question)
       .setType("confirm")
@@ -630,7 +663,8 @@ export class UserInput<R extends string = string> implements PromptObject<R> {
    *   I-->>Caller: Return undefined if limit reached
    */
   static async insist<R>(input: UserInput, test: (res: string | number) => boolean, defaultConfirmation: boolean, limit = 1, ): Promise<R | undefined> {
-    const logger = Logging.for(UserInput, UserInput.insist.name);
+    const log = logger.for(this.insist);
+    log.verbose(`Insisting on input: ${input.name}, test: ${test.toString()}, defaultConfirmation: ${defaultConfirmation}, limit: ${limit}`);
     let result: string | number | undefined = undefined;
     let count = 0
     let confirmation: boolean;
@@ -646,12 +680,12 @@ export class UserInput<R extends string = string> implements PromptObject<R> {
           result = undefined;
       } while (typeof result === "undefined" && limit > 1 && count++ < limit);
     } catch (e: unknown) {
-      logger.error(`Error while insisting: ${e}`);
+      log.error(`Error while insisting: ${e}`);
       throw e;
     }
 
     if (typeof result === "undefined")
-      Logging.for(UserInput, UserInput.insist.name).info("no selection...");
+      log.info("no selection...");
     return result as R | undefined;
   }
   /**
@@ -668,6 +702,8 @@ export class UserInput<R extends string = string> implements PromptObject<R> {
    * @return A Promise that resolves to the valid input or undefined if the limit is reached.
    */
   static async insistForText(name: string, question: string, test: (res: string | number) => boolean, mask: string | undefined = undefined, initial?: string, defaultConfirmation = false, limit = -1): Promise<string | undefined> {
+    const log = logger.for(this.insistForText);
+    log.verbose(`Insisting for text input: ${name}, question: ${question}, test: ${test.toString()}, mask: ${mask}, initial: ${initial}, defaultConfirmation: ${defaultConfirmation}, limit: ${limit}`);
     const userInput = new UserInput(name)
       .setMessage(question);
 
@@ -692,6 +728,8 @@ export class UserInput<R extends string = string> implements PromptObject<R> {
    * @return A Promise that resolves to the valid input or undefined if the limit is reached.
    */
   static async insistForNumber(name: string, question: string, test: (res: string | number) => boolean, min?: number, max?: number, initial?: number, defaultConfirmation = false, limit = -1): Promise<string | undefined> {
+    const log = logger.for(this.insistForNumber);
+    log.verbose(`Insisting for number input: ${name}, question: ${question}, test: ${test.toString()}, min: ${min}, max: ${max}, initial: ${initial}, defaultConfirmation: ${defaultConfirmation}, limit: ${limit}`);
     const userInput = new UserInput(name)
       .setMessage(question)
       .setType("number");
@@ -724,14 +762,16 @@ export class UserInput<R extends string = string> implements PromptObject<R> {
    *   P-->>C: Return ParseArgsResult
    */
   static parseArgs(options: ParseArgsOptionsConfig): ParseArgsResult {
+    const log = logger.for(this.parseArgs);
     const args: ParseArgsConfig = {
       args: process.argv.slice(2),
       options: options
     }
+    log.debug(`Parsing arguments: ${JSON.stringify(args, null, 2)}`);
     try {
       return parseArgs(args);
     } catch (error: unknown) {
-      Logging.for(UserInput, UserInput.parseArgs.name).debug(`Error while parsing arguments:\n${JSON.stringify(args, null, 2)}\n | options\n${JSON.stringify(options, null ,2)}\n | ${error}`);
+      log.debug(`Error while parsing arguments:\n${JSON.stringify(args, null, 2)}\n | options\n${JSON.stringify(options, null ,2)}\n | ${error}`);
       throw new Error(`Error while parsing arguments: ${error}`);
     }
   }

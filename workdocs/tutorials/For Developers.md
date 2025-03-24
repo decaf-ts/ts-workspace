@@ -1,4 +1,5 @@
-### ***Initial Setup***
+
+## ***Initial Setup***
 
 #### if you use github
 
@@ -39,8 +40,6 @@ If this is the first time you are running this command it will also (according t
 Run `npm install` (or `npm run do-install` if you have private dependencies and a `.token` file) to install the dependencies.
 
 On the first install you will have a setup script. Follow the guides to properly setup your repository as intended.
-
-
 
 ### Scripts
 

@@ -8,6 +8,8 @@ The current document is the root index of a module.
 Define documentation block with:
  - a @module tag using the library name from package.json;
  - a thorough @description with a detailed analysis of the objective of the module, taken from analysing all the files imported by the current one;
+also document all exported objects;
+never omit or change any code
 ```
 
 
@@ -20,6 +22,8 @@ Define documentation block with:
  - a @namespace tag using the appropriate name, given the folder it is on and all the files imported by the current one;
  - a thorough @description with a detailed analysis of the objective of the files in the current folder recrusively;
  - a @memberOf tag referencing the parent module;
+also document all exported objects;
+never omit or change any code
 ```
 
 
@@ -46,6 +50,7 @@ The order of tags  (when applicable) should be as follows:
 7 - @mermaid;
 
 ignore @mermaid for methods with less that 15 lines and constructors.
+never omit or change any code
 ```
 
 ### Interfaces and Types (/ts-doc-types)
@@ -65,6 +70,7 @@ The order of tags  (when applicable) should be as follows:
 5 - @return;
 6 - @interface or @typeDef followed by the interface or type name;
 8 - @memberOf referencing the appropriate namespace using the appropriate syntax
+never omit or change any code
 ```
 
 
@@ -87,6 +93,7 @@ The order of tags (when applicable) should be as follows:
 6 - @function followed by the interface or type name;
 7 - @mermaid with the sequence diagram for the function if ithas over 10 lines
 8 - @memberOf referencing the appropriate namespace using the appropriate syntax
+never omit or change any code
 ```
 
 
@@ -106,6 +113,7 @@ The order of tags  (when applicable) should be as follows:
 4 - @property;
 6 - @const followed by the const or enum name;
 8 - @memberOf referencing the appropriate namespace using the appropriate syntax
+never omit or change any code
 ```
 
 ### Scripts (/ts-doc-scripts)
@@ -123,5 +131,5 @@ The order of tags  (when applicable) should be as follows:
 3 - @template;
 4 - @param;
 6 - @function followed by the const or enum name;
-8 - @memberOf referencing the appropriate namespace using the appropriate syntax
+never omit or change any code
 ```

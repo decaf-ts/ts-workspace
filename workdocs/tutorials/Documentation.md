@@ -335,5 +335,6 @@ Used with frameworks like **React**, **Vue**, or **Angular** for UI docs.
 
 Need help setting up the initial doc site or generating docs from your CI pipeline? Reach out to your tech lead or tooling team — or set up `jsdoc` + `better-docs` with a custom GitHub Action to automate it.
 
+also check out the [Documentation prompts](../prompts/documentation.md) section. It might just be what you need.
 
 
