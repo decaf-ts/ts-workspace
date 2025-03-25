@@ -1,7 +1,8 @@
 import fs from "fs";
 import path from "path";
-import { TextUtils } from "./text";
-import { Logging } from "./logging";
+import { Logging } from "../output/logging";
+import { patchString } from "./text";
+import { runCommand } from "./utils";
 
 const logger = Logging.for("FS");
 
@@ -48,7 +49,7 @@ function patchFile(path: string, values: Record<string, number | string>) {
   try {
     log.verbose(`Patching file "${path}"...`);
     log.debug(`with value: ${JSON.stringify(values)}`);
-    content = TextUtils.patchString(content, values);
+    content = patchString(content, values);
   } catch (error: unknown) {
     throw new Error(`Error patching file: ${error}`);
   }
@@ -102,21 +103,68 @@ function writeFile(path: string, data: string | Buffer): void {
 
 /**
  * Retrieves the package information from the package.json file.
- * 
+ *
  * @description This function attempts to load the package.json file from the specified directory
  * or the current working directory if no path is provided. It returns the parsed contents of the package.json file.
- * 
+ *
  * @param {string} [p=process.cwd()] - The directory path where the package.json file is located.
  * Defaults to the current working directory if not specified.
- * 
+ *
+ * @param property
  * @returns {object} The parsed contents of the package.json file as an object.
- * 
+ *
  * @throws {Error} Throws an error if the package.json file cannot be found or parsed.
  */
-export function getPackage(p = process.cwd()) {
+export function getPackage(p = process.cwd(), property?:  string) {
+  let pkg: any;
   try {
-    return require(path.join(`package.json`));
+    pkg = require(path.join(`package.json`));
   }  catch (error) {
     throw new Error("Failed to retrieve package information");
+  }
+
+  if (property){
+    if (!(property in pkg))
+      throw new Error(`Property "${property}" not found in package.json`);
+    return pkg[property];
+  }
+  return pkg;
+}
+
+export function getPackageVersion(p = process.cwd(), property?:  string) {
+  return getPackage(p, "version");
+}
+
+export async function getDependencies(path: string = process.cwd()) {
+  let pkg: any;
+
+  try {
+    pkg = JSON.parse(await runCommand(`npm ls --json`, { cwd: path }));
+  } catch (e: unknown) {
+    throw new Error(`Failed to retrieve dependencies: ${e}`);
+  }
+
+  const mapper = (entry: [string, unknown], index: number) => ({name: entry[0], version: (entry[1] as any).version})
+
+  return {
+    prod: Object.entries(pkg.dependencies || {}).map(mapper),
+    dev: Object.entries(pkg.devDependencies || {}).map(mapper),
+    peer: Object.entries(pkg.peerDependencies || {}).map(mapper),
+  }
+}
+
+export async function installDependencies(dependencies: {prod: string[], dev: string[], peer: string[]}) {
+  const {prod, dev, peer} = dependencies;
+  if (prod.length) {
+    logger.info(`Installing dependencies ${prod.join(', ')}...`);
+    await runCommand(`npm install ${prod.join(' ')}`, { cwd: process.cwd() });
+  }
+  if (dev.length) {
+    logger.info(`Installing devDependencies ${dev.join(', ')}...`);
+    await runCommand(`npm install --save-dev ${dev.join(' ')}`, { cwd: process.cwd() });
+  }
+  if (peer.length) {
+    logger.info(`Installing peerDependencies ${peer.join(', ')}...`);
+    await runCommand(`npm install --save-peer ${peer.join(' ')}`, { cwd: process.cwd() });
   }
 }

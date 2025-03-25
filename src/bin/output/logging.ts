@@ -1,13 +1,6 @@
-import {
-  ColorizeOptions,
-  LoggingConfig,
-  Theme,
-  ThemeOption,
-  ThemeOptionByLogLevel,
-  VerbosityLogger,
-} from "./types";
-import { DefaultLoggingConfig, DefaultTheme, LogLevel, NumericLogLevels } from "./constants";
-import { color } from "./colors";
+import { DefaultLoggingConfig, DefaultTheme, LogLevel, NumericLogLevels } from "../utils/constants";
+import { LoggingConfig, Theme, ThemeOption, ThemeOptionByLogLevel, VerbosityLogger } from "./types";
+import { ColorizeOptions, style } from "../utils/strings";
 
 /**
  * @description A minimal logger implementation.
@@ -183,7 +176,7 @@ export class Logging {
    * 
    * @param config - An object containing verbosity and log level settings.
    */
-  static set config(config: LoggingConfig) {
+  static setConfig(config: Partial<LoggingConfig>) {
     Object.assign(this._config, config);
   }
 
@@ -286,7 +279,7 @@ export class Logging {
 
       try {
         let t = txt;
-        let c = color(t);
+        let c = style(t);
 
         function applyColor(val: number | [number] | [number, number, number], isBg = false){
           let f: typeof c.background | typeof c.foreground | typeof c.rgb | typeof c.color256 = isBg ? c.background : c.foreground;
@@ -313,7 +306,7 @@ export class Logging {
           case "style":
             function applyStyle(v: number | string): void {
               t = (typeof v === "number" ? c.style(v) : c[v as keyof ColorizeOptions] as string);
-              c = color(t)
+              c = style(t)
             }
 
             if (Array.isArray(value)){

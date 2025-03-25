@@ -1,47 +1,39 @@
 import fs from "fs";
-import { HttpClient } from "../utils/web";
-import { Logging } from "../utils/logging";
+import { Logging } from "../output/logging";
+import path from "path";
+import { HttpClient } from "../web/HttpClient";
 
-const logger = Logging.for("Update")
+const logger = Logging.for("Template Sync")
+
+const options = {
+  templates: [
+    ...fs.readdirSync(path.join(process.cwd(), ".github", "ISSUE_TEMPLATE")),
+    ".github/FUNDING.yml"
+  ],
+  workflows: fs.readdirSync(path.join(process.cwd(), ".github", "workflows")),
+  ide: fs.readdirSync(path.join(process.cwd(), ".run")),
+  docs : [
+    ...fs.readdirSync(path.join(process.cwd(), "workdocs", "licences")),
+    ...fs.readdirSync(path.join(process.cwd(), "workdocs", "tutorials")),
+  ],
+  styles: [
+    ".prettierrc",
+    ".eslint.config.js",
+  ],
+  scripts: [
+
+  ]
+}
 
 const scripts = [
-  ".github/ISSUE_TEMPLATE/bug_report.md",
-  ".github/ISSUE_TEMPLATE/feature_request.md",
-  ".github/workflows/codeql-analysis.yml",
-  ".github/workflows/jest-coverage.yml",
-  ".github/workflows/jest-test.yml",
-  ".github/workflows/nodejs-build-prod.yml",
-  ".github/workflows/pages.yml",
-  ".github/workflows/publish-on-release.yml",
-  ".github/workflows/release-alpha-on-tag.yml",
-  ".github/workflows/release-on-tag.yml",
-  ".github/workflows/snyk-analysis.yml",
-  ".github/FUNDING.yml",
-  ".github/build.run.xml",
-  ".github/build_prod.run.xml",
 
-  ".run/All Tests.run.xml",
-  ".run/build.run.xml",
-  ".run/build_prod.run.xml",
-  ".run/coverage.run.xml",
-  ".run/docs.run.xml",
-  ".run/drawings.run.xml",
-  ".run/flash-forward.run.xml",
-  ".run/Integration Tests.run.xml",
-  ".run/lint-fix.run.xml",
-  ".run/test_circular.run.xml",
-  ".run/uml.run.xml",
-  ".run/Unit Tests.run.xml",
-  ".run/update-scripts.run.xml",
 
-  ".gitlab-ci.yml",
-  ".prettierrc",
-  ".eslint.config.js",
   "LICENSE.md",
 
   "bin/tag-release.sh",
   "bin/template_setup.sh",
-  "bin/update-scripts.js"
+  "bin/update-scripts.js",
+  "bin/update-script.js"
 ]
 
 async function main(){

@@ -2,7 +2,7 @@ import { runCommand } from "../utils/utils";
 import fs from "fs";
 
 import { Encoding, SetupScriptKey, Tokens } from "../utils/constants";
-import { Logging } from "../utils/logging";
+import { Logging } from "../output/logging";
 
 const logger = Logging.for("TemplateSetup");
 

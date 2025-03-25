@@ -1,4 +1,4 @@
-import { LoggingConfig, Theme, ThemeOptionByLogLevel } from "./types";
+import { LoggingConfig, Theme } from "../output/types";
 
 /**
  * @description ANSI escape code for resetting text formatting.

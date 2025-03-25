@@ -1,24 +1,7 @@
-import { ParseArgsOptionsConfig, VerbosityLogger } from "../utils/types";
-import { TextUtils } from "../utils/text";
-import { color } from "../utils/colors";
+import { VerbosityLogger } from "./types";
+import { padEnd } from "../utils/text";
 import slogans from "../assets/slogans.json";
-
-/**
- * @description Base Configuration for command-line arguments.
- * @summary Defines the accepted command-line options for the script.
- */
-export const DefaultInputOptions = {
-  verbose: {
-    type: "boolean",
-    short: "v",
-    default: false
-  },
-  help: {
-    type: "boolean",
-    short: "m",
-    default: false
-  }
-}
+import { style } from "../utils/strings";
 
 const colors = [
   "\x1b[38;5;215m", // soft orange
@@ -34,8 +17,8 @@ const colors = [
 
 export function printBanner(logger?: VerbosityLogger){
   const message = getSlogan();
-  const banner: string | string[] =
-`#                 ░▒▓███████▓▒░  ░▒▓████████▓▒░  ░▒▓██████▓▒░   ░▒▓██████▓▒░  ░▒▓████████▓▒░       ░▒▓████████▓▒░  ░▒▓███████▓▒░ 
+  const banner: string | string[] =`
+#                 ░▒▓███████▓▒░  ░▒▓████████▓▒░  ░▒▓██████▓▒░   ░▒▓██████▓▒░  ░▒▓████████▓▒░       ░▒▓████████▓▒░  ░▒▓███████▓▒░ 
 #      ( (        ░▒▓█▓▒░░▒▓█▓▒░ ░▒▓█▓▒░        ░▒▓█▓▒░░▒▓█▓▒░ ░▒▓█▓▒░░▒▓█▓▒░ ░▒▓█▓▒░                 ░▒▓█▓▒░     ░▒▓█▓▒░        
 #       ) )       ░▒▓█▓▒░░▒▓█▓▒░ ░▒▓█▓▒░        ░▒▓█▓▒░        ░▒▓█▓▒░░▒▓█▓▒░ ░▒▓█▓▒░                 ░▒▓█▓▒░     ░▒▓█▓▒░        
 #    [=======]    ░▒▓█▓▒░░▒▓█▓▒░ ░▒▓██████▓▒░   ░▒▓█▓▒░        ░▒▓████████▓▒░ ░▒▓██████▓▒░            ░▒▓█▓▒░      ░▒▓██████▓▒░  
@@ -45,9 +28,9 @@ export function printBanner(logger?: VerbosityLogger){
 #                                                                                                                 
 `.split("\n")
   const maxLength = banner.reduce((max, line) => Math.max(max, line.length), 0);
-  banner.push(TextUtils.padEnd(` #  ${message}`, maxLength));
+  banner.push(padEnd(` #  ${message}`, maxLength));
   banner.forEach((line, index) => {
-    console.log(color(line).raw(colors[index]));
+    console.log(style(line).raw(colors[index]));
   })
 }
 

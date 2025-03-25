@@ -1,7 +1,8 @@
-import { spawn, SpawnOptionsWithoutStdio } from 'child_process';
+import { ChildProcessWithoutNullStreams, spawn, SpawnOptionsWithoutStdio } from "child_process";
 import { StandardOutputWriter } from "../writers/StandardOutputWriter";
-import { CommandResult, OutputWriterConstructor } from "./types";
-import { Logging } from "./logging";
+import { CommandResult } from "./types";
+import { Logging } from "../output/logging";
+import { OutputWriterConstructor } from "../writers/types";
 
 /**
  * @description Creates a locked version of a function.
@@ -95,11 +96,12 @@ export function lockify<R>(f: (...params: unknown[]) => R) {
  */
 export async function runCommand<R = string>(command: string | string[], opts: SpawnOptionsWithoutStdio = {}, outputConstructor: OutputWriterConstructor<R> = StandardOutputWriter<R>, ...args: unknown[]): Promise<R> {
   const logger = Logging.for(runCommand)
-  const abort = new AbortController();
-  const logs: string[] = [];
-  const errs: string[] = [];
   const lock = new Promise<R>((resolve, reject) => {
-    let runCommand, output;
+    const abort = new AbortController();
+    const logs: string[] = [];
+    const errs: string[] = [];
+    let childProcess: ChildProcessWithoutNullStreams;
+    let output;
     try {
       output = new outputConstructor({
         resolve,
@@ -109,50 +111,71 @@ export async function runCommand<R = string>(command: string | string[], opts: S
       const [cmd, argz] = output.parseCommand(command);
       logger.info(`Running command: ${cmd}`);
       logger.debug(`with args: ${argz.join(" ")}`);
-      runCommand = spawn(cmd, argz, {
+      childProcess = spawn(cmd, argz, {
         ...opts,
         cwd: opts.cwd || process.cwd(),
         env: Object.assign({}, process.env, opts.env),
         shell: opts.shell || false,
         signal: abort.signal
       });
-      logger.verbose(`pid : ${runCommand.pid}`);
+      logger.verbose(`pid : ${childProcess.pid}`);
     } catch (e: unknown){
       throw new Error(`Error running command ${command}: ${e}`);
     }
 
-    runCommand.stdout.setEncoding("utf8");
+    childProcess.stdout.setEncoding("utf8");
 
-    runCommand.stdout.on("data", (chunk: any) => {
+    childProcess.stdout.on("data", (chunk: any) => {
       chunk = chunk.toString();
       logs.push(chunk);
       output.data(chunk);
     });
 
-    runCommand.stderr.on("data", (data: any) => {
+    childProcess.stderr.on("data", (data: any) => {
       data = data.toString();
       errs.push(data);
       output.error(data);
     });
 
-    runCommand.once("error", (err: Error) => {
+    childProcess.once("error", (err: Error) => {
       output.errors(err);
     });
 
-    runCommand.once("exit", (code: number = 0) => {
+    childProcess.once("exit", (code: number = 0) => {
       output.exit(code);
     });
+
+    Object.assign(lock, {
+      abort: abort,
+      command: command,
+      cmd: childProcess,
+      logs,
+      errs,
+      pipe: async <E>(cb: (r: R) => E) => {
+        const l = logger.for("pipe");
+        try {
+          l.verbose(`Executing pipe function ${command}...`);
+          const result: R = await lock
+          l.verbose(`Piping output to ${cb.name}: ${result}`);
+          return cb(result)
+        } catch (e: unknown) {
+          l.error(`Error piping command output: ${e}`);
+          throw e;
+        }
+      }
+    })
   });
 
-  Object.assign(lock, {
-    abort: abort,
-    command: command,
-    cmd: runCommand,
-    logs,
-    errs
-  })
-
   return lock as CommandResult<R>;
+}
+
+export function runWithRequirements<R = string>(command: string | string[],
+                                                opts: SpawnOptionsWithoutStdio = {},
+                                                outputConstructor: OutputWriterConstructor<R> = StandardOutputWriter<R>,
+                                                requirements: string[],
+                                                ...args: unknown[]): Promise<R> {
+
+  return runCommand<R>(command, opts, outputConstructor,...args)
 }
 
 
