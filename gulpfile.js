@@ -13,6 +13,7 @@ import replace from "gulp-replace";
 import webpack from "webpack-stream";
 import run from "gulp-run-command";
 import process from "node:process";
+import nodeExternals from 'webpack-node-externals';
 
 import pkg from "./package.json" with { type: "json" };
 import fs from "fs";
@@ -34,10 +35,10 @@ function patchFiles() {
   return series(doPatch("lib"), doPatch("dist"));
 }
 
-function getWebpackConfig(isESM, isDev) {
+function getWebpackConfig(isESM, isDev, isLib, nameOverride = name) {
   const webPackConfig = {
     mode: isDev ? "development" : "production", // can be changed to production to produce minified bundle
-
+    target: 'node',
     module: {
       rules: [
         {
@@ -67,12 +68,16 @@ function getWebpackConfig(isESM, isDev) {
         util: false,
       },
     },
-
     output: {
-      filename: `${name}.bundle.${!isDev ? "min." : ""}${isESM ? "esm." : ""}js`,
-      path: path.join(process.cwd(), "./dist/"),
+      filename: `${nameOverride ? nameOverride : `.bundle.${!isDev ? "min" : ""}${isESM ? "esm" : ""}`}.js`,
+      path: path.join(process.cwd(), isLib ? "./bin" : "./dist/"),
     },
   };
+
+  if (isLib) {
+    webPackConfig.externals = [nodeExternals()];
+    webPackConfig.externalsPresets = { node: true };
+  }
 
   if (isESM) webPackConfig.experiments = { outputModule: true };
   else
@@ -156,10 +161,7 @@ function exportDefault(isDev, mode) {
 }
 
 function exportBundles(isEsm, isDev) {
-  const entryFile = "src/index.ts";
-  return src(entryFile)
-    .pipe(named())
-    .pipe(webpack(getWebpackConfig(isEsm, isDev)))
+  return bundleFromFile("src/index.ts", isEsm, isDev)
     .pipe(dest(`./dist${isEsm ? "/esm" : ""}`));
 }
 
@@ -212,18 +214,41 @@ function makeDocs() {
   );
 }
 
+function bundleFromFile(entryFile, isEsm, isDev, isLib) {
+  return src(entryFile)
+    .pipe(named())
+    .pipe(webpack(getWebpackConfig(isEsm, isDev, isLib)))
+}
+
+function makeCommands(fileName, isDev) {
+  return function makeCommands() {
+    return src(`./src/bin/bin/${fileName}*`)
+      .pipe(named())
+      .pipe(webpack(getWebpackConfig(false, isDev, true)))
+      .pipe(dest('./bin'));
+  };
+}
+
 export const dev = series(
   parallel(
-    series(exportDefault(true, "commonjs"), exportDefault(true, "es2022")),
-    exportESMDist(true),
-    exportJSDist(true)
+    series(
+      // exportDefault(true, "commonjs"),
+      // exportDefault(true, "es2022"),
+      makeCommands("update-script", true),
+    ),
+    // exportESMDist(true),
+    // exportJSDist(true)
   ),
-  patchFiles()
+  // patchFiles()
 );
 
 export const prod = series(
   parallel(
-    series(exportDefault(true, "commonjs"), exportDefault(true, "es2022")),
+    series(
+      exportDefault(true, "commonjs"),
+      exportDefault(true, "es2022"),
+      makeCommands("update-script", false),
+    ),
     exportESMDist(false),
     exportJSDist(false)
   ),

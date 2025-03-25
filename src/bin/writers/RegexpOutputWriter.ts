@@ -1,6 +1,6 @@
 import { StandardOutputWriter } from "./StandardOutputWriter";
 import { PromiseExecutor } from "../utils/types";
-import { color } from "../utils/colors";
+import { style } from "../utils/strings";
 
 /**
  * @description A specialized output writer that uses regular expressions to process output.
@@ -108,7 +108,7 @@ export class RegexpOutputWriter extends StandardOutputWriter<string> {
    * @param reason - The reason for the rejection.
    */
   protected reject(reason: string){
-    this.log("stderr", `${this.cmd} failed to execute: ${color(reason).red}`);
+    this.log("stderr", `${this.cmd} failed to execute: ${style(reason).red.bold}`);
     this.lock.reject(1);
   }
 }

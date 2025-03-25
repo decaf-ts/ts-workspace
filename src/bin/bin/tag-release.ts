@@ -1,10 +1,10 @@
-import { LoggingConfig, ParseArgsOptionsConfig } from "../utils/types";
 import { runCommand } from "../utils/utils";
 import { DefaultTheme, LogLevel, NoCIFLag } from "../utils/constants";
-import { UserInput } from "../input/UserInput";
-import { DefaultInputOptions } from "../input/common";
-import { Logging } from "../utils/logging";
+import { Logging } from "../output/logging";
 import { prepareMessage, prepareVersion } from "../cli/utils";
+import { ParseArgsOptionsConfig } from "../input/types";
+import { LoggingConfig } from "../output/types";
+import { UserInput } from "../input/input";
 
 const logger = Logging.for("ReleaseScript");
 /**

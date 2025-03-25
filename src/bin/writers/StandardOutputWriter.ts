@@ -1,7 +1,8 @@
-import { OutputType, PromiseExecutor } from "../utils/types";
 import { Encoding } from "../utils/constants";
 import { OutputWriter } from "./OutputWriter";
-import { color } from "../utils/colors";
+import { PromiseExecutor } from "../utils/types";
+import { OutputType } from "./types";
+import { style } from "../utils/strings";
 
 /**
  * @description A standard output writer for handling command execution output.
@@ -43,7 +44,7 @@ export class StandardOutputWriter<R = string> implements OutputWriter {
    */
   protected log(type: OutputType, data: string | Buffer){
     data = Buffer.isBuffer(data) ? data.toString(Encoding) : data;
-    const formatedType = type === "stderr" ? color("ERROR").red : type;
+    const formatedType = type === "stderr" ? style("ERROR").red : type;
     const log = `${new Date().getTime()} - ${formatedType}: ${data}`;
     console.log(log);
   }
@@ -85,7 +86,7 @@ export class StandardOutputWriter<R = string> implements OutputWriter {
    * @param code - The exit code of the command.
    */
   exit(code: number){
-    this.log("stdout", `command exited code : ${code === 0 ? color(code).green : color(code).red}`);
+    this.log("stdout", `command exited code : ${code === 0 ? style(code.toString()).green : style(code.toString()).red}`);
     code === 0 ? this.resolve(code as R) : this.reject(code);
   }
 
@@ -109,7 +110,7 @@ export class StandardOutputWriter<R = string> implements OutputWriter {
    * @param reason - The reason for resolving the promise.
    */
   protected resolve(reason: R){
-    this.log("stdout", `${this.cmd} executed successfully: ${color(reason ? "ran to completion" : reason).green}`);
+    this.log("stdout", `${this.cmd} executed successfully: ${style(reason ? "ran to completion" : reason as string).green}`);
     this.lock.resolve(reason)
   }
 
@@ -120,7 +121,7 @@ export class StandardOutputWriter<R = string> implements OutputWriter {
    * @param reason - The reason for rejecting the promise, either a number (exit code) or a string.
    */
   protected reject(reason: number | string){
-    this.log("stderr", `${this.cmd} failed to execute: ${color(typeof reason === 'number' ? `Exit code ${reason}` : reason).red}`);
+    this.log("stderr", `${this.cmd} failed to execute: ${style(typeof reason === 'number' ? `Exit code ${reason}` : reason).red}`);
     this.lock.reject(typeof reason === "number"? reason : 1);
   }
 }

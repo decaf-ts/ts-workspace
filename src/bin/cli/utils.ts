@@ -1,7 +1,8 @@
 import { runCommand } from "../utils/utils";
-import { ParseArgsOptionsConfig, VerbosityLogger } from "../utils/types";
-import { UserInput } from "../input/UserInput";
 import { SemVersion, SemVersionRegex } from "../utils/constants";
+import { ParseArgsOptionsConfig } from "../input/types";
+import { VerbosityLogger } from "../output/types";
+import { UserInput } from "../input/input";
 
 /**
  * @description Configuration for command-line arguments.

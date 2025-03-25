@@ -4,11 +4,11 @@ export * from "./input/common";
 export * from "./utils/colors";
 export * from "./utils/constants";
 export * from "./utils/fs";
-export * from "./utils/logging";
+export * from "./output/logging";
 export * from "./utils/text";
 export * from "./utils/types";
 export * from "./utils/utils";
-export * from "./utils/web";
+export * from "./web/web";
 
 export * from "./writers/OutputWriter";
 export * from "./writers/RegexpOutputWriter";

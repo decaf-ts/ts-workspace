@@ -1,4 +1,4 @@
-import { Logging } from "./logging";
+import { Logging } from "../output/logging";
 import {
   AnsiReset, BrightBackgroundColors,
   BrightForegroundColors,
@@ -6,7 +6,7 @@ import {
   StandardForegroundColors,
   styles,
 } from "./constants";
-import { ColorizeOptions } from "./types";
+import { ColorizeOptions } from "./strings";
 
 const logger = Logging.for("colorize");
 
@@ -143,71 +143,3 @@ export function clear(text: string): string {
 export function raw(text: string, raw: string): string {
   return `${raw}${text}${AnsiReset}`;
 }
-
-/**
- * @description Applies ANSI color codes to text.
- * @summary This function takes any number of arguments and returns an object with getters
- * to apply various color and background color ANSI codes to the joined string of arguments.
- * It supports 16 basic colors, 256 colors, and RGB colors for both foreground and background.
- * The color strings are calculated only when accessed, improving performance for large sets of unused colors.
- *
- * @param {...unknown} args - The arguments to be joined and colored.
- * @return {ColorizeOptions} An object with getters for each color type and style.
- * 
- * @function color
- * 
- * @memberOf module:@decaf-ts/utils
- */
-export function color(...args: unknown[]): ColorizeOptions {
-  const text = args.join(' ');
-  
-  const result = {
-    clear: () => clear(String(text)),
-    raw: (rawAnsi: string) => raw(text, rawAnsi),
-    foreground: (n: number) => colorizeANSI(text, n),
-    background: (n: number) => colorizeANSI(text, n, true),
-    style: (n: number | keyof typeof styles) => style(text, n),
-    // 256 colors
-    color256: (n: number) => colorize256(text, n),
-    bgColor256: (n: number) => colorize256(text, n, true),
-    // RGB colors
-    rgb: (r: number, g: number, b: number) => colorizeRGB(text, r, g, b),
-    bgRgb: (r: number, g: number, b: number) => colorizeRGB(text, r, g, b, true)
-  } as ColorizeOptions;
-
-  // Basic colors
-  Object.entries(StandardForegroundColors).forEach(([name, code]) => {
-    Object.defineProperty(result, name, {
-      get: () => result.foreground(code)
-    });
-  });
-
-  Object.entries(BrightForegroundColors).forEach(([name, code]) => {
-    Object.defineProperty(result, name, {
-      get: () => result.foreground(code)
-    });
-  });
-
-  // Background colors
-  Object.entries(StandardBackgroundColors).forEach(([name, code]) => {
-    Object.defineProperty(result, name, {
-      get: () => result.background(code)
-    });
-  });
-
-  Object.entries(BrightBackgroundColors).forEach(([name, code]) => {
-    Object.defineProperty(result, name, {
-      get: () => result.background(code)
-    });
-  });
-
-  // Styles
-  Object.entries(styles).forEach(([name, code]) => {
-    Object.defineProperty(result, name, {
-      get: () => result.background(code)
-    });
-  });
-
-  return result;
-}
-

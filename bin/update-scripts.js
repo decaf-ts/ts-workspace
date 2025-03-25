@@ -15,8 +15,6 @@ const scripts = [
   ".github/workflows/release-on-tag.yml",
   ".github/workflows/snyk-analysis.yml",
   ".github/FUNDING.yml",
-  ".github/build.run.xml",
-  ".github/build_prod.run.xml",
 
   ".run/All Tests.run.xml",
   ".run/build.run.xml",
