@@ -1,18 +1,8 @@
-export * from "./input/UserInput";
-export * from "./input/common";
-
-export * from "./utils/colors";
-export * from "./utils/constants";
-export * from "./utils/fs";
-export * from "./output/logging";
-export * from "./utils/text";
-export * from "./utils/types";
-export * from "./utils/utils";
-export * from "./web/web";
-
-export * from "./writers/OutputWriter";
-export * from "./writers/RegexpOutputWriter";
-export * from "./writers/StandardOutputWriter";
+export * from "./cli";
+export * from "./input";
+export * from "./output";
+export * from "./utils";
+export * from "./writers";
 
 /**
  * @module @decaf-ts/utils

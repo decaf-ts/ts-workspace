@@ -1,6 +1,6 @@
 import { VerbosityLogger } from "./types";
 import { padEnd } from "../utils/text";
-import slogans from "../assets/slogans.json";
+import slogans from "../../../workdocs/assets/slogans.json";
 import { style } from "../utils/strings";
 
 const colors = [

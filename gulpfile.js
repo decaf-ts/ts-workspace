@@ -232,14 +232,16 @@ function makeCommands(fileName, isDev) {
 export const dev = series(
   parallel(
     series(
-      // exportDefault(true, "commonjs"),
-      // exportDefault(true, "es2022"),
-      makeCommands("update-script", true),
+      exportDefault(true, "commonjs"),
+      exportDefault(true, "es2022"),
+      makeCommands("update-scripts", true),
+      makeCommands("tag-release", true),
+      makeCommands("template-setup", true),
     ),
-    // exportESMDist(true),
-    // exportJSDist(true)
+    exportESMDist(true),
+    exportJSDist(true)
   ),
-  // patchFiles()
+  patchFiles()
 );
 
 export const prod = series(
@@ -247,7 +249,9 @@ export const prod = series(
     series(
       exportDefault(true, "commonjs"),
       exportDefault(true, "es2022"),
-      makeCommands("update-script", false),
+      makeCommands("update-scripts", false),
+      makeCommands("tag-release", false),
+      makeCommands("template-setup", false),
     ),
     exportESMDist(false),
     exportJSDist(false)

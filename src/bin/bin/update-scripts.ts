@@ -1,7 +1,9 @@
 import fs from "fs";
 import { Logging } from "../output/logging";
 import path from "path";
-import { HttpClient } from "../web/HttpClient";
+import { Command } from "../cli/command";
+import { CommandOptions } from "../cli/types";
+import { HttpClient } from "../utils/http";
 
 const logger = Logging.for("Template Sync")
 
@@ -20,9 +22,20 @@ const options = {
     ".prettierrc",
     ".eslint.config.js",
   ],
+  licences: fs.readdirSync(path.join(process.cwd(), "workdocs", "licenses")),
   scripts: [
-
   ]
+}
+
+const opts = Object.keys(options).map(k => ({
+  type: "boolean",
+  default: true,
+}));
+
+class TemplateSync extends Command<CommandOptions<typeof opts>, void> {
+  constructor(options: CommandOptions<any>) {
+    super("TemplateSync", options);
+  }
 }
 
 const scripts = [

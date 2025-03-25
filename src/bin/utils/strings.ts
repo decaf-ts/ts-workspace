@@ -4,7 +4,7 @@ import {
   StandardBackgroundColors,
   StandardForegroundColors, styles,
 } from "./constants";
-import { clear, colorize256, colorizeANSI, colorizeRGB, raw, style as styler } from "./colors";
+import { clear, colorize256, colorizeANSI, colorizeRGB, raw, applyStyle } from "./colors";
 
 /**
  * @description Options for text colorization using ANSI codes.
@@ -91,7 +91,7 @@ export function style(text: string): StyledString {
       return text as StyledString;
     },
     style: (n: number | keyof typeof styles) => {
-      text = styler(text, n);
+      text = applyStyle(text, n);
       return text as StyledString;
     },
     // 256 colors

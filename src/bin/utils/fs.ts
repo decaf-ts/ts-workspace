@@ -4,7 +4,7 @@ import { Logging } from "../output/logging";
 import { patchString } from "./text";
 import { runCommand } from "./utils";
 
-const logger = Logging.for("FS");
+const logger = Logging.for("fs");
 
 /**
  * @description Patches a file with given values.
@@ -115,24 +115,24 @@ function writeFile(path: string, data: string | Buffer): void {
  *
  * @throws {Error} Throws an error if the package.json file cannot be found or parsed.
  */
-export function getPackage(p = process.cwd(), property?:  string) {
+export function getPackage(p: string = process.cwd(), property?: string): object | string {
   let pkg: any;
   try {
-    pkg = require(path.join(`package.json`));
-  }  catch (error) {
+    pkg = JSON.parse(readFile(path.join(p, `package.json`)));
+  } catch (error) {
     throw new Error("Failed to retrieve package information");
   }
 
-  if (property){
+  if (property) {
     if (!(property in pkg))
       throw new Error(`Property "${property}" not found in package.json`);
-    return pkg[property];
+    return pkg[property] as string;
   }
   return pkg;
 }
 
-export function getPackageVersion(p = process.cwd(), property?:  string) {
-  return getPackage(p, "version");
+export function getPackageVersion(p = process.cwd()): string {
+  return getPackage(p, "version") as string;
 }
 
 export async function getDependencies(path: string = process.cwd()) {
@@ -151,6 +151,34 @@ export async function getDependencies(path: string = process.cwd()) {
     dev: Object.entries(pkg.devDependencies || {}).map(mapper),
     peer: Object.entries(pkg.peerDependencies || {}).map(mapper),
   }
+}
+
+export async function updateDependencies() {
+  const log = logger.for(updateDependencies);
+  log.info("checking for updates...");
+  await runCommand("npx npm-check-updates -u");
+  log.info("updating...");
+  await runCommand("npx npm run do-install");
+}
+
+export async function auditFix() {
+  return await runCommand("npm audit fix --force");
+}
+
+export async function pushToGit(){
+  const log = logger.for(pushToGit);
+  const gitUser = await runCommand("git config user.name");
+  const gitEmail = await runCommand("git config user.email");
+  log.verbose(`cached git id: ${gitUser}/${gitEmail}. changing to automation`);
+  await runCommand("git config user.email \"automation@decaf.ts\"");
+  await runCommand("git config user.name \"decaf\"");
+  log.info("Pushing changes to git...");
+  await runCommand("git add .");
+  await runCommand(`git commit -m "refs #1 - after repo setup"`);
+  await runCommand("git push");
+  await runCommand(`git config user.email "${gitEmail}"`);
+  await runCommand(`git config user.name "${gitUser}"`);
+  log.verbose(`reverted to git id: ${gitUser}/${gitEmail}`);
 }
 
 export async function installDependencies(dependencies: {prod: string[], dev: string[], peer: string[]}) {

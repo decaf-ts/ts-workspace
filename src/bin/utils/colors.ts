@@ -1,12 +1,8 @@
 import { Logging } from "../output/logging";
 import {
-  AnsiReset, BrightBackgroundColors,
-  BrightForegroundColors,
-  StandardBackgroundColors,
-  StandardForegroundColors,
+  AnsiReset,
   styles,
 } from "./constants";
-import { ColorizeOptions } from "./strings";
 
 const logger = Logging.for("colorize");
 
@@ -101,10 +97,10 @@ export function colorizeRGB(text: string, r: number, g: number, b: number, bg = 
  * @param {number | keyof typeof styles} n - The style code or style name.
  * @return {string} The text wrapped in ANSI style codes.
  * 
- * @function style
+ * @function applyStyle
  * @memberOf module:@decaf-ts/utils
  */
-export function style(text: string, n: number | keyof typeof styles) {
+export function applyStyle(text: string, n: number | keyof typeof styles) {
   const styleCode = typeof n === 'number'? n : styles[n];
   return `\x1b[${styleCode}m${text}${AnsiReset}`;
 }
