@@ -212,10 +212,6 @@ export async function updateDependencies() {
   await runCommand("npx npm run do-install");
 }
 
-export async function auditFix() {
-  return await runCommand("npm audit fix --force");
-}
-
 export async function pushToGit(){
   const log = logger.for(pushToGit);
   const gitUser = await runCommand("git config user.name");

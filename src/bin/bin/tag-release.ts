@@ -122,14 +122,15 @@ class ReleaseScript extends Command<typeof options, void> {
 
 }
 
-new ReleaseScript(options).run(async (cmd: ReleaseScript, args: ParseArgsResult, log: VerbosityLogger) => {
+new ReleaseScript(options).run(async function (this: ReleaseScript, args: ParseArgsResult, log: VerbosityLogger) {
   let result: any;
-  let {tag, message, ci} = args.values;
-  tag = await cmd.prepareVersion(log, tag as string);
-  message = await cmd.prepareMessage(log, message as string);
+  const {ci} = args.values;
+  let {tag, message} = args.values;
+  tag = await this.prepareVersion(log, tag as string);
+  message = await this.prepareMessage(log, message as string);
   result = await runCommand(`npm run prepare-release -- ${tag} ${message}`, {cwd: process.cwd()});
   result = runCommand("git status --porcelain");
-  const resolved = await result;
+  await result;
   if (result.logs.length && await UserInput.askConfirmation("git-changes", "Do you want to push the changes to the remote repository?", true)) {
     await runCommand("git add .");
     await runCommand(`git commit -m "${tag} - ${message} - after release preparation${ci ? "" : NoCIFLag}"`);
@@ -137,7 +138,7 @@ new ReleaseScript(options).run(async (cmd: ReleaseScript, args: ParseArgsResult,
   await runCommand(`npm version "${tag}" -m "${message}${ci ? "" : NoCIFLag}"`);
   await runCommand("git push --follow-tags");
   if(!ci) {
-    await runCommand("NPM_TOKEN=\$(cat .npmtoken) npm publish --access public");
+    await runCommand("NPM_TOKEN=$(cat .npmtoken) npm publish --access public");
   }
 }).then(() => ReleaseScript.log.info("Release pushed successfully"))
   .catch((e: unknown) => {

@@ -1,10 +1,10 @@
 import fs from "fs";
 import { Encoding, SetupScriptKey, Tokens } from "../utils/constants";
-import { auditFix, pushToGit, updateDependencies, writeFile } from "../utils/fs";
+import { patchFile, pushToGit, updateDependencies, writeFile } from "../utils/fs";
 import { Command } from "../cli/command";
 import { CommandOptions } from "../cli/types";
 import { ParseArgsResult, UserInput } from "../input";
-import { HttpClient } from "../utils";
+import { HttpClient, runCommand } from "../utils";
 import path from "path";
 
 const baseUrl = "https://raw.githubusercontent.com/decaf-ts/ts-workspace/master"
@@ -88,15 +88,35 @@ class TemplateSetupScript extends Command<CommandOptions<typeof options>, void>{
     writeFile(path.join(process.cwd(), "LICENSE.md"), data);
   }
 
-  patchFiles(){
-    ["jsdocs.json", ]
+  patchFiles(org: string, name: string, author: string){
+    const files = [
+      ...fs.readdirSync(path.join(process.cwd(), "src"), {recursive: true, withFileTypes: true}),
+      ...fs.readdirSync(path.join(process.cwd(), "workdocs"), {recursive: true, withFileTypes: true}),
+      ".gitlab-ci.yml",
+      "jsdocs.json"
+    ];
+
+    for (const file of files) {
+      patchFile(path.join(process.cwd(), file as string), {
+        "decaf-ts/ts-workspace": `${org ? `${org}/` : ""}${name}`,
+        "decaf-ts": `${org || ""}`,
+        "ts-workspace": name,
+        "Tiago Venceslau": author
+      })
+    }
+
+  }
+
+
+  async auditFix() {
+    return await runCommand("npm audit fix --force");
   }
 }
 
-new TemplateSetupScript(options).run(async (cmd: TemplateSetupScript, args: ParseArgsResult)=> {
+new TemplateSetupScript(options).run(async function (this: TemplateSetupScript, args: ParseArgsResult) {
   let {org, name, author, license} = args.values;
   if (!org){
-    org = await cmd.getOrg();
+    org = await this.getOrg();
   }
   if (!name){
     name = await UserInput.insistForText("name", "Enter the name of your project:", (val) =>!!val && val.toString().length > 3);
@@ -112,13 +132,13 @@ new TemplateSetupScript(options).run(async (cmd: TemplateSetupScript, args: Pars
 
   const pkgName = org ? `@${org}/${name}` : name;
 
-  await cmd.fixPackage(pkgName as string, author as string, license as string);
-  await cmd.createTokenFiles();
+  await this.fixPackage(pkgName as string, author as string, license as string);
+  await this.createTokenFiles();
   if (license)
-    await cmd.getLicense(license as string);
-
+    await this.getLicense(license as string);
+  this.patchFiles(org as string, name as string, author as string);
   await updateDependencies();
-  await auditFix();
+  await this.auditFix();
   await pushToGit();
 }).then(() => TemplateSetupScript.log.info("Template updated successfully"))
   .catch((e: unknown) => {

@@ -133,7 +133,7 @@ class TemplateSync extends Command<CommandOptions<typeof args>, void> {
 
 }
 
-new TemplateSync(args).run(async (cmd: TemplateSync, args: ParseArgsResult) => {
+new TemplateSync(args).run(async function(this: TemplateSync, args: ParseArgsResult){
   const {license} = args.values;
   let {all, scripts, styles, docs, ide, workflows, templates } = args.values;
 
@@ -149,19 +149,19 @@ new TemplateSync(args).run(async (cmd: TemplateSync, args: ParseArgsResult) => {
     templates = true;
   }
   if (license)
-    await cmd.getLicense(license as "MIT");
+    await this.getLicense(license as "MIT");
   if (ide)
-    await cmd.getIde();
+    await this.getIde();
   if (scripts)
-    await cmd.getScripts();
+    await this.getScripts();
   if (styles)
-    await cmd.getStyles();
+    await this.getStyles();
   if (docs)
-    await cmd.getDocs();
+    await this.getDocs();
   if (workflows)
-    await cmd.getWorkflows();
+    await this.getWorkflows();
   if (templates)
-    await cmd.getTemplates();
+    await this.getTemplates();
 }).then(() => TemplateSync.log.info("Template updated successfully"))
   .catch((e: unknown) => {
     TemplateSync.log.error(`Error preparing template: ${e}`);

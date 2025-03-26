@@ -14,7 +14,7 @@ import { Command } from "./command";
  * @return A promise that resolves to the result of type R.
  * @typedef {Function} CliFunction
  */
-export type CliFunction<I, R, C extends Command<I,R>> = (command: C, answers: ParseArgsResult, logger: VerbosityLogger) => Promise<R>;
+export type CliFunction<I, R, C extends Command<I,R>> = (this: C, answers: ParseArgsResult, logger: VerbosityLogger) => Promise<R>;
 
 /**
  * @description Interface for input options.
