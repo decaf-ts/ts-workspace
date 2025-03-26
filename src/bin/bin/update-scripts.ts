@@ -1,83 +1,169 @@
-import fs from "fs";
-import { Logging } from "../output/logging";
 import path from "path";
 import { Command } from "../cli/command";
 import { CommandOptions } from "../cli/types";
-import { HttpClient } from "../utils/http";
+import { ParseArgsResult } from "../input";
+import { HttpClient, setPackageAttribute, writeFile } from "../utils";
 
-const logger = Logging.for("Template Sync")
+const baseUrl = "https://raw.githubusercontent.com/decaf-ts/ts-workspace/master"
 
 const options = {
   templates: [
-    ...fs.readdirSync(path.join(process.cwd(), ".github", "ISSUE_TEMPLATE")),
+    ".github/ISSUE_TEMPLATE/bug_report.md",
+    ".github/ISSUE_TEMPLATE/feature_request.md",
     ".github/FUNDING.yml"
   ],
-  workflows: fs.readdirSync(path.join(process.cwd(), ".github", "workflows")),
-  ide: fs.readdirSync(path.join(process.cwd(), ".run")),
+  workflows: [
+    ".github/workflows/codeql_analysis.yml",
+    ".github/workflows/jest-coverage.yaml",
+    ".github/workflows/nodejs-build-prod.yaml",
+    ".github/workflows/pages.yaml",
+    ".github/workflows/publish-on-release.yaml",
+    ".github/workflows/release-on-tag.yaml",
+    ".github/workflows/snyk-analysis.yaml",
+  ],
+  ide: [
+    ".run/All Tests.run.xml",
+    ".run/build.run.xml",
+    ".run/build_prod.run.xml",
+    ".run/coverage.run.xml",
+    ".run/docs.run.xml",
+    ".run/drawings.run.xml",
+    ".run/flash-forward.run.xml",
+    ".run/Integration Tests.run.xml",
+    ".run/lint-fix.run.xml",
+    ".run/test_circular.run.xml",
+    ".run/uml.run.xml",
+    ".run/Unit Tests.run.xml",
+    ".run/update-scripts.run.xml",
+  ],
   docs : [
-    ...fs.readdirSync(path.join(process.cwd(), "workdocs", "licences")),
-    ...fs.readdirSync(path.join(process.cwd(), "workdocs", "tutorials")),
+    "workdocs/tutorials/Contributing.md",
+    "workdocs/tutorials/Documentation.md",
+    "workdocs/tutorials/For Developers.md",
   ],
   styles: [
     ".prettierrc",
     ".eslint.config.js",
   ],
-  licences: fs.readdirSync(path.join(process.cwd(), "workdocs", "licenses")),
   scripts: [
+    "bin/tag-release.sh",
+    "bin/template_setup.sh",
+    "bin/update-scripts.cjs",
+    "bin/tag-release.cjs",
+    "bin/template-setup.cjs"
   ]
 }
 
-const opts = Object.keys(options).map(k => ({
-  type: "boolean",
-  default: true,
-}));
-
-class TemplateSync extends Command<CommandOptions<typeof opts>, void> {
-  constructor(options: CommandOptions<any>) {
-    super("TemplateSync", options);
+const args = {
+  all: {
+    type: "boolean",
+    default: true
+  },
+  license: {
+    type: 'multiselect',
+    name: 'license',
+    message: 'Pick the license',
+    choices: [
+      { title: 'MIT', value: 'MIT' },
+      { title: 'GPL', value: 'GPL' },
+      { title: 'LGPL', value: 'LGPL' },
+      { title: 'AGPL', value: 'AGPL' },
+      { title: 'Apache', value: 'Apache' },
+    ],
+    default: "MIT"
+  },
+  scripts: {
+    type: "boolean",
+    default: false
+  },
+  styles: {
+    type: "boolean",
+    default: false
+  },
+  docs: {
+    type: "boolean",
+    default: false
+  },
+  ide: {
+    type: "boolean",
+    default: false
+  },
+  workflows: {
+    type: "boolean",
+    default: false
+  },
+  templates: {
+    type: "boolean",
+    default: false
   }
 }
 
-const scripts = [
+class TemplateSync extends Command<CommandOptions<typeof args>, void> {
+  constructor(options: CommandOptions<typeof args>) {
+    super("TemplateSync", options);
+  }
 
+  async downloadOption(key: keyof typeof options): Promise<void> {
+    if (!(key in options)) {
+      throw new Error(`Option "${key}" not found in options`);
+    }
+    const files = options[key as keyof typeof options];
 
-  "LICENSE.md",
+    for (const file of files) {
+      this.log.info(`Downloading ${file}`);
 
-  "bin/tag-release.sh",
-  "bin/template_setup.sh",
-  "bin/update-scripts.js",
-  "bin/update-script.js"
-]
+      const data = await HttpClient.downloadFile(`${baseUrl}/${file}`);
+      writeFile(path.join(process.cwd(), file), data);
+    }
+  }
 
-async function main(){
-  return Promise.allSettled(scripts.map(async p => {
-    return new Promise<{path: string, result: string}>(async (resolve, reject) => {
-      const  data = await HttpClient.downloadFile(`https://raw.githubusercontent.com/decaf-ts/ts-wokspace/master/${p}`)
-      return data;
-    })
-  })).catch(error => {
-    logger.error(`Error fetching scripts: ${error}`);
-    throw new Error(`Error fetching scripts: ${error}`);
-  }).then(results => {
-    results.forEach((prom) => {
-      if(prom.status === "fulfilled") {
-        const { path, result } = prom.value;
-        const content = result.toString();
-        fs.writeFileSync(path, content);
-        logger.verbose(`Updated ${path}`);
-      } else {
-        logger.debug(`Failed to download: ${prom.reason}`);
-      }
-    });
-  }).catch((error: unknown) => {
-    logger.error(`Error fetching scripts: ${error}`);
-    throw new Error(`Error overwriting files: ${error}`);
-  })
+  async getLicense(license: "MIT" | "GPL" | "Apache" | "LGPL" | "AGPL"){
+    this.log.info(`Downloading ${license} license`);
+    const data = await HttpClient.downloadFile(`${baseUrl}/workdocs/licenses/${license}.md`);
+    writeFile(path.join(process.cwd(), "LICENSE.md"), data);
+    setPackageAttribute("license", license);
+  }
+
+  getIde = () => this.downloadOption("ide");
+  getScripts = () => this.downloadOption("scripts");
+  getStyles = () => this.downloadOption("styles");
+  getTemplates = () => this.downloadOption("templates");
+  getWorkflows = () => this.downloadOption("workflows");
+  getDocs = () => this.downloadOption("docs");
+
 }
 
-main()
-  .then(() => logger.info("Scripts and configs updated"))
-  .catch(e => {
-    logger.error(`Error Updating scripts: ${e}`);
+new TemplateSync(args).run(async (cmd: TemplateSync, args: ParseArgsResult) => {
+  const {license} = args.values;
+  let {all, scripts, styles, docs, ide, workflows, templates } = args.values;
+
+  if (scripts || styles || docs || ide || workflows || templates)
+    all = false;
+
+  if (all){
+    scripts = true;
+    styles = true;
+    docs = true;
+    ide = true;
+    workflows = true;
+    templates = true;
+  }
+  if (license)
+    await cmd.getLicense(license as "MIT");
+  if (ide)
+    await cmd.getIde();
+  if (scripts)
+    await cmd.getScripts();
+  if (styles)
+    await cmd.getStyles();
+  if (docs)
+    await cmd.getDocs();
+  if (workflows)
+    await cmd.getWorkflows();
+  if (templates)
+    await cmd.getTemplates();
+}).then(() => TemplateSync.log.info("Template updated successfully"))
+  .catch((e: unknown) => {
+    TemplateSync.log.error(`Error preparing template: ${e}`);
     process.exit(1);
   });

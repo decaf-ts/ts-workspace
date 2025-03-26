@@ -22,9 +22,13 @@ module.exports = {
     [
       "jest-junit",
       {
-        outputDirectory: "./workdocs/coverage",
+        outputDirectory: "./workdocs/resources/reports/junit",
         outputName: "junit-report.xml",
       },
     ],
+    ["./node_modules/jest-html-reporter", {
+      "pageTitle": "ts-workspace tests",
+      "outputPath": "./workdocs/reports/html/test-results.html"
+    }]
   ],
 };

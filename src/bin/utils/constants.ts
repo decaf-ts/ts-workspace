@@ -210,7 +210,9 @@ export enum Tokens {
   /** NPM authentication token file name. */
   NPM = ".npmtoken",
   /** Docker authentication token file name. */
-  DOCKER = ".dockertoken"
+  DOCKER = ".dockertoken",
+  /** Confluence authentication token file name. */
+  CONFLUENCE = ".confluence-token"
 }
 
 /**

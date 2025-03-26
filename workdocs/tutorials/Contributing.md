@@ -3,12 +3,13 @@
 [fork]: https://github.com/actions/dependency-review-action/fork
 [pr]: https://github.com/actions/dependency-review-action/compare
 [code-of-conduct]: CODE_OF_CONDUCT.md
+[developers-guide]: ./For%20Developers.md
 
 Hi there! I'm thrilled that you'd like to contribute to this project. Your help is essential for keeping it great.
 
 Contributions to this project are
 [released](https://help.github.com/articles/github-terms-of-service/#6-contributions-under-repository-license)
-to the public under the [project's open source license](LICENSE.md).
+to the public under the [project's open source license](../../LICENSE.md).
 
 Please note that this project is released with a [Contributor Code of
 Conduct][code-of-conduct]. By participating in this project you agree

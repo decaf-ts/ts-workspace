@@ -40,7 +40,7 @@ const logger = Logging.for("fs");
  * 
  * @memberOf module:fs-utils
  */
-function patchFile(path: string, values: Record<string, number | string>) {
+export function patchFile(path: string, values: Record<string, number | string>) {
   const log = logger.for(patchFile);
   if (!fs.existsSync(path))
     throw new Error(`File not found at path "${path}".`);
@@ -67,7 +67,7 @@ function patchFile(path: string, values: Record<string, number | string>) {
  * 
  * @memberOf module:fs-utils
  */
-function readFile(path: string): string {
+export function readFile(path: string): string {
   const log = logger.for(readFile);
   try {
     log.verbose(`Reading file "${path}"...`);
@@ -90,7 +90,7 @@ function readFile(path: string): string {
  * 
  * @memberOf module:fs-utils
  */
-function writeFile(path: string, data: string | Buffer): void {
+export function writeFile(path: string, data: string | Buffer): void {
   const log = logger.for(writeFile);
   try {
     log.verbose(`Writing file "${path} with ${data.length} bytes...`);
@@ -135,8 +135,8 @@ export function getPackage(p: string = process.cwd(), property?: string): object
   let pkg: any;
   try {
     pkg = JSON.parse(readFile(path.join(p, `package.json`)));
-  } catch (error) {
-    throw new Error("Failed to retrieve package information");
+  } catch (error: unknown) {
+    throw new Error(`Failed to retrieve package information" ${error}`);
   }
 
   if (property) {
@@ -145,6 +145,12 @@ export function getPackage(p: string = process.cwd(), property?: string): object
     return pkg[property] as string;
   }
   return pkg;
+}
+
+export function setPackageAttribute(attr: string, value: string, p: string = process.cwd()): void  {
+  const pkg = getPackage(p) as Record<string, any>;
+  pkg[attr] = value;
+  writeFile(path.join(p, `package.json`), JSON.stringify(pkg, null, 2));
 }
 
 /**

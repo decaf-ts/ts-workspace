@@ -5,7 +5,8 @@ RUN apk update && apk upgrade
 ENV WORKDIR="ts-workspace"
 
 COPY ./src/ $WORKDIR/src/
-COPY ./*.json $WORKDIR/
+COPY ./package*.json $WORKDIR/
+COPY ./.mpmrc $WORKDIR/
 
 ARG TOKEN
 
@@ -36,5 +37,5 @@ WORKDIR $WORKDIR
 
 ENTRYPOINT ["node", "cli"]
 
-LABEL name="TS Workspace" description="Template Dockerfile for "
+LABEL name="TS Workspace" description="Template Dockerfile for typescript projects"
 

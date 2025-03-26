@@ -146,7 +146,7 @@ export abstract class Command<I, R> {
 
     let result;
     try {
-      result = await func(this as unknown as C, args, this.log)
+      result = await func.call(this as unknown as C, args, this.log)
     } catch (e: unknown) {
       this.log.error(`Error while running provided cli function: ${e}`);
       throw e;

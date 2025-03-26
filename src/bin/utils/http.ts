@@ -43,6 +43,7 @@ export class HttpClient {
    */
   static async downloadFile(url: string): Promise<string> {
     return new Promise<string>((resolve, reject) => {
+      url = encodeURI(url)
       https.get(url, res => {
         if (res.statusCode !== 200) {
           this.log.error(`Failed to fetch ${url} (status: ${res.statusCode})`);

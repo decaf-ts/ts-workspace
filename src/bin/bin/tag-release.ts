@@ -27,8 +27,8 @@ const options = {
 }
 
 class ReleaseScript extends Command<typeof options, void> {
-  constructor(options: CommandOptions<any>) {
-    super("ReleaseScript", options);
+  constructor(opts: CommandOptions<typeof options>) {
+    super("ReleaseScript", opts);
   }
 
   /**
