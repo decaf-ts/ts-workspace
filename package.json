@@ -23,7 +23,7 @@
     "lint-fix": "eslint --fix .",
     "test:circular": "dpdm -T --no-warning --no-tree ./src/index.ts",
     "prepare-release": "npm run lint-fix && npm run build:prod && npm run coverage && npm run docs",
-    "release": "./bin/tag-release.sh",
+    "release": "node ./bin/tag-release.cjs",
     "clean-publish": "npx clean-publish",
     "coverage": "npm run test:all && cd workdocs && jest-coverage-badges",
     "drawings": "for FILE in workdocs/drawings/*.drawio; do echo \"converting $FILE to image...\" && docker run --rm -v $(pwd):/data rlespinasse/drawio-export --format png $FILE; done && cp -rf workdocs/drawings/export/* workdocs/resources/",

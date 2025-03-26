@@ -13,7 +13,6 @@ import { Command } from "../cli/command";
 const options = {
   ci: {
     type: "boolean",
-    short: "nc",
     default: true
   },
   message: {

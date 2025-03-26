@@ -1,15 +1,16 @@
 import { DefaultLoggingConfig, DefaultTheme, LogLevel, NumericLogLevels } from "../utils/constants";
 import { LoggingConfig, Theme, ThemeOption, ThemeOptionByLogLevel, VerbosityLogger } from "./types";
-import { ColorizeOptions, style } from "../utils/strings";
+import { ColorizeOptions, style, StyledString } from "../utils/strings";
+
 
 /**
  * @description A minimal logger implementation.
  * @summary MiniLogger is a lightweight logging class that implements the VerbosityLogger interface.
  * It provides basic logging functionality with support for different log levels and verbosity.
- * 
+ *
  * @class
  */
-class MiniLogger implements VerbosityLogger {
+export class MiniLogger implements VerbosityLogger {
   /**
    * @description Creates a new MiniLogger instance.
    * @summary Initializes a MiniLogger with the given class name, optional configuration, and method name.
@@ -25,7 +26,7 @@ class MiniLogger implements VerbosityLogger {
   ) {}
 
 
-  for(method?: string | Function): VerbosityLogger {
+  for(method?: string | ((...args: any[]) => any)): VerbosityLogger {
     method = method
       ? typeof method === "string"
         ? method
@@ -63,19 +64,19 @@ class MiniLogger implements VerbosityLogger {
    * @param stack
    */
   protected log(level: LogLevel, msg: string | Error, stack?: string): void {
-    if (NumericLogLevels[this.config.level] <= NumericLogLevels[level])
+    if (NumericLogLevels[this.config.level] > NumericLogLevels[level])
       return;
     let method;
     switch (level) {
       case LogLevel.info:
-        method = console.log.bind(console);
+        method = console.log;
         break;
       case LogLevel.verbose:
       case LogLevel.debug:
-        method = console.debug.bind(console);
+        method = console.debug;
         break;
       case LogLevel.error:
-        method = console.error.bind(console);
+        method = console.error;
         break;
       default:
         throw new Error("Invalid log level");
@@ -86,7 +87,7 @@ class MiniLogger implements VerbosityLogger {
   /**
    * @description LLogs a `way too verbose` or a silly message.
    * @summary Logs a message at the Silly level if the current verbosity allows it.
-   * 
+   *
    * @param msg - The message to be logged.
    * @param verbosity - The verbosity level of the message (default: 0).
    */
@@ -109,7 +110,7 @@ class MiniLogger implements VerbosityLogger {
   /**
    * @description Logs an info message.
    * @summary Logs a message at the Info level.
-   * 
+   *
    * @param msg - The message to be logged.
    */
   info(msg: string): void {
@@ -119,7 +120,7 @@ class MiniLogger implements VerbosityLogger {
   /**
    * @description Logs a debug message.
    * @summary Logs a message at the Debug level.
-   * 
+   *
    * @param msg - The message to be logged.
    */
   debug(msg: string): void {
@@ -129,7 +130,7 @@ class MiniLogger implements VerbosityLogger {
   /**
    * @description Logs an error message.
    * @summary Logs a message at the Error level.
-   * 
+   *
    * @param msg - The message to be logged.
    */
   error(msg: string | Error): void {
@@ -253,7 +254,7 @@ export class Logging {
    * @param method - Optional. The method for which the logger is being created. Can be a string (method name) or a function.
    * @returns A new VerbosityLogger instance if no method is specified, or a ClassLogger instance if a method is provided.
    */
-  static for(clazz: string | {new(...args: any[]): any} | Function, id?: string): VerbosityLogger {
+  static for(clazz: string | {new(...args: any[]): any} | ((...args: any[]) => any), id?: string): VerbosityLogger {
     clazz = typeof clazz === "string"? clazz : clazz.name;
     return this._factory(clazz, this._config, id);
   }
@@ -278,10 +279,10 @@ export class Logging {
     function apply(txt: string, option: keyof ThemeOption, value: number | [number] | [number, number, number] | number[] | string[]): string {
 
       try {
-        let t = txt;
+        let t: string | StyledString = txt;
         let c = style(t);
 
-        function applyColor(val: number | [number] | [number, number, number], isBg = false){
+        function applyColor(val: number | [number] | [number, number, number], isBg = false): StyledString{
           let f: typeof c.background | typeof c.foreground | typeof c.rgb | typeof c.color256 = isBg ? c.background : c.foreground;
           if (!Array.isArray(val)){
             return (f as typeof c.background | typeof c.foreground)(value as number);
@@ -295,19 +296,21 @@ export class Logging {
               return c.rgb(val[0], val[1], val[2]);
             default:
               logger.error(`Not a valid color option: ${option}`);
-              return t;
+              return style(t as string);
           }
+        }
+
+        function applyStyle(v: number | string): void {
+          t = (typeof v === "number" ? c.style(v) : c[v as keyof ColorizeOptions] as string);
+          c = style(t as string)
         }
 
         switch (option) {
           case "bg":
           case "fg":
-            return applyColor(value as number);
+            return applyColor(value as number).text;
           case "style":
-            function applyStyle(v: number | string): void {
-              t = (typeof v === "number" ? c.style(v) : c[v as keyof ColorizeOptions] as string);
-              c = style(t)
-            }
+
 
             if (Array.isArray(value)){
               value.forEach(applyStyle);
@@ -318,6 +321,7 @@ export class Logging {
             logger.error(`Not a valid theme option: ${option}`);
             return t;
         }
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (e: unknown) {
         logger.error(`Error applying style: ${option} with value ${value}`);
         return txt;
@@ -338,6 +342,6 @@ export class Logging {
       if (val)
         return apply(acc, key as keyof ThemeOption, val as number | [number] | [number, number, number] | number[] | string[]);
       return acc;
-    });
+    }, "");
   }
 }

@@ -1,4 +1,5 @@
 import https from "https";
+import { Logging } from "../output/logging";
 
 /**
  * @description A simple HTTP client for downloading files.
@@ -8,6 +9,8 @@ import https from "https";
  * @class
  */
 export class HttpClient {
+
+  protected static log = Logging.for(HttpClient)
   /**
    * @description Downloads a file from a given URL.
    * @summary This method sends a GET request to the specified URL and returns the response body as a string.
@@ -40,9 +43,9 @@ export class HttpClient {
    */
   static async downloadFile(url: string): Promise<string> {
     return new Promise<string>((resolve, reject) => {
-      const request = https.get(url, res => {
+      https.get(url, res => {
         if (res.statusCode !== 200) {
-          console.error(`Failed to fetch ${url} (status: ${res.statusCode})`);
+          this.log.error(`Failed to fetch ${url} (status: ${res.statusCode})`);
           return reject(new Error(`Failed to fetch ${url}`));
         }
         let data = '';

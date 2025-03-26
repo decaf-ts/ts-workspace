@@ -3,6 +3,7 @@ import { StandardOutputWriter } from "../writers/StandardOutputWriter";
 import { CommandResult } from "./types";
 import { Logging } from "../output/logging";
 import { OutputWriterConstructor } from "../writers/types";
+import { VerbosityLogger } from "../output/types";
 
 /**
  * @description Creates a locked version of a function.
@@ -47,6 +48,81 @@ export function lockify<R>(f: (...params: unknown[]) => R) {
     lock = result.catch(() => {})
     return result
   }
+}
+
+export function chainAbortController(controller: AbortController, ...signals: AbortSignal[]): AbortController;
+export function chainAbortController(...signals: AbortSignal[]): AbortController;
+export function chainAbortController(argument0: AbortController | AbortSignal, ...remainder: AbortSignal[]): AbortController {
+  let signals: AbortSignal[];
+  let controller: AbortController;
+
+  // normalize args
+  if (argument0 instanceof AbortSignal) {
+    controller = new AbortController();
+    signals = [argument0, ...remainder];
+  } else {
+    controller = argument0;
+    signals = remainder;
+  }
+
+  // if the controller is already aborted, exit early
+  if (controller.signal.aborted) {
+    return controller;
+  }
+
+  const handler = () => controller.abort();
+
+  for (const signal of signals) {
+    // check before adding! (and assume there is no possible way that the signal could
+    // abort between the `if` check and adding the event listener)
+    if (signal.aborted) {
+      controller.abort();
+      break;
+    }
+    signal.addEventListener("abort", handler, {
+      once: true,
+      signal: controller.signal,
+    });
+  }
+
+  return controller;
+}
+
+export function spawnCommand<R = string>(output: StandardOutputWriter<R>, command: string, opts: SpawnOptionsWithoutStdio, abort: AbortController, logger: VerbosityLogger): ChildProcessWithoutNullStreams {
+
+  function spawnInner(command: string, controller: AbortController){
+    const [cmd, argz] = output.parseCommand(command);
+    logger.info(`Running command: ${cmd}`);
+    logger.debug(`with args: ${argz.join(" ")}`);
+    const childProcess = spawn(cmd, argz, {
+      ...opts,
+      cwd: opts.cwd || process.cwd(),
+      env: Object.assign({}, process.env, opts.env, { PATH: process.env.PATH,}),
+      shell: opts.shell || false,
+      signal: controller.signal
+    });
+    logger.verbose(`pid : ${childProcess.pid}`);
+    return childProcess;
+  }
+
+  const m = command.match(/[<>$#]/g);
+  if(m)
+    throw new Error(`Invalid command: ${command}. contains invalid characters: ${m}`);
+  if (command.includes(" | ")){
+    const cmds = command.split(" | ");
+    const spawns = [];
+    const controllers = new Array(cmds.length);
+    controllers[0] = abort;
+    for (let i = 0; i < cmds.length; i++) {
+      if (i !== 0) controllers[i] = chainAbortController(controllers[i - 1].signal);
+      spawns.push(spawnInner(cmds[i], controllers[i]));
+      if (i === 0) continue;
+      spawns[i - 1].stdout.pipe(spawns[i].stdin);
+    }
+    return spawns[0];
+  }
+
+  return spawnInner(command, abort);
 }
 
 /**
@@ -94,7 +170,7 @@ export function lockify<R>(f: (...params: unknown[]) => R) {
  *
  * @memberOf module:@decaf-ts/utils
  */
-export async function runCommand<R = string>(command: string | string[], opts: SpawnOptionsWithoutStdio = {}, outputConstructor: OutputWriterConstructor<R> = StandardOutputWriter<R>, ...args: unknown[]): Promise<R> {
+export async function runCommand<R = string>(command: string, opts: SpawnOptionsWithoutStdio = {}, outputConstructor: OutputWriterConstructor<R> = StandardOutputWriter<R>, ...args: unknown[]): Promise<R> {
   const logger = Logging.for(runCommand)
   const lock = new Promise<R>((resolve, reject) => {
     const abort = new AbortController();
@@ -108,17 +184,7 @@ export async function runCommand<R = string>(command: string | string[], opts: S
         reject
       }, ...args);
 
-      const [cmd, argz] = output.parseCommand(command);
-      logger.info(`Running command: ${cmd}`);
-      logger.debug(`with args: ${argz.join(" ")}`);
-      childProcess = spawn(cmd, argz, {
-        ...opts,
-        cwd: opts.cwd || process.cwd(),
-        env: Object.assign({}, process.env, opts.env),
-        shell: opts.shell || false,
-        signal: abort.signal
-      });
-      logger.verbose(`pid : ${childProcess.pid}`);
+      childProcess = spawnCommand<R>(output, command, opts, abort, logger);
     } catch (e: unknown){
       throw new Error(`Error running command ${command}: ${e}`);
     }
@@ -169,7 +235,7 @@ export async function runCommand<R = string>(command: string | string[], opts: S
   return lock as CommandResult<R>;
 }
 
-export function runWithRequirements<R = string>(command: string | string[],
+export function runWithRequirements<R = string>(command: string,
                                                 opts: SpawnOptionsWithoutStdio = {},
                                                 outputConstructor: OutputWriterConstructor<R> = StandardOutputWriter<R>,
                                                 requirements: string[],

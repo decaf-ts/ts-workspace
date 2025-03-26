@@ -1,5 +1,6 @@
 export * from "./utils";
 export * from "./namespace";
+export * from "./bin";
 
 /**
  * @summary Module summary

@@ -102,18 +102,34 @@ function writeFile(path: string, data: string | Buffer): void {
 }
 
 /**
- * Retrieves the package information from the package.json file.
- *
- * @description This function attempts to load the package.json file from the specified directory
- * or the current working directory if no path is provided. It returns the parsed contents of the package.json file.
- *
+ * @description Retrieves package information from package.json.
+ * @summary Loads and parses the package.json file from a specified directory or the current working directory. Can return the entire package object or a specific property.
  * @param {string} [p=process.cwd()] - The directory path where the package.json file is located.
- * Defaults to the current working directory if not specified.
- *
- * @param property
- * @returns {object} The parsed contents of the package.json file as an object.
- *
- * @throws {Error} Throws an error if the package.json file cannot be found or parsed.
+ * @param {string} [property] - Optional. The specific property to retrieve from package.json.
+ * @return {object | string} The parsed contents of package.json or the value of the specified property.
+ * @function getPackage
+ * @mermaid
+ * sequenceDiagram
+ *   participant Caller
+ *   participant getPackage
+ *   participant readFile
+ *   participant JSON
+ *   Caller->>getPackage: Call with path and optional property
+ *   getPackage->>readFile: Read package.json
+ *   readFile-->>getPackage: Return file content
+ *   getPackage->>JSON: Parse file content
+ *   JSON-->>getPackage: Return parsed object
+ *   alt property specified
+ *     getPackage->>getPackage: Check if property exists
+ *     alt property exists
+ *       getPackage-->>Caller: Return property value
+ *     else property doesn't exist
+ *       getPackage-->>Caller: Throw Error
+ *     end
+ *   else no property specified
+ *     getPackage-->>Caller: Return entire package object
+ *   end
+ * @memberOf module:fs-utils
  */
 export function getPackage(p: string = process.cwd(), property?: string): object | string {
   let pkg: any;
@@ -131,10 +147,39 @@ export function getPackage(p: string = process.cwd(), property?: string): object
   return pkg;
 }
 
+/**
+ * @description Retrieves the version from package.json.
+ * @summary A convenience function that calls getPackage to retrieve the "version" property from package.json.
+ * @param {string} [p=process.cwd()] - The directory path where the package.json file is located.
+ * @return {string} The version string from package.json.
+ * @function getPackageVersion
+ * @memberOf module:fs-utils
+ */
 export function getPackageVersion(p = process.cwd()): string {
   return getPackage(p, "version") as string;
 }
 
+/**
+ * @description Retrieves all dependencies from the project.
+ * @summary Executes 'npm ls --json' command to get a detailed list of all dependencies (production, development, and peer) and their versions.
+ * @param {string} [path=process.cwd()] - The directory path of the project.
+ * @return {Promise<{prod: Array<{name: string, version: string}>, dev: Array<{name: string, version: string}>, peer: Array<{name: string, version: string}>}>} An object containing arrays of production, development, and peer dependencies.
+ * @function getDependencies
+ * @mermaid
+ * sequenceDiagram
+ *   participant Caller
+ *   participant getDependencies
+ *   participant runCommand
+ *   participant JSON
+ *   Caller->>getDependencies: Call with optional path
+ *   getDependencies->>runCommand: Execute 'npm ls --json'
+ *   runCommand-->>getDependencies: Return command output
+ *   getDependencies->>JSON: Parse command output
+ *   JSON-->>getDependencies: Return parsed object
+ *   getDependencies->>getDependencies: Process dependencies
+ *   getDependencies-->>Caller: Return processed dependencies
+ * @memberOf module:fs-utils
+ */
 export async function getDependencies(path: string = process.cwd()) {
   let pkg: any;
 

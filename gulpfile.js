@@ -220,11 +220,14 @@ function bundleFromFile(entryFile, isEsm, isDev, isLib) {
     .pipe(webpack(getWebpackConfig(isEsm, isDev, isLib)))
 }
 
-function makeCommands(fileName, isDev) {
+function makeCommands(fileName) {
   return function makeCommands() {
     return src(`./src/bin/bin/${fileName}*`)
       .pipe(named())
-      .pipe(webpack(getWebpackConfig(false, isDev, true)))
+      .pipe(webpack(getWebpackConfig(false, false, true, fileName)))
+      .pipe(rename(function changeName(file) {
+        return Object.assign(file, { extname: ".cjs" });
+      }))
       .pipe(dest('./bin'));
   };
 }
@@ -234,9 +237,9 @@ export const dev = series(
     series(
       exportDefault(true, "commonjs"),
       exportDefault(true, "es2022"),
-      makeCommands("update-scripts", true),
-      makeCommands("tag-release", true),
-      makeCommands("template-setup", true),
+      makeCommands("update-scripts", false),
+      makeCommands("tag-release", false),
+      makeCommands("template-setup", false),
     ),
     exportESMDist(true),
     exportJSDist(true)
