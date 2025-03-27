@@ -1,38 +1,22 @@
-/**
- * @summary This is how you document a class
- * @description
- *
- * @mermaid
- *   sequenceDiagram
- *     Alice ->> Bob: Hello Bob, how are you?
- *     Bob-->>John: How about you John?
- *     Bob--x Alice: I am good, thanks!
- *     Bob-x John: I am good, thanks!
- *     Note right of John: Bob thinks a long<br/>long time, so long<br/>that the text does<br/>not fit on a row.
- *
- *     Bob-->Alice: Checking with John...
- *     Alice->John: Yes... John, how are you?
- *
- * @typedef T
- *
- * @param {T} arg1 constructor argument description
- * @param {string} [arg2] optional constructor argument description
- *
- * @class Class
- * @implements Interface
- *
- * @memberOf module:ts-workspace.Namespace
- */
+
 import { Interface } from "./Interface";
 
+/**
+ * @class Class
+ * @summary A class implementing the Interface
+ * @description This class provides an implementation of the Interface, including a private property,
+ * a constructor, an instance method, and a static method.
+ * 
+ * @implements {Interface}
+ * @memberOf module:ts-workspace.Namespace
+ * 
+ * @param {unknown} arg1 - The first argument for the constructor
+ * @param {string} arg2 - The second argument for the constructor
+ */
 export class Class implements Interface {
   /**
-   * @summary class property summary
-   * @description class property description
-   *
-   * @property {any} prop
-   *
    * @private
+   * @property {unknown} prop - A private property of unknown type
    */
   private prop!: unknown;
 
@@ -41,20 +25,28 @@ export class Class implements Interface {
   }
 
   /**
-   * @summary async class method summary
-   * @description async class method description
-   *
-   * @throws {Error} it always throws an error
+   * @method
+   * @name Class#method
+   * @summary Asynchronous method that throws an error
+   * @description This method is a generic asynchronous function that always throws an error.
+   * The error message is cast to the generic type T and then back to a string.
+   * 
+   * @template T
+   * @returns {Promise<string>} A Promise that always rejects with an error
+   * @throws {Error} Always throws an error with the message "error"
    */
   async method<T>(): Promise<string> {
     throw new Error("error" as T as unknown as string);
   }
 
   /**
-   * @summary static class method summary
-   * @description static class method description
-   *
-   * @throws {Error} it always throws an error
+   * @method
+   * @name Class.method
+   * @summary Static method that throws an error
+   * @description This static method always throws an error with the message "error".
+   * 
+   * @static
+   * @throws {Error} Always throws an error with the message "error"
    */
   static method() {
     throw new Error("error");

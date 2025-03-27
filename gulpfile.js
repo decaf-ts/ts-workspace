@@ -222,7 +222,7 @@ function bundleFromFile(entryFile, isEsm, isDev, isLib) {
 
 function makeCommands(fileName) {
   return function makeCommands() {
-    return src(`./src/bin/bin/${fileName}*`)
+    return src(`./src/bin/${fileName}*`)
       .pipe(named())
       .pipe(webpack(getWebpackConfig(false, false, true, fileName)))
       .pipe(rename(function changeName(file) {
@@ -237,9 +237,6 @@ export const dev = series(
     series(
       exportDefault(true, "commonjs"),
       exportDefault(true, "es2022"),
-      makeCommands("update-scripts", false),
-      makeCommands("tag-release", false),
-      makeCommands("template-setup", false),
     ),
     exportESMDist(true),
     exportJSDist(true)

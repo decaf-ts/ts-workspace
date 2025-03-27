@@ -1,22 +1,23 @@
+
+
 /**
- * @summary Function summary
- * @description Function description
+ * @function complexFunction
+ * @summary Concatenates "Hello World" with a given string
+ * @description This function takes an optional string argument and concatenates it with "Hello World".
+ * Despite its name, it's a simple string concatenation operation.
  *
- * @mermaid
- *   sequenceDiagram
- *     Alice ->> Bob: Hello Bob, how are you?
- *     Bob-->>John: How about you John?
- *     Bob--x Alice: I am good thanks!
- *     Bob-x John: I am good thanks!
- *     Note right of John: Bob thinks a long<br/>long time, so long<br/>that the text does<br/>not fit on a row.
+ * @param {string} [arg1="default"] - The string to append to "Hello World". If not provided, defaults to "default".
+ * @returns {string} The resulting concatenated string
  *
- *     Bob-->Alice: Checking with John...
- *     Alice->John: Yes... John, how are you?
+ * @example
+ * // returns "Hello Worlddefault"
+ * complexFunction();
  *
- * @param {string} [arg1] defaults to 'default'
+ * @example
+ * // returns "Hello World!"
+ * complexFunction("!");
  *
- * @function helloWorld
- * @memberOf module:ts-workspace
+ * @memberOf module:ts-workspace.Utils
  */
 export function complexFunction(arg1: string = "default",) {
   return "Hello World" + arg1;
