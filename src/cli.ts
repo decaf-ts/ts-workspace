@@ -29,7 +29,6 @@
  * The function decrements the counter, logs the current count, and calls itself
  * until the counter reaches 0. When the counter reaches 0, the process exits.
  *
- * @global
  * @var {number} counter - The countdown timer, initialized to 60 seconds.
  *
  * @see {@link https://nodejs.org/api/process.html#process_process_exit_code|Node.js process.exit()}

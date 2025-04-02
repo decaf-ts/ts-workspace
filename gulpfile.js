@@ -185,6 +185,13 @@ function makeDocs() {
       );
     };
   };
+const copyFile = (source, destination) => {
+    return function copyFile() {
+      return src(source, { base: source, encoding: false }).pipe(
+        dest(destination)
+      );
+    };
+  };
 
   function compileReadme() {
     return run.default("npx markdown-include ./mdCompile.json")();
@@ -208,12 +215,17 @@ function makeDocs() {
         {
           src: "workdocs/coverage",
           dest: "./docs/workdocs/coverage",
-        },{
+        },
+        {
           src: "workdocs/resources",
           dest: "./docs/workdocs/resources",
         },
       ].map((e) => copyFiles(e.src, e.dest))
-    )
+    ),
+    series(...[{
+      src: "LICENSE.md",
+      dest: "./docs/LICENSE.md",
+    }].map((e) => copyFile(e.src, e.dest)))
   );
 }
 
