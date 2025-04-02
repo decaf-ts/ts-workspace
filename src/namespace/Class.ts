@@ -8,8 +8,7 @@ import { Interface } from "./Interface";
  * a constructor, an instance method, and a static method.
  * 
  * @implements {Interface}
- * @memberOf module:ts-workspace.Namespace
- * 
+ *
  * @param {unknown} arg1 - The first argument for the constructor
  * @param {string} arg2 - The second argument for the constructor
  */
@@ -25,8 +24,6 @@ export class Class implements Interface {
   }
 
   /**
-   * @method
-   * @name Class#method
    * @summary Asynchronous method that throws an error
    * @description This method is a generic asynchronous function that always throws an error.
    * The error message is cast to the generic type T and then back to a string.
@@ -40,11 +37,9 @@ export class Class implements Interface {
   }
 
   /**
-   * @method
-   * @name Class.method
    * @summary Static method that throws an error
    * @description This static method always throws an error with the message "error".
-   * 
+   *
    * @static
    * @throws {Error} Always throws an error with the message "error"
    */

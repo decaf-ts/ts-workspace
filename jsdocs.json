@@ -38,6 +38,10 @@
       "useLongnameInNav": false,
       "navLinks": [
         {
+          "label": "Test Results",
+          "href": "workdocs/resources/html/test-results.html"
+        },
+        {
           "label": "Test Coverage",
           "href": "workdocs/coverage"
         },

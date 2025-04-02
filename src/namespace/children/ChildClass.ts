@@ -29,8 +29,6 @@ export class ChildClass<T> extends Class implements ChildInterface<T> {
   }
 
   /**
-   * @method
-   * @name ChildClass#method
    * @summary Asynchronous method that returns a string
    * @description This method overrides the base class method. It returns a string
    * after a series of type assertions.
@@ -44,8 +42,6 @@ export class ChildClass<T> extends Class implements ChildInterface<T> {
   }
 
   /**
-   * @method
-   * @name ChildClass#method2
    * @summary Method that throws an error
    * @description This method implements the method2 from ChildInterface.
    * It throws an error with a message that includes the input argument.

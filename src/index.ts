@@ -20,14 +20,7 @@
  * to easily import and use specific parts of the library as needed.
  */
 
-/**
- * Exports all utility functions and types from the "./utils" directory.
- */
 export * from "./utils";
-
-/**
- * Exports all members of the namespace and related types from the "./namespace" directory.
- */
 export * from "./namespace";
 
 /**

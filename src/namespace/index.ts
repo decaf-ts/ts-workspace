@@ -13,12 +13,9 @@
  * By centralizing these exports, this namespace provides a clean and organized API surface
  * for consumers of the ts-workspace module.
  *
- * @see {@link Class} for core class implementations
- * @see {@link Interface} for interface declarations
- * @see {@link ChildNamespace} for additional utilities and sub-namespaces
- *
  * @memberOf module:ts-workspace
  */
+
 export * from "./Class";
 export * from "./Interface";
 export * from "./children";
