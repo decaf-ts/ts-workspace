@@ -26,9 +26,14 @@ module.exports = {
         outputName: "junit-report.xml",
       },
     ],
-    ["./node_modules/jest-html-reporter", {
-      "pageTitle": "ts-workspace tests",
-      "outputPath": "./workdocs/resources/html/test-results.html"
+    ["jest-html-reporters", {
+      publicPath: "./workdocs/resources/html",
+      filename: "test-report.html",
+      openReport: true,
+      expand: true,
+      pageTitle: "TypeScript Workspace Test Report",
+      stripSkippedTest: true,
+      darkTheme: true
     }]
   ],
 };
