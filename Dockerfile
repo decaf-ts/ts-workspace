@@ -1,4 +1,4 @@
-FROM node:20-alpine as builder
+FROM node:${NODE_VERSION:-22}-alpine as builder
 
 RUN apk update && apk upgrade
 
@@ -12,7 +12,7 @@ ARG TOKEN
 
 RUN cd $WORKDIR && TOKEN=$TOKEN npm ci && npm run build:prod
 
-FROM node:20-alpine as production
+FROM node:${NODE_VERSION:-22}-alpine as production
 
 RUN apk update && apk upgrade
 RUN apk --no-cache add htop less grep && apk add --no-cache --upgrade bash # optional but useful
@@ -21,7 +21,7 @@ ENV WORKDIR="ts-workspace"
 
 ENV NODE_ENV="production"
 
-COPY --from=builder --chown=node:node $WORKDIR/dist $WORKDIR/
+#COPY --from=builder --chown=node:node $WORKDIR/dist $WORKDIR/ #one or the other usually
 COPY --from=builder --chown=node:node $WORKDIR/bin $WORKDIR/bin/
 COPY --from=builder --chown=node:node $WORKDIR/package*.json $WORKDIR/
 
