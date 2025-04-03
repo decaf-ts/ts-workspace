@@ -18,6 +18,10 @@ export async function normalizeImport<T>(
   return importPromise.then((m: any) => (m.default || m) as T);
 }
 
+export async function awaitTimeout(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
 let addMsgFunction: (arg: AddMsgParams) => Promise<void>;
 let addAttachFunction: (arg: AddAttachParams) => Promise<void>;
 

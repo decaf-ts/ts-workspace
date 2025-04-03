@@ -1,8 +1,8 @@
 import { Config } from '@jest/types'
-import * as conf from "../../jest.config"
+import conf from "../../jest.config"
 
 const config: Config.InitialOptions = {
-  ...conf.default,
+  ...conf,
   collectCoverage: true,
   coverageDirectory: "./workdocs/reports/coverage",
   reporters:  [
