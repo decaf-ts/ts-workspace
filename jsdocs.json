@@ -39,7 +39,7 @@
       "navLinks": [
         {
           "label": "Test Results",
-          "href": "workdocs/resources/html/test-report.html"
+          "href": "workdocs/reports/html/test-report.html"
         },
         {
           "label": "Test Coverage",

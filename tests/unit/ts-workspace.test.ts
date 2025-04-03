@@ -1,4 +1,6 @@
 import {ChildClass, Class, complexFunction, something,} from "../../src";
+import { addReportMessage } from "../test-utils";
+import { runCLI } from "@jest/core";
 
 describe("Type Script Workspace test", function () {
   it("runs functions", function () {
@@ -16,5 +18,6 @@ describe("Type Script Workspace test", function () {
     expect(something.call(a,),).toEqual(a,);
     const res = await b.method();
     expect(res,).toEqual("ok",);
+    await addReportMessage("Class Instantiation", `Class used:\n${a.constructor.name}\nChildClass used:\n${b.constructor.name}`)
   },);
 },);

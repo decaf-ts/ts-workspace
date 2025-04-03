@@ -213,8 +213,12 @@ const copyFile = (source, destination) => {
           dest: "./docs/workdocs/assets",
         },
         {
-          src: "workdocs/coverage",
-          dest: "./docs/workdocs/coverage",
+          src: "workdocs/reports/coverage",
+          dest: "./docs/workdocs/reports/coverage",
+        },
+        {
+          src: "workdocs/reports/html",
+          dest: "./docs/workdocs/reports/html",
         },
         {
           src: "workdocs/resources",

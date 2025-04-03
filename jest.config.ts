@@ -1,11 +1,14 @@
-module.exports = {
+import { Config } from '@jest/types'
+
+const config: Config.InitialOptions = {
   verbose: true,
+  rootDir: process.cwd(),
   transform: { "^.+\\.ts?$": "ts-jest", },
   testEnvironment: "node",
   testRegex: "/tests/.*\\.(test|spec)\\.(ts|tsx)$",
   moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json", "node",],
-  collectCoverage: true,
-  coverageDirectory: "./workdocs/coverage",
+  collectCoverage: false,
+  coverageDirectory: "./workdocs/reports/coverage",
   collectCoverageFrom: ["src/**/*.{ts,jsx}",],
   coveragePathIgnorePatterns: ["src/cli.ts",],
   coverageThreshold: {
@@ -18,22 +21,8 @@ module.exports = {
   },
   coverageReporters: ["json-summary", "text-summary", "text", "html",],
   reporters: [
-    "default",
-    [
-      "jest-junit",
-      {
-        outputDirectory: "./workdocs/resources/junit",
-        outputName: "junit-report.xml",
-      },
-    ],
-    ["jest-html-reporters", {
-      publicPath: "./workdocs/resources/html",
-      filename: "test-report.html",
-      openReport: true,
-      expand: true,
-      pageTitle: "TypeScript Workspace Test Report",
-      stripSkippedTest: true,
-      darkTheme: true
-    }]
+    "default"
   ],
 };
+
+export default config;
