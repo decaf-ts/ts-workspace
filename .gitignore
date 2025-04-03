@@ -5,6 +5,9 @@
 !/workdocs/drawings/*.drawio
 /workdocs/resources/*
 /workdocs/reports/*
+!/workdocs/reports/data
+/workdocs/reports/data/*
+!/workdocs/reports/data/.gitkeep
 !/workdocs/reports/jest.report.config.ts
 /workdocs/uml/*
 !/workdocs/uml/*.puml
