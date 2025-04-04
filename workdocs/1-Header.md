@@ -11,9 +11,9 @@ This way just create one from this template and enjoy having everything set up f
 ![Licence](https://img.shields.io/github/license/decaf-ts/ts-workspace.svg?style=plastic)
 ![GitHub language count](https://img.shields.io/github/languages/count/decaf-ts/ts-workspace?style=plastic)
 ![GitHub top language](https://img.shields.io/github/languages/top/decaf-ts/ts-workspace?style=plastic)
-[![Tests](https://github.com/decaf-ts/ts-workspace/actions/workflows/jest-test.yaml/badge.svg)](http://www.pdmfc.com)
-[![CodeQL](https://github.com/starnowski/posmulten/workflows/CodeQL/badge.svg)](https://github.com/decaf-ts/ts-workspace/actions?query=workflow%3ACodeQL)
-
+[![Build](https://github.com/decaf-ts/ts-workspace/actions/workflows/jest-test.yaml/badge.svg)](http://www.pdmfc.com)
+[![CodeQL](https://github.com/decaf-ts/ts-workspace/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/decaf-ts/ts-workspace/actions/workflows/codeql-analysis.yml)[![Snyk Analysis](https://github.com/decaf-ts/ts-workspace/actions/workflows/snyk-analysis.yaml/badge.svg)](https://github.com/decaf-ts/ts-workspace/actions/workflows/snyk-analysis.yaml)
+[![Pages builder](https://github.com/decaf-ts/ts-workspace/actions/workflows/pages.yaml/badge.svg)](https://github.com/decaf-ts/ts-workspace/actions/workflows/pages.yaml)
 ![Open Issues](https://img.shields.io/github/issues/decaf-ts/ts-workspace.svg)
 ![Closed Issues](https://img.shields.io/github/issues-closed/decaf-ts/ts-workspace.svg)
 ![Pull Requests](https://img.shields.io/github/issues-pr-closed/decaf-ts/ts-workspace.svg)

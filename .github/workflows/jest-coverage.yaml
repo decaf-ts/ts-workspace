@@ -1,4 +1,5 @@
-name: 'coverage'
+name: 'Test Coverage'
+
 on:
   tags:
     - 'v?[0-9]+.[0-9]+.[0-9]+'
