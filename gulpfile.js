@@ -268,9 +268,6 @@ export const prod = series(
     series(
       exportDefault(true, "commonjs"),
       exportDefault(true, "es2022"),
-      makeCommands("update-scripts", false),
-      makeCommands("tag-release", false),
-      makeCommands("template-setup", false),
     ),
     exportESMDist(false),
     exportJSDist(false)
