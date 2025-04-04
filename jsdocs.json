@@ -43,7 +43,7 @@
         },
         {
           "label": "Test Coverage",
-          "href": "workdocs/coverage"
+          "href": "workdocs/reports/coverage"
         },
         {
           "label": "Github Repository",
