@@ -239,18 +239,6 @@ function bundleFromFile(entryFile, isEsm, isDev, isLib) {
     .pipe(webpack(getWebpackConfig(isEsm, isDev, isLib)))
 }
 
-function makeCommands(fileName) {
-  return function makeCommands() {
-    return src(`./src/bin/${fileName}*`)
-      .pipe(named())
-      .pipe(webpack(getWebpackConfig(false, false, true, fileName)))
-      .pipe(rename(function changeName(file) {
-        return Object.assign(file, { extname: ".cjs" });
-      }))
-      .pipe(dest('./bin'));
-  };
-}
-
 export const dev = series(
   parallel(
     series(
