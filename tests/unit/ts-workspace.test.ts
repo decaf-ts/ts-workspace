@@ -72,8 +72,6 @@ describe("Type Script Workspace test", function () {
     expect(something.call(a,),).toEqual(a,);
     const res = await b.method();
     expect(res,).toEqual("ok",);
-    const j = jest
-    const e = expect
     await addReportMessage("Class Instantiation", `Class used:\n${a.constructor.name}\nChildClass used:\n${b.constructor.name}`)
     await addReportAttachment("Class Instantiation 2", Buffer.from(`Class used:\n${a.constructor.name}\nChildClass used:\n${b.constructor.name}`))
   },);
