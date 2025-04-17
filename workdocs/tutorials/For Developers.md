@@ -92,14 +92,7 @@ Preconfigured Jest based testing:
 
 ## Documentation
 
-The repository proposes a way to generate documentation that while still not ideal, produces verys consitest results.
-
-In the code you see an example on how to properly document each code object, but the overall structure is:
-- each package is a `@module`;
-- Classes and Interfaces are categorized into `@category` and `@subcategory`;
-- All other objects are categorized by `@namespace` and `@memberOf`;
-- Enums and const are declared as `@const` and both must describe their properties as `@property` (when constants are objects);
-- Interfaces must declare their methods `@method`;
+The repository proposes a [way to generate documentation](./Documentation.md) that while still not ideal, produces very consistent results.
 
 There are 3 steps the generating the documentation (automated in CI):
 - `npm run drawings` - generates png files from each drawing in the `workdocs/drawings` folder and moves them to the `workdocs/resources` folder (requires Docker);
@@ -134,7 +127,7 @@ The template comes with ci/cd for :
 - github:
     - jest-test: standard `install -> build -> test` loop;
     - jest-coverage: extracts coverage from the tests;
-    - codeql-analysis: Code quality analisys;
+    - codeql-analysis: Code quality analysis;
     - snyk-scan: Vulnerability scanning
     - pages: builds the documentation and deploys to github pages
     - release-on-tag: issues a release when the tag does not contain `-no-ci` string
@@ -142,6 +135,11 @@ The template comes with ci/cd for :
     - Requires Variables:
         - CONSECUTIVE_ACTION_TRIGGER: secret to enable actions to trigger other actions;
         - NPM_TOKEN: npm/docker registry token
+    - CI Pages Setup: 
+      - Enable Pages via GitHub action: ![pages-via-action](../assets/gh-pages-by-action.png)
+      - Secure Workflows via GitHub action: ![secure-workflows](../assets/gh-allow-workflows.png)
+      - Allow GitHub pages via GitHub action for tags: ![environment-rules](../assets/gh-environment-rules.png)
+
 
 ### Releases
 
@@ -230,7 +228,10 @@ ts-workspace
 └───tests       
 │   │───bundling                    <-- Tests the result of the produced bundle
 │   │───unit                        <-- Unit tests
-│   └───integration                 <-- Integration tests
+│   │───integration                 <-- Integration tests
+│   │   ...                         <-- Categorized *.md files that are merged to generate the final readme (via md compile)
+│   │   test-utils.ts               <-- Reporter Class (attaches evidences to the rest report)  
+
 │           
 └───workdocs                        <-- Folder with all pre-compiled documentation
 │   │───assets                      <-- Documentation asset folder
@@ -257,6 +258,5 @@ ts-workspace
 ```
 
 ## Considerations
-- Setup for a linux based environment (Sorry windows users. use WSL... or just change already);
 - Setup for node 20, but will work at least with 16;
 - Requires docker to build documentation (drawings and PlantUML)

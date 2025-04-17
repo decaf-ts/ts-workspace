@@ -22,7 +22,3 @@ So if you can, if this project in any way. either by learning something or simpl
 ## License
 
 This project is released under the [MIT License](LICENSE.md).
-
-#### Disclaimer:
-
-badges found [here](https://dev.to/envoy_/150-badges-for-github-pnk), [here](https://github.com/alexandresanlim/Badges4-README.md-Profile#-social-) and [here](https://github.com/Ileriayo/markdown-badges)

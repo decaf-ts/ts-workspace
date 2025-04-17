@@ -8,6 +8,9 @@
 !/workdocs/reports/data
 /workdocs/reports/data/*
 !/workdocs/reports/data/.gitkeep
+!/workdocs/reports/images
+/workdocs/reports/images/*
+!/workdocs/reports/images/.gitkeep
 !/workdocs/reports/jest.report.config.ts
 /workdocs/uml/*
 !/workdocs/uml/*.puml
