@@ -1,5 +1,4 @@
-
-## ***Initial Setup***
+## **_Initial Setup_**
 
 #### if you use github
 
@@ -18,6 +17,7 @@ clone it `git clone <project>` and navigate to the root folder `cd <project>`
 ```
 
 Changing:
+
 - <ADDRESS> to `gitlab` or `github` (or other);
 - <DOMAIN> to your domain if any (if you are using plain gitlab or github use empty and take care to remove the extra `.`);
 - <GROUP_ID> to your project's group id (if any). otherwise remove this line
@@ -30,6 +30,7 @@ and adding a `.token` file containing your access token to the private registrie
 Run `npm install` (or `npm run do-install` if you have private dependencies and a `.token` file) to install the dependencies:
 
 If this is the first time you are running this command it will also (according to your choices:
+
 - update this repository's dependencies to their latest version;
 - creates the various token files which you can leave empty unless you have private dependencies or publish to private registries
 - delete the `postinstall` script from `package.json`;
@@ -69,8 +70,8 @@ The following npm scripts are available for development:
 - `uml` - compiles all PlantUML `*.puml` files in the `workdocs/uml` folder to png and moves them to
   the `workdocs/resources` folder;
 - `docs` - compiles all the coverage, drawings, uml, jsdocs and md docs into a readable web page under `./docs`. Will be made available at [Github Pages]();
-- `publish-docs` - publishes the content of `./workdocs/confluence` to confluence according to the config at `./workdocs/confluence/.markdown-confluence.json`. 
-                   Uses [markdown-confluence](https://markdown-confluence.com/introduction.html). Check their documentation for configuration details;
+- `publish-docs` - publishes the content of `./workdocs/confluence` to confluence according to the config at `./workdocs/confluence/.markdown-confluence.json`.
+  Uses [markdown-confluence](https://markdown-confluence.com/introduction.html). Check their documentation for configuration details;
 
 ## Linting
 
@@ -95,18 +96,19 @@ Preconfigured Jest based testing:
 The repository proposes a [way to generate documentation](./Documentation.md) that while still not ideal, produces very consistent results.
 
 There are 3 steps the generating the documentation (automated in CI):
+
 - `npm run drawings` - generates png files from each drawing in the `workdocs/drawings` folder and moves them to the `workdocs/resources` folder (requires Docker);
 - `npm run uml` - generates png files from each PlantUML diagram in the `workdocs/uml` folder and moves them to the `workdocs/resources` folder (requires Docker);
 - `npm run docs` - this has several stages, defined under the `gulp docs` (gulpfile.js):
-    - compiles the Readme file via md compile:
-        - enables keeping separate files for sections that are then joined into a single file;
-        - Allows keeping specific files in the jsdocs tutorial folder so they show up on their own menu;
-    - compiles the documentation from the source code using jsdocs:
-        - uses the better docs template with the category and component plugins
-        - uses the mermaid jsdoc plugin to embue uml diagrams in the docs
-        - includes a nav link to the test coverage results;
-    - copies the jsdoc and mds to `/docs`;
-    - copies the `./workdocs/{drawings, uml, assets, resources}` to `./docs`;
+  - compiles the Readme file via md compile:
+    - enables keeping separate files for sections that are then joined into a single file;
+    - Allows keeping specific files in the jsdocs tutorial folder so they show up on their own menu;
+  - compiles the documentation from the source code using jsdocs:
+    - uses the better docs template with the category and component plugins
+    - uses the mermaid jsdoc plugin to embue uml diagrams in the docs
+    - includes a nav link to the test coverage results;
+  - copies the jsdoc and mds to `/docs`;
+  - copies the `./workdocs/{drawings, uml, assets, resources}` to `./docs`;
 
 The produced `docs` folder contains the resulting documentation;
 
@@ -115,38 +117,38 @@ The produced `docs` folder contains the resulting documentation;
 While the implementation for gitlab and github are not perfectly matched, they are perfectly usable.
 
 The template comes with ci/cd for :
-- gitlab (with caching for performance):
-    - stages:
-        - dependencies: Installs dependencies (on `package-lock.json` changes, caches node modules);
-        - build: builds the code (on `src/*` changes, caches `lib` and `dist`);
-        - test: tests the code (on `src/*`, `test/*` changes, caches `workdocs/{resources, badges, coverage}`);
-        - deploy:
-            - deploys to package registry on a tag (public|private);
-            - deploys docker image to docker registry (private);
-            - Deploys the documentation to the repository pages;
-- github:
-    - jest-test: standard `install -> build -> test` loop;
-    - jest-coverage: extracts coverage from the tests;
-    - codeql-analysis: Code quality analysis;
-    - snyk-scan: Vulnerability scanning
-    - pages: builds the documentation and deploys to github pages
-    - release-on-tag: issues a release when the tag does not contain `-no-ci` string
-    - publish-on-release: publishes to package registry when the tag does not contain the `-no-ci` string
-    - Requires Variables:
-        - CONSECUTIVE_ACTION_TRIGGER: secret to enable actions to trigger other actions;
-        - NPM_TOKEN: npm/docker registry token
-    - CI Pages Setup: 
-      - Enable Pages via GitHub action: ![pages-via-action](../assets/gh-pages-by-action.png)
-      - Secure Workflows via GitHub action: ![secure-workflows](../assets/gh-allow-workflows.png)
-      - Allow GitHub pages via GitHub action for tags: ![environment-rules](../assets/gh-environment-rules.png)
 
+- gitlab (with caching for performance):
+  - stages:
+    - dependencies: Installs dependencies (on `package-lock.json` changes, caches node modules);
+    - build: builds the code (on `src/*` changes, caches `lib` and `dist`);
+    - test: tests the code (on `src/*`, `test/*` changes, caches `workdocs/{resources, badges, coverage}`);
+    - deploy:
+      - deploys to package registry on a tag (public|private);
+      - deploys docker image to docker registry (private);
+      - Deploys the documentation to the repository pages;
+- github:
+  - jest-test: standard `install -> build -> test` loop;
+  - jest-coverage: extracts coverage from the tests;
+  - codeql-analysis: Code quality analysis;
+  - snyk-scan: Vulnerability scanning
+  - pages: builds the documentation and deploys to github pages
+  - release-on-tag: issues a release when the tag does not contain `-no-ci` string
+  - publish-on-release: publishes to package registry when the tag does not contain the `-no-ci` string
+  - Requires Variables:
+    - CONSECUTIVE_ACTION_TRIGGER: secret to enable actions to trigger other actions;
+    - NPM_TOKEN: npm/docker registry token
+  - CI Pages Setup:
+    - Enable Pages via GitHub action: ![pages-via-action](../assets/gh-pages-by-action.png)
+    - Secure Workflows via GitHub action: ![secure-workflows](../assets/gh-allow-workflows.png)
+    - Allow GitHub pages via GitHub action for tags: ![environment-rules](../assets/gh-environment-rules.png)
 
 ### Releases
 
 This repository automates releases in the following manner:
 
 - run `npm run release -- <major|minor|patch|version> <message>`:
-    - if arguments are missing you will be prompted for them;
+  - if arguments are missing you will be prompted for them;
 - it will run `npm run prepare-release` npm script;
 - it will commit all changes;
 - it will push the new tag;
@@ -176,10 +178,9 @@ automatically by github/gitlab (triggered by the tag).
 When the `-no-ci` flag is passed then you can:
 
 - run `npm run publish`. This command assumes :
-    - you have previously run the `npm run release`;
-    - you have you publishing properly configured in `npmrc` and `package.json`;
-    - The token for any special access required is stored in the `.token` file;
-
+  - you have previously run the `npm run release`;
+  - you have you publishing properly configured in `npmrc` and `package.json`;
+  - The token for any special access required is stored in the `.token` file;
 
 ### Repository Structure
 
@@ -203,36 +204,36 @@ ts-workspace
 │   jsdocs.json                     <-- jsdoc Documentation generation configuration file
 │   LICENCE.md                      <-- Licence disclamer
 │   mdCompile.json                  <-- md Documentation generation configuration file
-│   package.json        
-│   package-lock.json       
+│   package.json
+│   package-lock.json
 │   README.md                       <-- Readme File dynamically compiled from 'workdocs' via the 'docs' npm script
-│   tsconfig.json                   <-- Typescript config file. Is overriden in 'gulpfile.js' 
-│       
-└───.github     
+│   tsconfig.json                   <-- Typescript config file. Is overriden in 'gulpfile.js'
+│
+└───.github
 │   │   ...                         <-- github workflows and templates
-│           
-└───.run        
+│
+└───.run
 │   │   ...                         <-- IDE run scripts (WebStorm)
-│           
-│           
-└───bin     
+│
+│
+└───bin
 │   │───tag_release.cjs             <-- Script to help with releases
 │   │───template-setup.cjs          <-- Script that runs on first npm install and configures the repo
 │   └───update-scripts.cjs          <-- Retrieves the most updated configuration files from the original repository
-└───docs        
+└───docs
 │   │   ...                         <-- Dinamically generated folder, containing the compiled documentation for this repository. generated via the 'docs' npm script
-│           
-└───src     
+│
+└───src
 │   │   ...                         <-- Source code for this repository
-│           
-└───tests       
+│
+└───tests
 │   │───bundling                    <-- Tests the result of the produced bundle
 │   │───unit                        <-- Unit tests
 │   │───integration                 <-- Integration tests
 │   │   ...                         <-- Categorized *.md files that are merged to generate the final readme (via md compile)
-│   │   test-utils.ts               <-- Reporter Class (attaches evidences to the rest report)  
+│   │   test-utils.ts               <-- Reporter Class (attaches evidences to the rest report)
 
-│           
+│
 └───workdocs                        <-- Folder with all pre-compiled documentation
 │   │───assets                      <-- Documentation asset folder
 │   │───confluence                  <-- folder containing specific documentation to be synced with a confluence page
@@ -248,15 +249,47 @@ ts-workspace
 │   │───tutorials                   <-- Tutorial folder (will show up on tutorial section in generated documentation)
 │   │───uml                         <-- folder containing puml files to be compiled along with the documentation
 │   │   ...                         <-- Categorized *.md files that are merged to generate the final readme (via md compile)
-│   │   Readme.md                   <-- Entry point to the README.md (will import other referenced md files)  
-│       
-└───dist        
+│   │   Readme.md                   <-- Entry point to the README.md (will import other referenced md files)
+│
+└───dist
 │   │   ...                         <-- Dinamically generated folder containing the bundles for distribution
-│       
-└───lib     
+│
+└───lib
     |   ...                 <-- Dinamically generated folder containing the compiled code
 ```
 
+## IDE Integrations
+
+### Visual Studio Code (VSCode)
+
+For an optimal development experience in **VSCode**, we recommend installing the following extensions:
+
+- [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) – Linting made easy and integrated.
+- [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) – Code formatting with style.
+- [Jest](https://marketplace.visualstudio.com/items?itemName=Orta.vscode-jest) – Smooth integration for running and debugging tests.
+
+We've included a pre-configured `settings.json` that ensures:
+
+- **Linting and formatting** are automatically applied on file save.
+- **Jest** works seamlessly with your test suite out of the box.
+
+#### Tasks & Launchers
+
+Common tasks like `build`, `test`, and others are pre-configured as **VSCode Tasks** and **Launch Configurations**.
+
+To access and run them:
+
+- Open the Command Palette (`Cmd/Ctrl + Shift + P`) and select `Tasks: Run Task`.
+- Or go to the **Run and Debug** panel, choose a configuration from the dropdown, and press ▶️.
+
+---
+
+### WebStorm
+
+For **WebStorm** users, everything comes integrated right out of the box 🎉  
+Common commands such as builds, tests, and documentation generation are available in the **Run/Debug configurations** dropdown for quick access and execution.
+
 ## Considerations
+
 - Setup for node 20, but will work at least with 16;
 - Requires docker to build documentation (drawings and PlantUML)
