@@ -74,7 +74,7 @@ fi
 
 npm version "$TAG" -m "$MESSAGE"
 
-git push --follow-tags
+git push --follow-tags --token "$(cat .token)"
 
 if [[ "$MESSAGE" =~ -no-ci$ ]]; then
   NPM_TOKEN=$(cat .npmtoken) npm publish --access public
