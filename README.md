@@ -35,6 +35,7 @@ This way just create one from this template and enjoy having everything set up f
 ![Node Version](https://img.shields.io/badge/dynamic/json.svg?url=https%3A%2F%2Fraw.githubusercontent.com%2Fbadges%2Fshields%2Fmaster%2Fpackage.json&label=Node&query=$.engines.node&colorB=blue)
 ![NPM Version](https://img.shields.io/badge/dynamic/json.svg?url=https%3A%2F%2Fraw.githubusercontent.com%2Fbadges%2Fshields%2Fmaster%2Fpackage.json&label=NPM&query=$.engines.npm&colorB=purple)
 
+Documentation available [here](https://decaf-ts.github.io/ts-workspace/)
 ### Description
 
 THis is a template project for Typescript repos.
@@ -44,16 +45,15 @@ By developers, [for developers](./tutorials/For%20Developers.md).
 
 
 
-## Considerations
- - Setup for a linux based environment (Sorry windows users. use WSL... or just change already);
- - Setup for node 20, but will work at least with 16;
- - Requires docker to build documentation (drawings and PlantUML)
 ### Related
 
 [![Readme Card](https://github-readme-stats.vercel.app/api/pin/?username=decaf-ts&repo=ts-workspace)](https://github.com/decaf-ts/ts-workspace)
 ### Social
 
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/decaf-ts/)
+
+
+
 ![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
 ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
 ![NodeJS](https://img.shields.io/badge/Node.js-43853D?style=for-the-badge&logo=node.js&logoColor=white)
@@ -78,7 +78,3 @@ So if you can, if this project in any way. either by learning something or simpl
 ## License
 
 This project is released under the [MIT License](LICENSE.md).
-
-#### Disclaimer:
-
-badges found [here](https://dev.to/envoy_/150-badges-for-github-pnk), [here](https://github.com/alexandresanlim/Badges4-README.md-Profile#-social-) and [here](https://github.com/Ileriayo/markdown-badges)
