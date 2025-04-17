@@ -31,8 +31,8 @@ let addAttachFunction: (arg: AddAttachParams) => Promise<void>;
 
 
 async function importHelpers(): Promise<void> {
-  if (!process.env[JestReportersTempPathEnvKey])
-    process.env[JestReportersTempPathEnvKey] = './workdocs/reports';
+  // if (!process.env[JestReportersTempPathEnvKey])
+  //   process.env[JestReportersTempPathEnvKey] = './workdocs/reports';
   const { addMsg, addAttach } = await normalizeImport(import('jest-html-reporters/helper'));
   addMsgFunction = addMsg;
   addAttachFunction = addAttach;
