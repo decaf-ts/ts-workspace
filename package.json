@@ -17,7 +17,8 @@
     "reset": "rm -rf * && git checkout . && git pull && npm run do-install",
     "build": "rimraf ./lib && rimraf ./dist && gulp dev",
     "build:prod": "rimraf ./lib && rimraf ./dist && gulp prod",
-    "test": "jest --testPathPattern=\"/tests/unit\" --passWithNoTests --detectOpenHandles",
+    "test": "jest --runInBand --coverage --detectOpenHandles",
+    "test:unit": "jest --testPathPattern=\"/tests/unit\" --passWithNoTests --detectOpenHandles",
     "test:integration": "jest --testPathPattern=\"/tests/(integration)\" --passWithNoTests --detectOpenHandles",
     "test:all": "jest --testPathPattern=\"/tests/(unit|integration)\" --passWithNoTests --detectOpenHandles",
     "coverage": "rimraf ./workdocs/reports/data/*.json && npm run test:all -- --coverage --config=./workdocs/reports/jest.report.config.ts && cd workdocs/reports && jest-coverage-badges",
@@ -30,7 +31,12 @@
     "drawings": "for FILE in workdocs/drawings/*.drawio; do echo \"converting $FILE to image...\" && docker run --rm -v $(pwd):/data rlespinasse/drawio-export --format png $FILE; done && cp -rf workdocs/drawings/export/* workdocs/resources/",
     "uml": "cd workdocs/uml && for FILE in ./*.puml; do docker run --rm -v $(pwd):/work -w /work miy4/plantuml -DPLANTUML_LIMIT_SIZE=8192 -tpng $FILE; done && cd ../.. && cp -fr workdocs/uml/*.png workdocs/resources/",
     "docs": "npx rimraf ./docs && mkdir docs && npm run do-install -- better-docs taffydb && gulp docs; npm remove better-docs taffydb",
-    "publish-docs": "docker run -it --rm --user $(id -u):$(id -g) -v \"$(pwd)/workdocs/confluence:/content\" -e ATLASSIAN_API_TOKEN=$(cat .confluence-token) ghcr.io/markdown-confluence/publish:latest"
+    "publish-docs": "docker run -it --rm --user $(id -u):$(id -g) -v \"$(pwd)/workdocs/confluence:/content\" -e ATLASSIAN_API_TOKEN=$(cat .confluence-token) ghcr.io/markdown-confluence/publish:latest",
+    "docker:login": "docker login ghcr.io -u $(cat .dockeruser) -p $(cat .dockertoken)",
+    "docker:build": "npm run docker:build-base",
+    "docker:build-base": "DOCKER_BUILDKIT=1 docker build --secret id=TOKEN,src=$PWD/.npmtoken -t ghcr.io/decaf-ts/ts-workspace:base-$(cat package.json | jq -r '.version') -t ghcr.io/decaf-ts/ts-workspace:base-${VERSION:-latest} -f ./Dockerfile .",
+    "docker:publish": "npm run docker:publish-base",
+    "docker:publish-base": "docker push ghcr.io/decaf-ts/ts-workspace:base-$(cat package.json | jq -r '.version') && docker push ghcr.io/decaf-ts/ts-workspace:base-${VERSION:-latest}"
   },
   "repository": {
     "type": "git",

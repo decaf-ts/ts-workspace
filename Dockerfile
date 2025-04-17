@@ -1,3 +1,5 @@
+ARG NODE_VERSION=22
+
 FROM node:${NODE_VERSION:-22}-alpine as builder
 
 RUN apk update && apk upgrade
@@ -8,11 +10,11 @@ COPY ./src/ $WORKDIR/src/
 COPY ./package*.json $WORKDIR/
 COPY ./.mpmrc $WORKDIR/
 
-ARG TOKEN
+# Install the dependencies from package-lock.json
+# Make the workfolder available to the the 'node' user. The `node` user is built in the Node image.
+RUN --mount=type=secret,id=TOKEN TOKEN=$(cat /run/secrets/TOKEN) npm ci && npm cache clean --force && chown -R node:node .
 
-RUN cd $WORKDIR && TOKEN=$TOKEN npm ci && npm run build:prod
-
-FROM node:${NODE_VERSION:-22}-alpine as production
+FROM node:${NODE_VERSION:-22}-alpine AS production
 
 RUN apk update && apk upgrade
 RUN apk --no-cache add htop less grep && apk add --no-cache --upgrade bash # optional but useful
@@ -27,11 +29,12 @@ COPY --from=builder --chown=node:node $WORKDIR/package*.json $WORKDIR/
 
 USER node
 
-ARG TOKEN
-
-RUN cd $WORKDIR && TOKEN=$TOKEN npm ci
-
 WORKDIR $WORKDIR
+
+# Install the dependencies from package-lock.json
+# Make the workfolder available to the the 'node' user. The `node` user is built in the Node image.
+RUN --mount=type=secret,id=TOKEN TOKEN=$(cat /run/secrets/TOKEN) npm ci && npm cache clean --force && chown -R node:node .
+
 
 # EXPOSE 3000/tcp
 
