@@ -13,7 +13,7 @@ import replace from "gulp-replace";
 import webpack from "webpack-stream";
 import run from "gulp-run-command";
 import process from "node:process";
-import nodeExternals from 'webpack-node-externals';
+import nodeExternals from "webpack-node-externals";
 
 import pkg from "./package.json" with { type: "json" };
 import fs from "fs";
@@ -38,7 +38,7 @@ function patchFiles() {
 function getWebpackConfig(isESM, isDev, isLib, nameOverride = name) {
   const webPackConfig = {
     mode: isDev ? "development" : "production", // can be changed to production to produce minified bundle
-    target: 'node',
+    target: "node",
     module: {
       rules: [
         {
@@ -161,8 +161,9 @@ function exportDefault(isDev, mode) {
 }
 
 function exportBundles(isEsm, isDev) {
-  return bundleFromFile("src/index.ts", isEsm, isDev)
-    .pipe(dest(`./dist${isEsm ? "/esm" : ""}`));
+  return bundleFromFile("src/index.ts", isEsm, isDev).pipe(
+    dest(`./dist${isEsm ? "/esm" : ""}`)
+  );
 }
 
 function exportESMDist(isDev = false) {
@@ -185,7 +186,7 @@ function makeDocs() {
       );
     };
   };
-const copyFile = (source, destination) => {
+  const copyFile = (source, destination) => {
     return function copyFile() {
       return src(source, { base: source, encoding: false }).pipe(
         dest(destination)
@@ -194,12 +195,12 @@ const copyFile = (source, destination) => {
   };
 
   function compileReadme() {
-    return run.default("npx markdown-include ./mdCompile.json")();
+    return run.default("npx markdown-include ./workdocs/readme-md.json")();
   }
 
   function compileDocs() {
     return run.default(
-      "npx jsdoc -c jsdocs.json -t ./node_modules/better-docs"
+      "npx jsdoc -c ./workdocs/jsdocs.json -t ./node_modules/better-docs"
     )();
   }
 
@@ -226,25 +227,26 @@ const copyFile = (source, destination) => {
         },
       ].map((e) => copyFiles(e.src, e.dest))
     ),
-    series(...[{
-      src: "LICENSE.md",
-      dest: "./docs/LICENSE.md",
-    }].map((e) => copyFile(e.src, e.dest)))
+    series(
+      ...[
+        {
+          src: "LICENSE.md",
+          dest: "./docs/LICENSE.md",
+        },
+      ].map((e) => copyFile(e.src, e.dest))
+    )
   );
 }
 
 function bundleFromFile(entryFile, isEsm, isDev, isLib) {
   return src(entryFile)
     .pipe(named())
-    .pipe(webpack(getWebpackConfig(isEsm, isDev, isLib)))
+    .pipe(webpack(getWebpackConfig(isEsm, isDev, isLib)));
 }
 
 export const dev = series(
   parallel(
-    series(
-      exportDefault(true, "commonjs"),
-      exportDefault(true, "es2022"),
-    ),
+    series(exportDefault(true, "commonjs"), exportDefault(true, "es2022")),
     exportESMDist(true),
     exportJSDist(true)
   ),
@@ -253,10 +255,7 @@ export const dev = series(
 
 export const prod = series(
   parallel(
-    series(
-      exportDefault(true, "commonjs"),
-      exportDefault(true, "es2022"),
-    ),
+    series(exportDefault(true, "commonjs"), exportDefault(true, "es2022")),
     exportESMDist(false),
     exportJSDist(false)
   ),

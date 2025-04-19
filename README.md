@@ -1,12 +1,8 @@
-![Banner](./workdocs/assets/Banner.png)
-
+[![Banner](./workdocs/assets/Banner.png)]()
 ## Typescript Template
 
-This repository is meant the provide a base for any standard Typescript project
+This repository is meant to provide an enterprise template for any standard Typescript project
 
-No one needs the hassle of setting up new repos every time.
-
-This way just create one from this template and enjoy having everything set up fo you.
 
 ![Licence](https://img.shields.io/github/license/decaf-ts/ts-workspace.svg?style=plastic)
 ![GitHub language count](https://img.shields.io/github/languages/count/decaf-ts/ts-workspace?style=plastic)
@@ -22,10 +18,10 @@ This way just create one from this template and enjoy having everything set up f
 ![Pull Requests](https://img.shields.io/github/issues-pr-closed/decaf-ts/ts-workspace.svg)
 ![Maintained](https://img.shields.io/badge/Maintained%3F-yes-green.svg)
 
-![Line Coverage](workdocs/coverage/badge-lines.svg)
-![Function Coverage](workdocs/coverage/badge-functions.svg)
-![Statement Coverage](workdocs/coverage/badge-statements.svg)
-![Branch Coverage](workdocs/coverage/badge-branches.svg)
+![Line Coverage](workdocs/reports/coverage/badge-lines.svg)
+![Function Coverage](workdocs/reports/coverage/badge-functions.svg)
+![Statement Coverage](workdocs/reports/coverage/badge-statements.svg)
+![Branch Coverage](workdocs/reports/coverage/badge-branches.svg)
 
 
 ![Forks](https://img.shields.io/github/forks/decaf-ts/ts-workspace.svg)
@@ -36,11 +32,28 @@ This way just create one from this template and enjoy having everything set up f
 ![NPM Version](https://img.shields.io/badge/dynamic/json.svg?url=https%3A%2F%2Fraw.githubusercontent.com%2Fbadges%2Fshields%2Fmaster%2Fpackage.json&label=NPM&query=$.engines.npm&colorB=purple)
 
 Documentation available [here](https://decaf-ts.github.io/ts-workspace/)
+
 ### Description
 
-THis is a template project for Typescript repos.
+No one needs the hassle of setting up new repos every time.
 
-By developers, [for developers](./tutorials/For%20Developers.md).
+Now you can create new repositories from this template and enjoy having everything set up for you.
+
+
+
+### How to Use
+
+- [Initial Setup](./tutorials/For%20Developers.md#_initial-setup_)
+- [Installation](./tutorials/For%20Developers.md#installation)
+- [Scripts](./tutorials/For%20Developers.md#scripts)
+- [Linting](./tutorials/For%20Developers.md#testing)
+- [CI/CD](./tutorials/For%20Developers.md#continuous-integrationdeployment)
+- [Publishing](./tutorials/For%20Developers.md#publishing)
+- [Structure](./tutorials/For%20Developers.md#repository-structure)
+- [IDE Integrations](./tutorials/For%20Developers.md#ide-integrations)
+  - [VSCode(ium)](./tutorials/For%20Developers.md#visual-studio-code-vscode)
+  - [WebStorm](./tutorials/For%20Developers.md#webstorm)
+- [Considerations](./tutorials/For%20Developers.md#considerations)
 
 
 
@@ -48,11 +61,15 @@ By developers, [for developers](./tutorials/For%20Developers.md).
 ### Related
 
 [![Readme Card](https://github-readme-stats.vercel.app/api/pin/?username=decaf-ts&repo=ts-workspace)](https://github.com/decaf-ts/ts-workspace)
+
 ### Social
 
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/decaf-ts/)
 
 
+
+
+#### Languages
 
 ![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
 ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
@@ -71,10 +88,12 @@ I am grateful for any contributions made to this project. Please read [this](./w
 
 The first and easiest way you can support it is by [Contributing](./workdocs/98-Contributing.md). Even just finding a typo in the documentation is important.
 
-Financial support is always welcome and helps keep the both me and the project alive and healthy.
+Financial support is always welcome and helps keep both me and the project alive and healthy.
 
 So if you can, if this project in any way. either by learning something or simply by helping you save precious time, please consider donating.
 
 ## License
 
-This project is released under the [MIT License](LICENSE.md).
+This project is released under the [MIT License](./LICENSE.md).
+
+By developers, for developers...

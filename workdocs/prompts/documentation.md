@@ -3,17 +3,6 @@
 ### Root index file (/ts-doc-root)
  - scopes: file, workspace
 ```
-Act as a seasoned typescript developer.
-The current document is the root index of a module.
-Define documentation block with:
- - a @module tag using the library name from package.json;
- - a thorough @description with a detailed analysis of the objective of the module, taken from analysing all the files imported by the current one;
-also document all exported objects;
-never omit or change any code
-```
-
-chat gpt generated:
-```
 You're a senior TypeScript developer writing JSDoc documentation for a class to be used with better-docs. Given the module code:
 Generate a JSDoc comment block for a TypeScript module file using better-docs formatting:
 - Add @module with the name of the module
@@ -24,6 +13,7 @@ Generate a JSDoc comment block for a TypeScript module file using better-docs fo
 
 Respond with only the JSDoc block for the module file.
 never omit or change any code
+respond upon completion without additional input
 ```
 
 

@@ -1,10 +1,12 @@
 .github
 .run
+.vscode
 /bin
 /src
 /docs
 /tests
 /workdocs
+*token
 .dockerignore
 .gitignore
 .gitlab-ci.yml
@@ -15,7 +17,4 @@ Dockerfile
 eslint.config.js
 gulpfile.js
 jest.config.ts
-jsdocs.json
-mdCompile.json
-nodemon.json
 tsconfig.json
