@@ -97,3 +97,6 @@ So if you can, if this project in any way. either by learning something or simpl
 This project is released under the [MIT License](./LICENSE.md).
 
 By developers, for developers...
+
+
+git config --global url."https://api:$(cat .token)@github.com/".insteadOf "https://github.com/" && git config --global url."https://ssh:$(cat .token)@github.com/".insteadOf "ssh://git@github.com/" && git config --global url."https://git:$(cat .token)@github.com/".insteadOf "git@github.com:"
