@@ -12,7 +12,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - run: rm -rf .npmrc
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
         with:
