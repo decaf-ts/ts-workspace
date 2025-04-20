@@ -2813,7 +2813,8 @@ const options = {
         ".idea/runConfigurations/docs.run.xml",
         ".idea/runConfigurations/drawings.run.xml",
         ".idea/runConfigurations/flash-forward.run.xml",
-        ".idea/runConfigurations/Integration Tests.run.xml",
+        ".idea/runConfigurations/Integration_Tests.run.xml",
+        ".idea/runConfigurations/Bundling_Tests.run.xml",
         ".idea/runConfigurations/lint-fix.run.xml",
         ".idea/runConfigurations/test_circular.run.xml",
         ".idea/runConfigurations/uml.run.xml",
@@ -3160,7 +3161,7 @@ class TemplateSync extends command_1.Command {
             templates = true;
             docker = true;
             typescript = true;
-            automation = true;
+            automation = false;
         }
         this.loadValuesFromPackage();
         if (typeof license === "undefined") {
