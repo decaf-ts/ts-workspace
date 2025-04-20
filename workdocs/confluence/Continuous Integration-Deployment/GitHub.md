@@ -29,6 +29,13 @@ For incidents:
 
 ### Actions
 
+#### Caches
+
+ - dependencies: key: `<repo>-dependencies-<branch>` - store the cached npm dependencies. update triggered by change of `package-lock.json`
+ - build: key: `<repo>-build-<branch>` - store compiled code. update triggered by change of `src`/`tests`/`ts-config`/`package-lock.json`
+ - test: key: `<repo>-test-<branch>` - store test results. update triggered by change of `tests`/`workdocs/reports/jest-reports.config.ts`/`package-lock.json`
+
+
 #### ***Triggerable***
 actions that can be triggered by authorized user
 
