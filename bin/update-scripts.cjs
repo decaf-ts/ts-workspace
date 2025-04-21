@@ -4696,7 +4696,8 @@ class TemplateSync extends command_1.Command {
      */
     async getScripts() {
         await this.downloadOption("scripts");
-        this.log.info("please re-run the command");
+        await (0, utils_1.runCommand)("npm run update-scripts -- --all").promise;
+        // this.log.info("please re-run the command");
         process.exit(0);
     }
     async initPackage(pkgName, author, license) {
@@ -4859,7 +4860,7 @@ class TemplateSync extends command_1.Command {
             this.patchFiles();
         }
         if (all) {
-            scripts = true;
+            scripts = false;
             styles = true;
             docs = true;
             ide = true;
