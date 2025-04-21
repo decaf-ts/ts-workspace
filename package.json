@@ -11,7 +11,7 @@
   "scripts": {
     "do-install": "TOKEN=$(cat .token) npm install",
     "update-scripts": "node ./bin/update-scripts.cjs",
-    "on-first-run": "chmod +x ./bin/template_setup.sh && ./bin/template_setup.sh",
+    "on-first-run": "node ./bin/update-scripts.cjs --boot",
     "set-git-auth": "git config url.\"https://api:$(cat .token)@github.com/\".insteadOf \"https://github.com/\" && git config url.\"https://ssh:$(cat .token)@github.com/\".insteadOf \"ssh://git@github.com/\" && git config url.\"https://git:$(cat .token)@github.com/\".insteadOf \"git@github.com:\"",
     "postinstall": "[ -z $CI ] && npm run on-first-run || echo 'CI detected, skipping on-first-run'",
     "flash-forward": "npx npm-check-updates -u && npm run do-install",
