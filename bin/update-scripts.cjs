@@ -4696,8 +4696,7 @@ class TemplateSync extends command_1.Command {
      */
     async getScripts() {
         await this.downloadOption("scripts");
-        await (0, utils_1.runCommand)("npm run update-scripts -- --all").promise;
-        // this.log.info("please re-run the command");
+        this.log.info("please re-run the command");
         process.exit(0);
     }
     async initPackage(pkgName, author, license) {
@@ -4881,7 +4880,8 @@ class TemplateSync extends command_1.Command {
             if (confirmation)
                 license = await input_1.UserInput.insistForText("license", "Enter the desired License (MIT|GPL|Apache|LGPL|AGPL):", (val) => !!val && !!val.match(/^(MIT|GPL|Apache|LGPL|AGPL)$/g));
         }
-        await this.getLicense(license);
+        if (typeof license !== "undefined")
+            await this.getLicense(license);
         if (typeof ide === "undefined")
             ide = await input_1.UserInput.askConfirmation("ide", "Do you want to get ide configs?", true);
         if (ide)
