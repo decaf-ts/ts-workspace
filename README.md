@@ -18,12 +18,6 @@ This repository is meant to provide an enterprise template for any standard Type
 ![Pull Requests](https://img.shields.io/github/issues-pr-closed/decaf-ts/ts-workspace.svg)
 ![Maintained](https://img.shields.io/badge/Maintained%3F-yes-green.svg)
 
-![Line Coverage](workdocs/reports/coverage/badge-lines.svg)
-![Function Coverage](workdocs/reports/coverage/badge-functions.svg)
-![Statement Coverage](workdocs/reports/coverage/badge-statements.svg)
-![Branch Coverage](workdocs/reports/coverage/badge-branches.svg)
-
-
 ![Forks](https://img.shields.io/github/forks/decaf-ts/ts-workspace.svg)
 ![Stars](https://img.shields.io/github/stars/decaf-ts/ts-workspace.svg)
 ![Watchers](https://img.shields.io/github/watchers/decaf-ts/ts-workspace.svg)
