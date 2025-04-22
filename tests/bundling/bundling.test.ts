@@ -15,11 +15,11 @@ describe("Distribution Tests", () => {
   });
 
   it("reads JS Bundle", () => {
-
     let distFile: Dirent[];
     try {
-      distFile = fs.readdirSync(path.join(process.cwd(), "dist"), {withFileTypes: true})
-        .filter(d => d.isFile() && d.name.endsWith(".js"))
+      distFile = fs
+        .readdirSync(path.join(process.cwd(), "dist"), { withFileTypes: true })
+        .filter((d) => d.isFile() && !d.name.endsWith("esm.js"));
     } catch (e: unknown) {
       throw new Error("Error reading JS bundle: " + e);
     }
@@ -27,11 +27,9 @@ describe("Distribution Tests", () => {
     if (distFile.length === 0)
       throw new Error("There should only be a js file in directory");
 
-    const {
-      VERSION,
-      complexFunction,
-      ChildClass,
-    } = require(`../../dist/${distFile[0].name}`);
+    const { VERSION, complexFunction, ChildClass } = require(
+      `../../dist/${distFile[0].name}`
+    );
     expect(VERSION).toBeDefined();
     expect(complexFunction).toBeDefined();
     expect(ChildClass).toBeDefined();
