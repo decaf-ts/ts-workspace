@@ -78,8 +78,8 @@ This repo comes with eslint + prettier preconfigured to the default standards.
 
 Please configure your IDE to recognize these files and perform automatic validation and fixes on save:
  - Webstorm:
-   - eslint recommended setup [here](../assets/ws-eslint-setup.png)
-   - prettier recommended setup [here](../assets/ws-prettier-setup.png)
+   - eslint recommended setup preconfigured under `.idea/jsLinters/eslint.xml`
+   - prettier recommended setup preconfigured under `.idea/prettier.xml`
  - VSCode(ium):
    - eslint recommended setup preconfigured under `.vscode/settings.json`
    - prettier recommended setup preconfigured under `.vscode/settings.json`
