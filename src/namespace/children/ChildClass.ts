@@ -7,6 +7,9 @@ import { ChildInterface } from "./ChildInterface";
  * @summary Generic class extending Class and implementing ChildInterface with additional functionality.
  * It provides a generic implementation with additional properties and methods.
  *
+ * @param {unknown} arg1 - First argument of unknown type
+ * @param {string} arg2 - Second argument as string
+ *
  * @template T - The generic type parameter
  * @extends {Class}
  * @implements {ChildInterface<T>}
