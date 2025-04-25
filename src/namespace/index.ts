@@ -1,9 +1,7 @@
 /**
  * @namespace Namespace
- * @summary Core namespace for the ts-workspace module
  * @description This namespace serves as the main container for the ts-workspace module's core components.
- * It aggregates and exports various classes, interfaces, and utility functions that form the backbone
- * of the module's functionality.
+ * @summary Core namespace for the ts-workspace module that aggregates and exports various components.
  *
  * The namespace includes:
  * - Class definitions (from "./Class")

@@ -1,9 +1,10 @@
 /**
- * @typedef {string|T} Type
- * @template T
- * @summary A union type of string and a generic type T
+ * @typedef Type
  * @description This type represents either a string or a value of the generic type T.
+ * @summary A union type of string and a generic type T that allows for flexible typing.
  * It allows for flexible typing where a value can be either a string or of any other specified type.
+ * @template T - The generic type parameter
+ * @typeDef
  *
  * @example
  * // Using Type with a specific type

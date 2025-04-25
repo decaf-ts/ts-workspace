@@ -1,7 +1,7 @@
 /**
  * @module ts-workspace
- * @description This module serves as the main entry point for the ts-workspace library. It aggregates and exports 
- * functionality from various submodules and utilities within the project.
+ * @description This module serves as the main entry point for the ts-workspace library.
+ * @summary Aggregates and exports functionality from various submodules and utilities within the project.
  * 
  * The module includes:
  * 1. Utility functions and types from the "./utils" directory:
@@ -24,9 +24,10 @@ export * from "./utils";
 export * from "./namespace";
 
 /**
- * Represents the current version of the ts-workspace module.
- * The actual version number is replaced during the build process.
- * @constant
+ * @const VERSION
+ * @name VERSION
+ * @description Represents the current version of the ts-workspace module.
+ * @summary The actual version number is replaced during the build process.
  * @type {string}
  */
 export const VERSION = "##VERSION##";

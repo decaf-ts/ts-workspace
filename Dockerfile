@@ -6,7 +6,10 @@ RUN apk update && apk upgrade
 
 ENV WORKDIR="ts-workspace"
 
+COPY ./bin/ $WORKDIR/bin/
 COPY ./src/ $WORKDIR/src/
+COPY ./tests/ $WORKDIR/tests/
+COPY ./workdocs/reports $WORKDIR/workdocs/reports
 COPY ./package*.json $WORKDIR/
 COPY ./.mpmrc $WORKDIR/
 
@@ -24,7 +27,7 @@ ENV WORKDIR="ts-workspace"
 ENV NODE_ENV="production"
 
 #COPY --from=builder --chown=node:node $WORKDIR/dist $WORKDIR/ #one or the other usually
-COPY --from=builder --chown=node:node $WORKDIR/bin $WORKDIR/bin/
+COPY --from=builder --chown=node:node $WORKDIR/lib $WORKDIR/lib/
 COPY --from=builder --chown=node:node $WORKDIR/package*.json $WORKDIR/
 
 USER node
@@ -36,9 +39,7 @@ WORKDIR $WORKDIR
 RUN --mount=type=secret,id=TOKEN TOKEN=$(cat /run/secrets/TOKEN) npm ci && npm cache clean --force && chown -R node:node .
 
 
-# EXPOSE 3000/tcp
-
-ENTRYPOINT ["node", "cli"]
+ENTRYPOINT ["node", "lib/cli.cjs"]
 
 LABEL name="TS Workspace" description="Template Dockerfile for typescript projects"
 

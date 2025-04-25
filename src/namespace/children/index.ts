@@ -1,9 +1,7 @@
 /**
  * @namespace ChildNamespace
- * @summary Child namespace containing additional components for the ts-workspace module
  * @description This namespace serves as a container for various child components of the ts-workspace module.
- * It aggregates and exports classes, interfaces, enums, and functions that extend the functionality
- * of the parent namespace.
+ * @summary Child namespace containing additional components that extend the functionality of the parent namespace.
  *
  * The namespace includes:
  * - Child class definitions (from "./ChildClass")
