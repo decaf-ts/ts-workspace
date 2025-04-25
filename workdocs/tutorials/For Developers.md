@@ -46,7 +46,7 @@ The following npm scripts are available for development:
   have private dependencies);
 - `update-scripts`: will pull the GitHub actions, templates, and style configs from the [ts-workspace](https://github.com/decaf-ts/ts-workspace) repository, overwriting the existing.
 - `on-first-run`: will run the initial setup script,
-- `set-git-auth` - change git config to include the token (no longer requires manual auth);
+- `set-git-auth` - change git config to include the token (no longer requires manual auth). ***Only run once per repository***;
 - `postinstall` - will run only on the first installation to trigger the dep update. Will self-delete;
 - `flash-forward` - updates all dependencies. Take care, This may not be desirable is some cases;
 - `reset` - updates all dependencies. Take care, This may not be desirable is some cases;
