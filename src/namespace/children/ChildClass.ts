@@ -37,7 +37,7 @@ export class ChildClass<T> extends Class implements ChildInterface<T> {
    * @return {Promise<string>} A Promise that resolves to a string
    * @override
    */
-  async method<V>(): Promise<string> {
+  override async method<V>(): Promise<string> {
     return "ok" as unknown as V as unknown as string;
   }
 
