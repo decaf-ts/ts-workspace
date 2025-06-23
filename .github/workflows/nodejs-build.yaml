@@ -25,7 +25,7 @@ jobs:
     
       # Cache dependencies (node_modules)
       - name: Cache dependencies
-        id: cache-deps
+        id: cache-node-modules
         uses: actions/cache@v4
         with:
           path: node_modules
@@ -34,7 +34,7 @@ jobs:
             deps-${{ runner.os }}-${{ matrix.node-version }}-
 
       # Install dependencies only if cache missed
-      - if: steps.cache-deps.outputs.cache-hit != 'true'
+      - if: steps.cache-node-modules.outputs.cache-hit != 'true'
         run: npm ci
 
       # Cache build outputs (e.g., dist/)
@@ -46,7 +46,3 @@ jobs:
           key: build-${{ runner.os }}-${{ matrix.node-version }}-${{ hashFiles('src/**', 'package.json') }}
           restore-keys: |
             build-${{ runner.os }}-${{ matrix.node-version }}-
-
-      # Run build only if dependencies changed or build cache missed
-      - if: steps.cache-deps.outputs.cache-hit != 'true' || steps.cache-build.outputs.cache-hit != 'true'
-        run: npm run build:prod  # Replace with your build command

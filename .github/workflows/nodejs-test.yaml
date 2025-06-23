@@ -25,18 +25,29 @@ jobs:
       
       - name: Cache node_modules
         uses: actions/cache@v4
+        id: cache-node-modules
         with:
           path: node_modules
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             deps-${{ runner.os }}-${{ matrix.node-version }}-
 
+      # Install dependencies only if cache missed
+      - name: Exec npm ci
+        if: steps.cache-node-modules.outputs.cache-hit != 'true'
+        run: npm ci
+
       - name: Cache build output
+        id: cache-build
         uses: actions/cache@v4
         with:
           path: dist
           key: build-${{ runner.os }}-${{ hashFiles('src/**', 'package.json') }}
           restore-keys: |
             build-${{ runner.os }}-${{ matrix.node-version }}-
+      
+      # Run build only if dependencies changed or build cache missed
+      - if: steps.cache-node-modules.outputs.cache-hit != 'true' || steps.cache-build.outputs.cache-hit != 'true'
+        run: npm run build:prod  # Replace with your build command      
 
       - run: npm run test:all
