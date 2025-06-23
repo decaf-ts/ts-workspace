@@ -1,0 +1,42 @@
+name: Test Code
+
+on:
+  workflow_dispatch: # on button click
+  push:
+    branches: [ master, main ]
+    paths:
+      - src/**
+      - tests/**
+  pull_request:
+    branches: [ master, main ]
+
+jobs:
+  test:
+    strategy:
+      matrix:
+        node-version: [20, 22]  # Add your desired versions
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+      
+      - name: Cache node_modules
+        uses: actions/cache@v4
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            deps-${{ runner.os }}-${{ matrix.node-version }}-
+
+      - name: Cache build output
+        uses: actions/cache@v4
+        with:
+          path: dist
+          key: build-${{ runner.os }}-${{ hashFiles('src/**', 'package.json') }}
+          restore-keys: |
+            build-${{ runner.os }}-${{ matrix.node-version }}-
+
+      - run: npm test:all
