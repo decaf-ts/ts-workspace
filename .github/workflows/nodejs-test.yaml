@@ -28,10 +28,9 @@ jobs:
         id: cache-node-modules
         with:
           path: node_modules
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          key: deps-${{ runner.os }}-${{ matrix.node-version }}-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             deps-${{ runner.os }}-${{ matrix.node-version }}-
-
       # Install dependencies only if cache missed
       - name: Exec npm ci
         if: steps.cache-node-modules.outputs.cache-hit != 'true'
@@ -42,7 +41,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: dist
-          key: build-${{ runner.os }}-${{ hashFiles('src/**', 'package.json') }}
+          key: build-${{ runner.os }}-${{ matrix.node-version }}-${{ hashFiles('src/**', 'package.json') }}
           restore-keys: |
             build-${{ runner.os }}-${{ matrix.node-version }}-
       
