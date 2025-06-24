@@ -34,18 +34,7 @@ jobs:
       # Install dependencies only if cache missed
       - run: npm ci
 
-      - name: Cache build output
-        id: cache-build
-        uses: actions/cache@v4
-        with:
-          path: dist
-          key: build-${{ runner.os }}-${{ matrix.node-version }}-${{ hashFiles('src/**', 'package.json') }}
-          restore-keys: |
-            build-${{ runner.os }}-${{ matrix.node-version }}-
-      
-      # Run build only if dependencies changed or build cache missed
-      - if: steps.cache-npm.outputs.cache-hit != 'true' || steps.cache-build.outputs.cache-hit != 'true'
-        run: npm run build:prod  # Replace with your build command    
+      - run: npm run build:prod  # Replace with your build command    
               
       - run: npm run coverage
       - name: Tests ✅

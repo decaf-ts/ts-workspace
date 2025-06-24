@@ -11,18 +11,31 @@ on:
     branches: [ master, main ]
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
+  test:
     strategy:
       matrix:
-        node-version: [ 20.x ]
+        node-version: [20, 22]  # Add your desired versions
+    runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
+      
+      # Cache dependencies (npm)
+      - name: Cache dependencies
+        id: cache-npm
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: deps-${{ runner.os }}-${{ matrix.node-version }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            deps-${{ runner.os }}-${{ matrix.node-version }}-
+
+      # Install dependencies only
       - run: npm ci
-      - run: npm run build:prod
+
+      - run: npm run build:prod  # Replace with your build command      
+
       - run: npm run test:all

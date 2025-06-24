@@ -8,6 +8,9 @@ on:
 
 jobs:
   build:
+    strategy:
+      matrix:
+        node-version: [ 20, 22 ]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -17,6 +20,15 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           registry-url: https://registry.npmjs.org/
+          # Cache dependencies (npm)
+      - name: Cache dependencies
+        id: cache-npm
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: deps-${{ runner.os }}-${{ matrix.node-version }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            deps-${{ runner.os }}-${{ matrix.node-version }}-
       - run: npm ci
       - run: npm run build:prod
       - run: npm run test:all
