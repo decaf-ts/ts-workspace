@@ -35,7 +35,5 @@ jobs:
 
       # Install dependencies only
       - run: npm ci
-
       - run: npm run build:prod  # Replace with your build command      
-
       - run: npm run test:all
