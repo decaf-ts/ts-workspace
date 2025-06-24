@@ -13,3 +13,5 @@
 
 # All files from the repository
 *       @decaf-ts/quality @decaf-ts/reviewers
+
+.github/ @decaf-ts/CI-CD @decaf-ts/quality
