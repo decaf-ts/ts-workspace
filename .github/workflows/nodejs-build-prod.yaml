@@ -2,19 +2,12 @@ name: "Build & Test"
 
 on:
   workflow_dispatch: # on button click
-  push:
-    branches: [ master, main ]
-    paths:
-      - src/**
-      - tests/**
-  pull_request:
-    branches: [ master, main ]
 
 jobs:
   test:
     strategy:
       matrix:
-        node-version: [20, 22]  # Add your desired versions
+        node-version: [22]  # Add your desired versions
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -22,13 +15,14 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
-      
-      # Cache dependencies (npm)
+
       - name: Cache dependencies
         id: cache-npm
         uses: actions/cache@v4
         with:
-          path: ~/.npm
+          path: |
+            ~/.npm
+            node_modules
           key: deps-${{ runner.os }}-${{ matrix.node-version }}-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             deps-${{ runner.os }}-${{ matrix.node-version }}-
@@ -36,6 +30,17 @@ jobs:
       # Install dependencies only
       - run: npm ci
 
+      - name: Cache dependencies
+        id: cache-build
+        uses: actions/cache@v4
+        with:
+          path: | 
+            lib
+            dist
+          key: build-${{ runner.os }}-${{ matrix.node-version }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            build-${{ runner.os }}-${{ matrix.node-version }}-
+            
       - run: npm run build:prod  # Replace with your build command      
 
       - run: npm run test:all
