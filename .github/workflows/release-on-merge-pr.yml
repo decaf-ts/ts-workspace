@@ -47,8 +47,6 @@ jobs:
       - name: Test
         run: npm run coverage
 
-      
-
       - name: Commit changes
         run: |
           TAG_NAME="${{ github.ref_name }}"
