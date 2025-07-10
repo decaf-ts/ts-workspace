@@ -51,6 +51,7 @@ jobs:
       - name: Commit changes
         run: |
           TAG=$(git describe --tags --exact-match || echo "no-tag")
+          git tag -a "v$TAG" -m "Release Version $TAG"
           git add .
           git commit -m  "Github Action automatic release: ${TAG_NAME}" || echo "No changes to commit"
           git push origin HEAD:master --follow-tags
