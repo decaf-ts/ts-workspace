@@ -49,7 +49,7 @@ jobs:
 
       - name: Commit changes
         run: |
-          TAG_NAME="${{ github.ref_name }}"
+          TAG=$(git describe --tags --exact-match || echo "no-tag")
           git add .
           git commit -m  "Github Action automatic release: ${TAG_NAME}" || echo "No changes to commit"
           git push --follow-tags
