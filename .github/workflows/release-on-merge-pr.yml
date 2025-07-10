@@ -37,7 +37,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git remote set-url origin https://x-access-token:${{ secrets.GH_PAT }}@github.com/decaf-ts/ts-workspace.git
+          git remote set-url origin https://vpaulino98:${{ secrets.GH_PAT }}@github.com/decaf-ts/ts-workspace.git
 
       - name: Bump TAG
         run: npm version patch
