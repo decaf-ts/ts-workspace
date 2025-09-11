@@ -7,7 +7,7 @@
 
 ## Getting help
 
-If you have bug reports, questions or suggestions please [create a new issue](https://github.com/decaf-ts/ts-workspace/issues/new/choose).
+If you have bug reports, questions or suggestions, please [create a new issue](https://github.com/decaf-ts/ts-workspace/issues/new/choose).
 
 ## Contributing
 
@@ -15,7 +15,7 @@ I am grateful for any contributions made to this project. Please read [this](./w
 
 ## Supporting
 
-The first and easiest way you can support it is by [Contributing](./workdocs/98-Contributing.md). Even just finding a typo in the documentation is important.
+The first and easiest way you can support it is by [Contributing](./workdocs/tutorials/Contributing.md). Even just finding a typo in the documentation is important.
 
 Financial support is always welcome and helps keep both me and the project alive and healthy.
 
