@@ -25,7 +25,9 @@ This repository is meant to provide an enterprise template for any standard Type
 ![Node Version](https://img.shields.io/badge/dynamic/json.svg?url=https%3A%2F%2Fraw.githubusercontent.com%2Fbadges%2Fshields%2Fmaster%2Fpackage.json&label=Node&query=$.engines.node&colorB=blue)
 ![NPM Version](https://img.shields.io/badge/dynamic/json.svg?url=https%3A%2F%2Fraw.githubusercontent.com%2Fbadges%2Fshields%2Fmaster%2Fpackage.json&label=NPM&query=$.engines.npm&colorB=purple)
 
-Documentation available [here](https://decaf-ts.github.io/ts-workspace/)
+Documentation [here](https://decaf-ts.github.io/ts-workspace/), Test results [here](https://decaf-ts.github.io/ts-workspace/workdocs/reports/html/test-report.html) and Coverage [here](https://decaf-ts.github.io/ts-workspace/workdocs/reports/coverage/lcov-report/index.html)
+
+
 
 ### Description
 
@@ -37,17 +39,17 @@ Now you can create new repositories from this template and enjoy having everythi
 
 ### How to Use
 
-- [Initial Setup](./tutorials/For%20Developers.md#_initial-setup_)
-- [Installation](./tutorials/For%20Developers.md#installation)
-- [Scripts](./tutorials/For%20Developers.md#scripts)
-- [Linting](./tutorials/For%20Developers.md#testing)
-- [CI/CD](./tutorials/For%20Developers.md#continuous-integrationdeployment)
-- [Publishing](./tutorials/For%20Developers.md#publishing)
-- [Structure](./tutorials/For%20Developers.md#repository-structure)
-- [IDE Integrations](./tutorials/For%20Developers.md#ide-integrations)
-  - [VSCode(ium)](./tutorials/For%20Developers.md#visual-studio-code-vscode)
-  - [WebStorm](./tutorials/For%20Developers.md#webstorm)
-- [Considerations](./tutorials/For%20Developers.md#considerations)
+- [Initial Setup](./workdocs/tutorials/For%20Developers.md#_initial-setup_)
+- [Installation](./workdocs/tutorials/For%20Developers.md#installation)
+- [Scripts](./workdocs/tutorials/For%20Developers.md#scripts)
+- [Linting](./workdocs/tutorials/For%20Developers.md#testing)
+- [CI/CD](./workdocs/tutorials/For%20Developers.md#continuous-integrationdeployment)
+- [Publishing](./workdocs/tutorials/For%20Developers.md#publishing)
+- [Structure](./workdocs/tutorials/For%20Developers.md#repository-structure)
+- [IDE Integrations](./workdocs/tutorials/For%20Developers.md#ide-integrations)
+  - [VSCode(ium)](./workdocs/tutorials/For%20Developers.md#visual-studio-code-vscode)
+  - [WebStorm](./workdocs/tutorials/For%20Developers.md#webstorm)
+- [Considerations](./workdocs/tutorials/For%20Developers.md#considerations)
 
 
 
@@ -58,7 +60,7 @@ Now you can create new repositories from this template and enjoy having everythi
 
 ### Social
 
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/decaf-ts/)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/TiagoVenceslau/)
 
 
 
@@ -72,7 +74,7 @@ Now you can create new repositories from this template and enjoy having everythi
 
 ## Getting help
 
-If you have bug reports, questions or suggestions please [create a new issue](https://github.com/decaf-ts/ts-workspace/issues/new/choose).
+If you have bug reports, questions or suggestions, please [create a new issue](https://github.com/decaf-ts/ts-workspace/issues/new/choose).
 
 ## Contributing
 
@@ -80,7 +82,7 @@ I am grateful for any contributions made to this project. Please read [this](./w
 
 ## Supporting
 
-The first and easiest way you can support it is by [Contributing](./workdocs/98-Contributing.md). Even just finding a typo in the documentation is important.
+The first and easiest way you can support it is by [Contributing](./workdocs/tutorials/Contributing.md). Even just finding a typo in the documentation is important.
 
 Financial support is always welcome and helps keep both me and the project alive and healthy.
 
