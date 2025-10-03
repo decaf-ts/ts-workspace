@@ -4,7 +4,9 @@
     <jest-package value="$PROJECT_DIR$/node_modules/jest" />
     <working-dir value="$PROJECT_DIR$" />
     <jest-options value="--testPathPattern=&quot;/tests&quot; --detectOpenHandles" />
-    <envs />
+    <envs>
+      <env name="TEST_TARGET" value="src" />
+    </envs>
     <scope-kind value="ALL" />
     <method v="2" />
   </configuration>

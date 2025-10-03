@@ -8,7 +8,7 @@ task 4 - understand the content of each test file, and how to use the main objec
 task 5 - from the identified elements, elaborate a short summary of the intent of the library and write in `<base_path>/workdocs/1-Header.md` under the banner and title
 task 6 - from the identified elements, elaborate a detailed description of the intent of the library and write in `<base_path>workdocs/4-Description.md` under the title
 - write examples in the `workdocs/5-HowToUse.md` file for all the identified elements
-- each exaple MUST contain:
+- each example MUST contain:
     - Description of the use case;
     - typescript example using the appropriate typescript code notation in md format
       stop only when the task is done

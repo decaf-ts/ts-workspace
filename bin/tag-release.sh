@@ -52,8 +52,8 @@ if [[ $# -ne 0 ]];then
   MESSAGE="$*"
 fi
 
-echo "Preparing Release... "
-npm run prepare-release
+echo "Preparing release prerequisites..."
+npm run prepare-pr
 
 if [[ -z "$TAG" ]];then
   echo "Listing existing tags..."
@@ -79,4 +79,3 @@ git push --follow-tags
 if [[ "$MESSAGE" =~ -no-ci$ ]]; then
   NPM_TOKEN=$(cat .npmtoken) npm publish --access public
 fi
-

@@ -1,7 +1,7 @@
 ## Contributing
 
-[fork]: https://github.com/actions/dependency-review-action/fork
-[pr]: https://github.com/actions/dependency-review-action/compare
+[fork]: https://github.com/decaf-ts/ts-workspace/fork
+[pr]: https://github.com/decaf-ts/ts-workspace/compare
 [code-of-conduct]: CODE_OF_CONDUCT.md
 [developers-guide]: ./For%20Developers.md
 
@@ -39,7 +39,7 @@ _Note_: We don't have any useful tests yet, contributions are welcome!
 2. Make sure the tests pass on your machine: `npm run test:all`
 3. Create a new branch: `git checkout -b my-branch-name`. Relate the branch to an issue if possible
 4. Make your change, add tests, add documentation, and make sure the tests still pass
-5. Make sure to build and package before pushing: `npm run prepare-release`
+5. Make sure to build, test, and refresh docs before pushing: `npm run prepare-pr`
 6. Push to your fork and [submit a pull request][pr]
 7. Pat your self on the back and wait for your pull request to be reviewed and merged.
 
