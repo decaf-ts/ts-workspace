@@ -47,20 +47,23 @@ The following npm scripts are available for development:
 - `update-scripts`: will pull the GitHub actions, templates, and style configs from the [ts-workspace](https://github.com/decaf-ts/ts-workspace) repository, overwriting the existing.
 - `on-first-run`: will run the initial setup script,
 - `set-git-auth` - change git config to include the token (no longer requires manual auth). ***Only run once per repository***;
-- `postinstall` - will run only on the first installation to trigger the dep update. Will self-delete;
+- `sync-codex`; - syncs the `.codex` folder with the latest version from the `./.codex/prompts`
 - `flash-forward` - updates all dependencies. Take care, This may not be desirable is some cases;
 - `reset` - updates all dependencies. Take care, This may not be desirable is some cases;
-- `build` - builds the code (via gulp `gulpfile.js`) in development mode (generates `lib` and `dist` folder);
-- `build:prod` - builds the code (via gulp `gulpfile.js`) in production mode (generates `lib` and `dist` folder);
-- `test` - default project test script, defaults to `test:unit`;
+- `build` - builds the code (via `npx build_scripts --dev`) in development mode (generates `lib` and `dist` folder);
+- `build:prod` - builds the code (via `npx build_scripts --prod`) in production mode (generates `lib` and `dist` folder);
+- `test` - default project test script, defaults to `test:all`;
 - `test:unit` - runs unit tests;
 - `test:integration` - runs it tests;
 - `test:all` - runs all tests;
 - `test:circular` - tests for circular dependencies;
 - `coverage` - runs all tests, calculates coverage (html/csv), generates a test report (HTML and junit) and generates badges for readme;
+- `prepare-pr`: same as prepare-release,
 - `lint` - runs es lint on the code folder;
 - `lint-fix` - tries to auto-fix the code folder;
 - `prepare-release` - defines the commands to run prior to a new tag (defaults to linting, building production code,
+  running tests and documentation generation);
+- `prepare-pr` - defines the commands to run prior to a creating a new pull request (defaults to linting, building production code,
   running tests and documentation generation);
 - `release` - triggers a new tag being pushed to master (via `./bin/tag_release.sh`);
 - `clean-publish` - cleans the package.json for publishing;
@@ -108,7 +111,7 @@ There are 3 steps in generating the documentation (automated in CI):
 
 - `npm run drawings` - generates png files from each drawing in the `workdocs/drawings` folder and moves them to the `workdocs/resources` folder (requires Docker);
 - `npm run uml` - generates png files from each PlantUML diagram in the `workdocs/uml` folder and moves them to the `workdocs/resources` folder (requires Docker);
-- `npm run docs` - this has several stages, defined under the `gulp docs` (gulpfile.js):
+- `npm run docs` - (should be ran after `npm run coverage` to include test results and coverage) this has several stages, defined under the `npx build-docs`):
   - compiles the Readme file via md compile:
     - enables keeping separate files for sections that are then joined into a single file;
     - Allows keeping specific files in the jsdoc tutorial folder so they show up on their own menu;
@@ -194,7 +197,7 @@ When the `-no-ci` flag is passed then you can:
 ### Repository Structure
 
 ```
-ts-workspace
+repository-root
 │
 │   .confluence-token               <-- stores confluence access token
 │   .dockerignore                   <-- Defines files by docker in the build image
@@ -215,21 +218,23 @@ ts-workspace
 │   package.json
 │   package-lock.json
 │   README.md                       <-- Readme File dynamically compiled from 'workdocs' via the 'docs' npm script
-│   tsconfig.json                   <-- Typescript config file. Is overriden in 'gulpfile.js'
+│   tsconfig.json                   <-- Typescript config file.
+│
+└───.codex
+│   │   ...                         <-- codex prompts and configs
 │
 └───.github
 │   │   ...                         <-- github workflows and templates
 │
-└───.run
-│   │   ...                         <-- IDE run scripts for WebStorm
+└───.idea
+│   │   ...                         <-- IDE run scripts for Jetbrains IDEs
 │
 │└───.vscode
 │   │   ...                         <-- IDE run scripts and configs for VSCode(ium)
 │
 └───bin
-│   │───tag_release.cjs             <-- Script to help with releases
-│   │───template-setup.cjs          <-- Script that runs on first npm install and configures the repo
-│   └───update-scripts.cjs          <-- Retrieves the most updated configuration files from the original repository
+│   │───tag_release.sh             <-- Script to help with releases
+│   └───sync-codex.sh              <-- Script to update codex prompts from reporitory ones
 └───dist
 │   │   ...                         <-- Dinamically generated folder containing the bundles for distribution
 │
@@ -251,7 +256,6 @@ ts-workspace
     │───assets                      <-- Documentation asset folder
     │───confluence                  <-- folder containing specific documentation to be synced with a confluence page
     │───drawings                    <-- Drawio drawings that are converted to the resources folder dynamically
-    │───prompts                     <-- Used AI prompts (great for documentation and testing)
     │───reports                     <-- Folder storing generated content (compiled uml, drawio, test reports, etc)
     │   └───coverage                <-- Auto generated coverage results (report ready html)
     │   └───data                    <-- folder used as temp while genrating reports wiht attachements
