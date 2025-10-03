@@ -194,6 +194,22 @@ When the `-no-ci` flag is passed then you can:
   - you have you publishing properly configured in `npmrc` and `package.json`;
   - The token for any special access required is stored in the `.token` file;
 
+### AI
+
+#### codex
+This repository comes prebuilt with codex support. It will use the prompts and configurations in the `.codex` folder to provide AI assistance.
+To sync its prompts, run the `npm run sync-codex` command.
+Prompts under `./.codex/prompts` are:
+- `update-readme.md` - will update the readme file with a summary, detailed description, and examples of use for all identified elements in the code and tests;
+- `bulk-tests.md` - will create tests until a certain coverage is reached;
+- `repo-setup.md` - will ensure the repository is properly setup with correct badges, scripts, and documentation;
+- `update-dependencies.md` - will update all dependencies to their latest versions, taking care of any breaking changes;
+- `doc.md` - will setup a documentation role;
+- `file.md` - will document the file;
+- `bulk-docs.md` - will document all files in the `src` folder;
+
+`AGENTS.md` can also be found in the `.codex` folder, describing how to use agents with this repository.
+
 ### Repository Structure
 
 ```
@@ -322,5 +338,5 @@ Common commands for builds, tests, and documentation generation are available in
 
 ## Considerations
 
-- Setup for node 20, but will work at least with 16;
+- Setup for node 22, but will work at least with 16;
 - Requires docker to build documentation (drawings and PlantUML)
