@@ -51,7 +51,7 @@ All automated test scripts live in `package.json`:
 - `test:circular`: checks the source for circular dependencies using `dpdm`.
 - `coverage`: wipes previous coverage JSON files and runs the full test suite with the coverage-specific Jest config to emit reports and badges.
 
-Name specs with `*.test.ts`. Isolate logic in unit suites never mock. It a mock is required, write an integration test instead; move cross-module workflows to `tests/integration`. Run `npm run coverage` before merging and confirm the generated reports in `workdocs/reports/data/`.
+Name specs with `*.test.ts`. Isolate logic in unit suites never mock. If a mock is required, write an integration test instead; move cross-module workflows to `tests/integration`. Run `npm run coverage` before merging and confirm the generated reports in `workdocs/reports/data/`.
 
 ## Commit & Pull Request Guidelines
 Mirror existing history by prefixing commit subjects with the tracker key when they match the branch name, otherwise ask the user for the reference (e.g., `DECAF-123 short summary`) or semantic version when cutting a release. Keep subjects under 72 characters and include rationale in the body when behaviour changes. Pull requests should link issues, list validation commands (`lint`, `test`, `coverage`), and attach screenshots for visual updates. Run `npm run prepare-pr` and mention any skipped steps.
