@@ -1,0 +1,14 @@
+name: Run bug in progress
+
+on:
+  repository_dispatch:
+    types:
+      - decaf_bug_in_progress
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Print jira payload
+        run: |
+          echo "Ticket: ${{ github.event.client_payload.branch }}"
