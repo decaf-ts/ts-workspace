@@ -1,0 +1,33 @@
+name: Create bug pull request
+
+on:
+  repository_dispatch:
+    types:
+      - decaf_bug_pull_request
+
+jobs:
+  create-pr:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: master
+
+      - name: Create pull request
+        env:
+          BRANCH_NAME: ${{ github.event.client_payload.branch }}
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          echo "Creating pull request from $BRANCH_NAME to master"
+
+          gh pr create \
+            --base master \
+            --head "$BRANCH_NAME" \
+            --title "Decaf bug fix: $BRANCH_NAME" \
+            --body "Automated pull request for branch \`$BRANCH_NAME\`."
