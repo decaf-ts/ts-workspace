@@ -91,9 +91,30 @@ jobs:
 
       - name: Assign reviewers
         env:
-          GH_TOKEN: ${{ github.token }}
+          GH_TOKEN: ${{ secrets.JIRA_AUTOMATION }}
           PR_URL: ${{ steps.create_pr.outputs.url }}
           REVIEWERS: ${{ steps.reviewers.outputs.reviewers }}
         run: |
-          gh pr edit "$PR_URL" \
-            --add-reviewer "$REVIEWERS"
+          PR_NUMBER="${PR_URL##*/}"
+
+          REVIEWERS_JSON=$(printf '%s\n' "$REVIEWERS" \
+            | tr ',' '\n' \
+            | jq -R . \
+            | jq -s .)
+
+          for attempt in 1 2 3 4 5; do
+            echo "Requesting reviewers, attempt $attempt..."
+
+            if gh api \
+              --method POST \
+              "/repos/${{ github.repository }}/pulls/$PR_NUMBER/requested_reviewers" \
+              --field reviewers="$REVIEWERS_JSON"; then
+              echo "Reviewers requested successfully."
+              exit 0
+            fi
+
+            sleep $((attempt * 10))
+          done
+
+          echo "Failed to request reviewers after retries."
+          exit 1
