@@ -1,8 +1,8 @@
 [![Banner](./workdocs/assets/Banner.png)](https://decaf-ts.github.io/ts-workspace/)
+
 ## Typescript Template
 
 This repository is meant to provide an enterprise template for any standard Typescript project
-
 
 ![Licence](https://img.shields.io/github/license/decaf-ts/ts-workspace.svg?style=plastic)
 ![GitHub language count](https://img.shields.io/github/languages/count/decaf-ts/ts-workspace?style=plastic)
@@ -27,15 +27,11 @@ This repository is meant to provide an enterprise template for any standard Type
 
 Documentation [here](https://decaf-ts.github.io/ts-workspace/), Test results [here](https://decaf-ts.github.io/ts-workspace/workdocs/reports/html/test-report.html) and Coverage [here](https://decaf-ts.github.io/ts-workspace/workdocs/reports/coverage/lcov-report/index.html)
 
-
-
 ### Description
 
 No one needs the hassle of setting up new repos every time.
 
 Now you can create new repositories from this template and enjoy having everything set up for you.
-
-
 
 ### How to Use
 
@@ -51,9 +47,6 @@ Now you can create new repositories from this template and enjoy having everythi
   - [WebStorm](./workdocs/tutorials/For%20Developers.md#webstorm)
 - [Considerations](./workdocs/tutorials/For%20Developers.md#considerations)
 
-
-
-
 ### Related
 
 [![Readme Card](https://github-readme-stats.vercel.app/api/pin/?username=decaf-ts&repo=ts-workspace)](https://github.com/decaf-ts/ts-workspace)
@@ -61,9 +54,6 @@ Now you can create new repositories from this template and enjoy having everythi
 ### Social
 
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/TiagoVenceslau/)
-
-
-
 
 #### Languages
 
@@ -93,3 +83,4 @@ So if you can, if this project in any way. either by learning something or simpl
 This project is released under the [MIT License](./LICENSE.md).
 
 By developers, for developers...
+Making life easier
