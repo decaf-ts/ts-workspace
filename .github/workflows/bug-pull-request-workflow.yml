@@ -47,16 +47,11 @@ jobs:
           echo "Changed files:"
           echo "$CHANGED_FILES"
 
-          # Default owners from:
-          # * @decaf-ts/quality @decaf-ts/techlead
           REQUIRED_TEAMS="quality techlead"
 
           while IFS= read -r file; do
-            # .github/CODEOWNERS and LICENCE.md
             if [[ "$file" == ".github/CODEOWNERS" || "$file" == "LICENCE.md" ]]; then
               REQUIRED_TEAMS="$REQUIRED_TEAMS administration"
-
-            # .github/
             elif [[ "$file" == .github/* ]]; then
               REQUIRED_TEAMS="$REQUIRED_TEAMS CI-CD quality"
             fi
@@ -86,7 +81,6 @@ jobs:
           REVIEWERS="${REVIEWERS#,}"
 
           echo "Final reviewers: $REVIEWERS"
-
           echo "reviewers=$REVIEWERS" >> "$GITHUB_OUTPUT"
 
       - name: Assign reviewers
@@ -102,13 +96,20 @@ jobs:
             | jq -R . \
             | jq -s .)
 
+          REQUEST_BODY=$(jq -n \
+            --argjson reviewers "$REVIEWERS_JSON" \
+            '{reviewers: $reviewers}')
+
+          echo "Request body:"
+          echo "$REQUEST_BODY"
+
           for attempt in 1 2 3 4 5; do
             echo "Requesting reviewers, attempt $attempt..."
 
-            if gh api \
+            if echo "$REQUEST_BODY" | gh api \
               --method POST \
               "/repos/${{ github.repository }}/pulls/$PR_NUMBER/requested_reviewers" \
-              --field reviewers="$REVIEWERS_JSON"; then
+              --input -; then
               echo "Reviewers requested successfully."
               exit 0
             fi
