@@ -37,7 +37,7 @@ jobs:
       - name: Determine required teams from CODEOWNERS
         id: reviewers
         env:
-          GH_TOKEN: ${{ secrets.ORG_TOKEN }}
+          GH_TOKEN: ${{ secrets.JIRA_AUTOMATION }}
           BRANCH_NAME: ${{ github.event.client_payload.branch }}
         run: |
           git fetch origin "$BRANCH_NAME"
