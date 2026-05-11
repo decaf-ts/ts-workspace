@@ -48,8 +48,8 @@ jobs:
           echo "$CHANGED_FILES"
 
           # Default owners from:
-          # * @decaf-ts/quality @decaf-ts/Techlead
-          REQUIRED_TEAMS="quality Techlead"
+          # * @decaf-ts/quality @decaf-ts/techlead
+          REQUIRED_TEAMS="quality techlead"
 
           while IFS= read -r file; do
             # .github/CODEOWNERS and LICENCE.md
