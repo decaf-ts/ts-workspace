@@ -1,11 +1,18 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["config:base"],
-  "baseBranches": ["master"],
+  "extends": ["config:recommended"],
+  "baseBranchPatterns": ["master"],
+  "branchPrefix": "security/renovate-",
+  "forkProcessing": "enabled",
+  "ignorePaths": ["**/node_modules/**"],
+  "includePaths": [
+    "package.json",
+    "package-lock.json",
+    "tests/trivy-fixture/package-lock.json",
+    "tests/trivy-fixture/package.json"
+  ],
   "vulnerabilityAlerts": {
     "enabled": true,
     "labels": ["security"]
-  },
-  "triggers": ["repository_dispatch"],
-  "repositoryDispatchTrigger": "renovate-trigger"
+  }
 }
