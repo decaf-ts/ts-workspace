@@ -35,4 +35,4 @@ jobs:
       - name: Trigger Renovate
         uses: renovatebot/github-action@v46.1.14
         with:
-          token: ${{ secrets.GH_TOKEN }}
+          token: ${{ secrets.JIRA_AUTOMATION }}
