@@ -36,3 +36,5 @@ jobs:
         uses: renovatebot/github-action@v46.1.14
         with:
           token: ${{ secrets.JIRA_AUTOMATION }}
+
+          
