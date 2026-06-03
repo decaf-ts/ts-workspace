@@ -8,11 +8,18 @@
   "includePaths": [
     "package.json",
     "package-lock.json",
-    "tests/trivy-fixture/package-lock.json",
-    "tests/trivy-fixture/package.json"
+    "tests/trivy-fixture/package.json",
+    "tests/trivy-fixture/package-lock.json"
   ],
   "vulnerabilityAlerts": {
     "enabled": true,
     "labels": ["security"]
-  }
+  },
+  "packageRules": [
+    {
+      "matchLabels": ["security"],
+      "automerge": true,
+      "automergeType": "pr"
+    }
+  ]
 }
