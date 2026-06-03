@@ -17,7 +17,7 @@
   },
   "packageRules": [
     {
-      "matchLabels": ["security"],
+      "matchCategories": ["security"],
       "automerge": true,
       "automergeType": "pr"
     }
