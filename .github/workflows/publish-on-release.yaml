@@ -52,4 +52,8 @@ jobs:
       - run: npm run test:all
       - run: npm publish --access public
         env:
+          # The repo ships a committed .npmrc that reads ${NPM_TOKEN}, so this
+          # env name must match it. NODE_AUTH_TOKEN also satisfies the user-level
+          # .npmrc that setup-node generates from `registry-url`.
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
