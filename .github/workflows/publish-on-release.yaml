@@ -1,5 +1,9 @@
 name: "Publish on Release"
 
+# Triggered by the GitHub Release created in release-on-tag.yaml. Builds, tests,
+# and publishes @decaf-ts/ts-workspace to npm. NODE_AUTH_TOKEN is read by the
+# .npmrc that setup-node generates from `registry-url`.
+
 on:
   release:
     types:
@@ -10,8 +14,10 @@ jobs:
   build:
     strategy:
       matrix:
-        node-version: [ 22 ]
+        node-version: [22]
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -20,7 +26,6 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           registry-url: https://registry.npmjs.org/
-          # Cache dependencies (npm)
       - name: Cache dependencies
         id: cache-npm
         uses: actions/cache@v4
@@ -36,17 +41,15 @@ jobs:
         id: cache-build
         uses: actions/cache@v4
         with:
-          path: | 
+          path: |
             lib
             dist
           key: build-${{ runner.os }}-${{ matrix.node-version }}-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             build-${{ runner.os }}-${{ matrix.node-version }}-
-            
       - if: ${{ steps.cache-build.outputs.cache-hit != 'true' }}
-        run: npm run build:prod  # Replace with your build command 
+        run: npm run build:prod
       - run: npm run test:all
       - run: npm publish --access public
         env:
-          GITHUB_TOKEN: ${{ secrets.CONSECUTIVE_ACTION_TRIGGER }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

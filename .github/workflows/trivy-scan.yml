@@ -1,28 +1,41 @@
 name: Trivy Security Scan
 
+# Thin caller of decaf-ts/reusable-actions/.github/workflows/trivy-scan.yml
+# - push / pull_request / workflow_dispatch -> vuln scan (report-only, never fails the job)
+# - weekly schedule -> dep scan (drives the renovate dep run)
+# Automatic renovate PRs are opened by the Mend Renovate GitHub App (see renovate.json);
+# the vuln-found dispatch below also fires the on-demand self-hosted renovate workflow.
+
 on:
   workflow_dispatch:
   push:
     branches: [master]
   pull_request:
     branches: [master]
+  schedule:
+    # Weekly dependency-update pass (Monday 02:00 UTC).
+    - cron: "0 2 * * 1"
 
 jobs:
-  trivy-scan:
-    name: Trivy Vulnerability Scan
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+  vuln:
+    name: Trivy vuln scan
+    if: github.event_name != 'schedule'
+    uses: decaf-ts/reusable-actions/.github/workflows/trivy-scan.yml@master
+    with:
+      scan-type: vuln
+      severity: HIGH,CRITICAL
+      ignore-unfixed: true
+      exit-code: "0"
+      upload-artifact: true
+    secrets:
+      GH_PAT: ${{ secrets.GH_TOKEN }}
 
-      - name: Install Trivy
-        run: curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin
-
-      - name: Run Trivy
-        run: trivy fs . --severity CRITICAL,HIGH --format table --output trivy-report.txt
-
-      - name: Upload report as artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: trivy-report
-          path: trivy-report.txt
+  dep:
+    name: Trivy dep scan
+    if: github.event_name == 'schedule'
+    uses: decaf-ts/reusable-actions/.github/workflows/trivy-scan.yml@master
+    with:
+      scan-type: dep
+      upload-artifact: true
+    secrets:
+      GH_PAT: ${{ secrets.GH_TOKEN }}

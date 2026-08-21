@@ -1,21 +1,37 @@
-name: Renovate
+name: Renovate (on-demand)
+
+# Thin caller of decaf-ts/reusable-actions/.github/workflows/renovate.yml.
+# Triggers:
+#   - workflow_dispatch: manual / forced renovate run
+#   - repository_dispatch (renovate-trigger, renovate-dep-trigger): fired by the
+#     reusable trivy-scan workflow when vulns / dep updates are found.
+#
+# NOTE: PRs opened by this self-hosted run are authored by the RENOVATE_TOKEN
+# owner (decaf-ts-admin) and therefore CANNOT be self-approved/auto-merged
+# (GitHub blocks self-review). Merge them manually, or rely on the Mend Renovate
+# GitHub App (renovate.json) which authors PRs as renovate[bot] and auto-merges.
 
 on:
   workflow_dispatch:
+    inputs:
+      pr-strategy:
+        description: "overrides | bump-dependents | both"
+        required: false
+        default: "bump-dependents"
+      clear-stale-overrides:
+        description: "Remove package.json overrides that no longer match a known vuln (weekly dep run)."
+        required: false
+        default: false
   repository_dispatch:
-    types: [renovate-trigger]
+    types: [renovate-trigger, renovate-dep-trigger]
 
 jobs:
   renovate:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Run Renovate
-        uses: renovatebot/github-action@v46.1.14
-        with:
-          configurationFile: renovate.json
-        env:
-          RENOVATE_TOKEN: ${{ secrets.JIRA_AUTOMATION }}
-          RENOVATE_REPOSITORIES: decaf-ts/ts-workspace
+    uses: decaf-ts/reusable-actions/.github/workflows/renovate.yml@master
+    with:
+      pr-strategy: ${{ inputs.pr-strategy || 'bump-dependents' }}
+      clear-stale-overrides: ${{ github.event.action == 'renovate-dep-trigger' }}
+      renovate-config-file: renovate.json
+    secrets:
+      RENOVATE_TOKEN: ${{ secrets.RENOVATE_TOKEN }}
+      GH_PAT: ${{ secrets.GH_TOKEN }}

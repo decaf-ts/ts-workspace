@@ -1,5 +1,8 @@
 name: "Release on Tag"
 
+# Triggered by the tag pushed from release-on-merge-pr.yml. Creates a GitHub
+# Release, which in turn triggers publish-on-release (npm publish).
+
 on:
   push:
     tags:
@@ -13,11 +16,9 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [ 22 ]
+        node-version: [22]
     permissions:
       contents: write
-    env:
-      GITHUB_TOKEN: ${{ secrets.CONSECUTIVE_ACTION_TRIGGER }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
