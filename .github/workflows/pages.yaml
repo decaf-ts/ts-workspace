@@ -1,5 +1,8 @@
 name: "Pages Builder"
 
+# Docs deploy exactly once per release: every merge to master produces a
+# release (release-on-merge-pr), whose tag push triggers this deployment.
+# Plain branch pushes deliberately do not deploy.
 # Thin caller of decaf-ts/reusable-actions/.github/workflows/pages.yaml.
 
 on:
@@ -7,10 +10,6 @@ on:
   push:
     tags:
       - 'v?[0-9]+.[0-9]+.[0-9]+'
-    branches: [ master, main ]
-    paths:
-      - workdocs/**
-      - .github/workflows/pages.yaml
 
 jobs:
   deploy:
