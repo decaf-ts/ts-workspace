@@ -50,9 +50,16 @@ async function addReportMessage(
   )
     // we ony create reports when running coverage
     return;
-  if (!addMsgFunction) await importHelpers();
-  const msg = `${title}\n${message}`;
-  await addMsgFunction({ message: msg });
+  try {
+    if (!addMsgFunction) await importHelpers();
+    const msg = `${title}\n${message}`;
+    await addMsgFunction({ message: msg });
+  } catch (e) {
+    // reporting is best-effort: the jest-html-reporters helper expects the
+    // reporters' temp dir, which only exists under the configured coverage
+    // reporters (re-runs such as the coverage-report action may not have it)
+    console.warn("addReportMessage failed (non-fatal):", e);
+  }
 }
 
 async function addReportAttachment(
@@ -66,11 +73,16 @@ async function addReportAttachment(
   )
     // we ony create reports when running coverage
     return;
-  if (!addAttachFunction) await importHelpers();
-  await addAttachFunction({
-    attach: attachment,
-    description: title,
-  });
+  try {
+    if (!addAttachFunction) await importHelpers();
+    await addAttachFunction({
+      attach: attachment,
+      description: title,
+    });
+  } catch (e) {
+    // see addReportMessage: best-effort reporting only
+    console.warn("addReportAttachment failed (non-fatal):", e);
+  }
 }
 
 describe("Type Script Workspace test", function () {
