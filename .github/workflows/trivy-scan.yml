@@ -1,25 +1,16 @@
-name: Trivy Security Scan
+name: "Trivy Security Scan"
 
-# Thin caller of decaf-ts/reusable-actions/.github/workflows/trivy-scan.yml
-# - push / pull_request / workflow_dispatch -> vuln scan (report-only, never fails the job)
-# - weekly schedule -> dep scan (drives the renovate dep run)
-# Automatic renovate PRs are opened by the Mend Renovate GitHub App (see renovate.json);
-# the vuln-found dispatch below also fires the on-demand self-hosted renovate workflow.
+# Security scanning is enforced at RELEASE time: the shared release-on-tag
+# workflow runs the trivy release gate before creating the GitHub Release,
+# blocking the release (and the npm publish) on HIGH/CRITICAL findings.
+# This standalone workflow is kept only for the weekly dependency-update
+# pass (which drives the weekly renovate dep run) and manual diagnostics.
 
 on:
   workflow_dispatch:
-  push:
-    branches: [master]
-  pull_request:
-    branches: [master]
   schedule:
     # Weekly dependency-update pass (Monday 02:00 UTC).
     - cron: "0 2 * * 1"
-
-# Cancel superseded in-flight runs; never cancel runs on master.
-concurrency:
-  group: trivy-${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: ${{ github.ref != 'refs/heads/master' }}
 
 jobs:
   vuln:
