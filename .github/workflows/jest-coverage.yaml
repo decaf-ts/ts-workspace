@@ -14,5 +14,4 @@ jobs:
     with:
       # template repo ships a minimal src/ sample; keep the threshold under its
       # current 77% statement coverage until the sample is broadened
-      coverage-threshold: 75
     secrets: inherit
