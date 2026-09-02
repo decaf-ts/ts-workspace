@@ -1,5 +1,6 @@
 import type { WorkspaceModule } from "../workspace-target";
 import { loadWorkspaceModule } from "../workspace-target";
+import { mkdirSync } from "fs";
 
 interface AddAttachParams {
   attach: string | Buffer;
@@ -32,9 +33,18 @@ let workspaceModule: WorkspaceModule;
 async function importHelpers(): Promise<void> {
   // if (!process.env[JestReportersTempPathEnvKey])
   //   process.env[JestReportersTempPathEnvKey] = './workdocs/reports';
-  const { addMsg, addAttach } = await normalizeImport(
+  const { addMsg, addAttach, dataDirPath, attachDirPath } = await normalizeImport(
     import("jest-html-reporters/helper")
   );
+  // The temp dirs are created by the jest-html-reporters REPORTER at the start
+  // of a run and cleaned after its data is merged into the html report. Jest
+  // re-runs WITHOUT the reporter configured (e.g. the coverage-report action's
+  // annotation pass) therefore have no dirs, and the helper's writeJSON fails
+  // with ENOENT since it does not create parent directories. Create them first
+  // so messages/attachments are always accepted; a reporter active in the same
+  // run will pick them up and merge them into the report.
+  mkdirSync(dataDirPath, { recursive: true });
+  mkdirSync(attachDirPath, { recursive: true });
   addMsgFunction = addMsg;
   addAttachFunction = addAttach;
 }
