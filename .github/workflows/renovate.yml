@@ -1,15 +1,10 @@
-name: Renovate (on-demand)
+name: "Renovate (on-demand)"
 
 # Thin caller of decaf-ts/reusable-actions/.github/workflows/renovate.yml.
 # Triggers:
 #   - workflow_dispatch: manual / forced renovate run
 #   - repository_dispatch (renovate-trigger, renovate-dep-trigger): fired by the
-#     reusable trivy-scan workflow when vulns / dep updates are found.
-#
-# NOTE: PRs opened by this self-hosted run are authored by the RENOVATE_TOKEN
-# owner (decaf-ts-admin) and therefore CANNOT be self-approved/auto-merged
-# (GitHub blocks self-review). Merge them manually, or rely on the Mend Renovate
-# GitHub App (renovate.json) which authors PRs as renovate[bot] and auto-merges.
+#     release gates / weekly trivy dep pass when vulns / dep updates are found.
 
 on:
   workflow_dispatch:
@@ -32,6 +27,4 @@ jobs:
       pr-strategy: ${{ inputs.pr-strategy || 'bump-dependents' }}
       clear-stale-overrides: ${{ github.event.action == 'renovate-dep-trigger' }}
       renovate-config-file: renovate.json
-    secrets:
-      RENOVATE_TOKEN: ${{ secrets.RENOVATE_TOKEN }}
-      GH_PAT: ${{ secrets.GH_TOKEN }}
+    secrets: inherit
