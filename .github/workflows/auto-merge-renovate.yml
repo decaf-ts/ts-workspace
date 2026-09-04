@@ -1,34 +1,16 @@
 name: Auto Approve and Merge Renovate PRs
 
-# Fires when the Mend Renovate GitHub App opens/reopens a PR against master.
-# Approves and enables auto-merge so the PR merges once status checks pass.
-# (App PRs are authored by renovate[bot]; decaf-ts-admin is in the branch
-# protection bypass allowance, so no human approval is required.)
+# Thin caller of decaf-ts/reusable-actions/.github/workflows/auto-merge-renovate.yml.
+# Approves and enables auto-merge on bot dependency PRs once every status check
+# passes, so trivy/renovate dependency updates release without human interaction.
 
 on:
   pull_request:
-    types: [opened, reopened]
+    types: [opened, reopened, synchronize]
     branches: [master]
 
 jobs:
   auto-approve-merge:
-    name: Auto Approve and Merge
-    runs-on: ubuntu-latest
-    if: github.actor == 'renovate[bot]'
-    steps:
-      - name: Approve PR
-        env:
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
-        run: |
-          gh pr review ${{ github.event.pull_request.number }} \
-            --repo ${{ github.repository }} \
-            --approve
-
-      - name: Enable auto-merge
-        env:
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
-        run: |
-          gh pr merge ${{ github.event.pull_request.number }} \
-            --repo ${{ github.repository }} \
-            --squash \
-            --auto
+    if: github.actor == 'renovate[bot]' || github.actor == 'dependabot[bot]'
+    uses: decaf-ts/reusable-actions/.github/workflows/auto-merge-renovate.yml@master
+    secrets: inherit
