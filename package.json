@@ -14,7 +14,7 @@
   "types": "./lib/types/index.d.mts",
   "sideEffects": false,
   "scripts": {
-    "do-install": "NPM_TOKEN=\"$(DECAF_BANNER=false decaf utils credentials get --name npm --logLevel error)\" npm install",
+    "do-install": "NPM_TOKEN=$(cat .npmtoken) npm install",
     "update-dependencies": "PREFIX=\"decaf-ts\"; npm ls | grep \"$PREFIX\" | awk -F/ '{print $NF}' | sed 's/@.*//' | xargs -I package npm update @\"$PREFIX\"/package",
     "update-scripts": "npx update-scripts",
     "sync-codex": "./bin/sync-codex.sh",
