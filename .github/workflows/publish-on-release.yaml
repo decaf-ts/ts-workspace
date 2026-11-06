@@ -12,5 +12,12 @@ on:
 
 jobs:
   build:
+    permissions:
+      contents: read
+      # OIDC trusted publishing for the deno/JSR target in the reusable
+      # workflow; the npm/pnpm targets keep using the inherited NPM_TOKEN.
+      id-token: write
+      # Preserves the GitHub Container Registry login/publish path.
+      packages: write
     uses: decaf-ts/reusable-actions/.github/workflows/publish-on-release.yaml@master
     secrets: inherit

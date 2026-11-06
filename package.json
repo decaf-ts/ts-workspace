@@ -17,9 +17,7 @@
     "do-install": "NPM_TOKEN=$(cat .npmtoken) npm install",
     "update-dependencies": "PREFIX=\"decaf-ts\"; npm ls | grep \"$PREFIX\" | awk -F/ '{print $NF}' | sed 's/@.*//' | xargs -I package npm update @\"$PREFIX\"/package",
     "update-scripts": "npx update-scripts",
-    "sync-codex": "./bin/sync-codex.sh",
-    "codex": "codex -s workspace-write exec",
-    "release": "./bin/tag-release.sh",
+    "release": "tag-release",
     "on-first-run": "npx update-scripts --boot",
     "set-git-auth": "decaf utils credentials git-helper",
     "flash-forward": "npx npm-check-updates -u && npm run do-install",
@@ -94,6 +92,22 @@
   },
   "homepage": "https://github.com/decaf-ts/ts-workspace#readme",
   "devDependencies": {
-    "@decaf-ts/utils": "latest"
+    "@decaf-ts/for-testing": "^1.3.7",
+    "@decaf-ts/utils": "^2.0.6"
+  },
+  "overrides": {
+    "open": "^11.0.0",
+    "glob": "^14.0.4",
+    "minimatch": "^11.0.5",
+    "eslint": {
+      "minimatch": "^11.0.5"
+    },
+    "dpdm": {
+      "glob": "^14.0.4",
+      "minimatch": "^11.0.5"
+    },
+    "typescript-eslint": {
+      "minimatch": "^11.0.5"
+    }
   }
 }

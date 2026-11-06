@@ -93,4 +93,3 @@ So if you can, if this project in any way. either by learning something or simpl
 This project is released under the [MIT License](./LICENSE.md).
 
 By developers, for developers...
-> CI note: shared workflows come from [decaf-ts/reusable-actions](https://github.com/decaf-ts/reusable-actions) (see `workdocs/tutorials/For Developers.md`).
