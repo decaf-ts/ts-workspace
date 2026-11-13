@@ -4,5 +4,6 @@
 !tests/*
 !workdocs/*
 !./.npmrc
-!gulpfile.js
-!jest.config.ts
+!eslint.config.js
+!.prettierrc
+!jest.config.cjs
