@@ -1,6 +1,6 @@
-ARG NODE_VERSION=22
+ARG NODE_VERSION=24
 
-FROM node:${NODE_VERSION:-22}-alpine as builder
+FROM node:${NODE_VERSION:-24}-alpine as builder
 
 RUN apk update && apk upgrade
 
@@ -17,7 +17,7 @@ COPY ./.npmrc $WORKDIR/
 # Make the workfolder available to the the 'node' user. The `node` user is built in the Node image.
 RUN --mount=type=secret,id=TOKEN TOKEN=$(cat /run/secrets/TOKEN) npm ci && npm cache clean --force && chown -R node:node .
 
-FROM node:${NODE_VERSION:-22}-alpine AS production
+FROM node:${NODE_VERSION:-24}-alpine AS production
 
 RUN apk update && apk upgrade
 RUN apk --no-cache add htop less grep && apk add --no-cache --upgrade bash # optional but useful
