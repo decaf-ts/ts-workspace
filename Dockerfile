@@ -11,7 +11,7 @@ COPY ./src/ $WORKDIR/src/
 COPY ./tests/ $WORKDIR/tests/
 COPY ./workdocs/reports $WORKDIR/workdocs/reports
 COPY ./package*.json $WORKDIR/
-COPY ./.mpmrc $WORKDIR/
+COPY ./.npmrc $WORKDIR/
 
 # Install the dependencies from package-lock.json
 # Make the workfolder available to the the 'node' user. The `node` user is built in the Node image.
