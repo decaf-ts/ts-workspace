@@ -39,7 +39,9 @@ WORKDIR $WORKDIR
 RUN --mount=type=secret,id=TOKEN TOKEN=$(cat /run/secrets/TOKEN) npm ci && npm cache clean --force && chown -R node:node .
 
 
-ENTRYPOINT ["node", "lib/cli.cjs"]
+ENTRYPOINT ["node", "lib/cjs/bin/cli.cjs"]
+
+CMD ["--help"]
 
 LABEL name="TS Workspace" description="Template Dockerfile for typescript projects"
 
